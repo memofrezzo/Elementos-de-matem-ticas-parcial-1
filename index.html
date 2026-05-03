@@ -2063,6 +2063,7 @@ body.donation-open {
 </main>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 // ── DONATION MODAL ──
 const btnDonation = document.getElementById('btnDonation');
@@ -2070,8 +2071,27 @@ const donationModal = document.getElementById('donationModal');
 const donationClose = document.getElementById('donationClose');
 const donationStatus = document.getElementById('donationStatus');
 const DONATION_DELAY_MS = 30000;
+const SUPABASE_URL = 'https://jqwrrreeftehieuxblyy.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_mH7jK53aMSNKg0f5OPesHg_xnyJwEr8';
+const SUPABASE_DONATION_TABLE = 'donation_prompt_visitors';
+const DONATION_VISITOR_ID_KEY = 'matematica_donation_visitor_id';
+const DONATION_VIEW_RECORDED_KEY = 'matematica_donation_prompt_view_recorded';
 let donationTimer = null;
 let donationPromptUsed = false;
+const donationSupabaseClient = (
+  window.supabase &&
+  SUPABASE_URL &&
+  SUPABASE_ANON_KEY &&
+  !SUPABASE_ANON_KEY.includes('PEGAR_')
+)
+  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+        detectSessionInUrl: false
+      }
+    })
+  : null;
 
 function clearDonationTimer() {
   if (donationTimer) {
@@ -2080,7 +2100,73 @@ function clearDonationTimer() {
   }
 }
 
-function openDonationModal() {
+function getStoredDonationValue(key) {
+  try {
+    return window.localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function setStoredDonationValue(key, value) {
+  try {
+    window.localStorage.setItem(key, value);
+  } catch {
+    // Si el navegador bloquea localStorage, la pagina sigue funcionando.
+  }
+}
+
+function createDonationVisitorId() {
+  if (window.crypto && typeof window.crypto.randomUUID === 'function') {
+    return window.crypto.randomUUID();
+  }
+
+  if (window.crypto && typeof window.crypto.getRandomValues === 'function') {
+    const bytes = new Uint8Array(16);
+    window.crypto.getRandomValues(bytes);
+    return Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('');
+  }
+
+  return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function getDonationVisitorId() {
+  const storedId = getStoredDonationValue(DONATION_VISITOR_ID_KEY);
+  if (storedId) return storedId;
+
+  const visitorId = createDonationVisitorId();
+  setStoredDonationValue(DONATION_VISITOR_ID_KEY, visitorId);
+  return visitorId;
+}
+
+async function recordDonationPromptView() {
+  if (!donationSupabaseClient) {
+    console.info('Supabase no esta configurado todavia: falta pegar la anon public key.');
+    return;
+  }
+
+  if (getStoredDonationValue(DONATION_VIEW_RECORDED_KEY) === '1') return;
+
+  const payload = {
+    visitor_id: getDonationVisitorId(),
+    page_path: window.location.pathname || '/',
+    prompted_after_seconds: Math.round(DONATION_DELAY_MS / 1000),
+    source: 'donation_modal_auto'
+  };
+
+  const { error } = await donationSupabaseClient
+    .from(SUPABASE_DONATION_TABLE)
+    .insert(payload);
+
+  if (!error || error.code === '23505') {
+    setStoredDonationValue(DONATION_VIEW_RECORDED_KEY, '1');
+    return;
+  }
+
+  console.error('No se pudo registrar la vista del cartel de donaciones.', error);
+}
+
+function openDonationModal(options = {}) {
   clearDonationTimer();
   donationPromptUsed = true;
   donationStatus.textContent = '';
@@ -2088,6 +2174,10 @@ function openDonationModal() {
   document.body.classList.add('donation-open');
   btnDonation.setAttribute('aria-expanded', 'true');
   window.setTimeout(() => donationClose.focus(), 60);
+
+  if (options.trackPrompt) {
+    recordDonationPromptView();
+  }
 }
 
 function closeDonationModal() {
@@ -2101,7 +2191,7 @@ function scheduleDonationPrompt() {
 
   donationTimer = window.setTimeout(() => {
     donationTimer = null;
-    openDonationModal();
+    openDonationModal({ trackPrompt: true });
   }, DONATION_DELAY_MS);
 }
 
@@ -2122,7 +2212,7 @@ function copyDonationAlias(value) {
   return Promise.resolve();
 }
 
-btnDonation.addEventListener('click', openDonationModal);
+btnDonation.addEventListener('click', () => openDonationModal());
 donationClose.addEventListener('click', closeDonationModal);
 donationModal.addEventListener('click', (event) => {
   if (event.target === donationModal) closeDonationModal();
