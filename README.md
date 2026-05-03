@@ -1,6 +1,7 @@
 # Matematica - Guia de estudio
 
 Esta es una pagina web estatica pensada como material de estudio autonomo para temas de matematica preuniversitaria.
+https://memofrezzo.github.io/Elementos-de-matem-ticas-parcial-1/
 
 ## Contenido
 
