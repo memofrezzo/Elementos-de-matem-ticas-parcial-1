@@ -45,102 +45,10 @@ body {
   line-height: 1.8;
   overflow-x: hidden;
 }
-body.locked {
-  overflow: hidden;
-}
-body.locked .site-content {
-  height: 100vh;
-  overflow: hidden;
-  pointer-events: none;
-  user-select: none;
-  visibility: hidden;
-}
-
 /* ════════════════════════════════════
-   ACCESS GATE
+   GENERAL CONTROLS
 ════════════════════════════════════ */
-.access-gate {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: grid;
-  place-items: center;
-  padding: 1.25rem;
-  background:
-    radial-gradient(ellipse 55% 75% at 80% 15%, rgba(200,144,62,0.17), transparent 65%),
-    linear-gradient(135deg, var(--navy), #17233c 55%, #0d1526);
-}
-.access-gate[hidden] {
-  display: none;
-}
-.access-panel {
-  width: min(100%, 420px);
-  background: var(--cream);
-  border: 1px solid rgba(232,180,112,0.45);
-  border-radius: var(--r-lg);
-  box-shadow: var(--shadow-lg);
-  padding: 2.2rem;
-}
-.access-kicker {
-  display: inline-flex;
-  margin-bottom: 0.85rem;
-  padding: 0.25rem 0.65rem;
-  border: 1px solid var(--border-hard);
-  border-radius: 4px;
-  color: var(--gold);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.62rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-.access-panel h1 {
-  color: var(--navy);
-  font-family: 'Playfair Display', serif;
-  font-size: 1.8rem;
-  line-height: 1.18;
-  margin-bottom: 0.45rem;
-}
-.access-panel p {
-  color: var(--text-soft);
-  font-size: 1rem;
-  line-height: 1.55;
-  margin-bottom: 1.35rem;
-}
-.access-form {
-  display: grid;
-  gap: 0.85rem;
-}
-.access-label {
-  color: var(--navy);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.68rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-.access-row {
-  display: flex;
-  gap: 0.55rem;
-}
-.access-input {
-  min-width: 0;
-  flex: 1;
-  border: 1px solid var(--border-hard);
-  border-radius: 8px;
-  background: #fff;
-  color: var(--text);
-  font: inherit;
-  font-size: 1rem;
-  line-height: 1.2;
-  padding: 0.72rem 0.85rem;
-  outline: none;
-}
-.access-input:focus {
-  border-color: var(--gold);
-  box-shadow: 0 0 0 3px rgba(200,144,62,0.18);
-}
-.access-button,
-.btn-donation,
-.btn-logout {
+.btn-donation {
   border: 1px solid var(--gold);
   border-radius: 8px;
   background: var(--navy);
@@ -153,36 +61,13 @@ body.locked .site-content {
   text-transform: uppercase;
   transition: transform 0.16s ease, background 0.16s ease, color 0.16s ease;
 }
-.access-button {
-  flex: 0 0 auto;
-  padding: 0.72rem 0.95rem;
-}
-.access-button:hover,
-.btn-donation:hover,
-.btn-logout:hover {
+.btn-donation:hover {
   background: var(--gold);
   color: var(--navy);
 }
-.access-button:active,
-.btn-donation:active,
-.btn-logout:active {
+.btn-donation:active {
   transform: translateY(1px);
 }
-.access-error {
-  min-height: 1.2rem;
-  color: var(--red);
-  font-size: 0.92rem;
-  line-height: 1.3;
-}
-.access-form.shake {
-  animation: accessShake 0.22s ease;
-}
-@keyframes accessShake {
-  0%, 100% { transform: translateX(0); }
-  30% { transform: translateX(-5px); }
-  70% { transform: translateX(5px); }
-}
-
 /* ════════════════════════════════════
    DONATION MODAL
 ════════════════════════════════════ */
@@ -379,10 +264,6 @@ body.donation-open {
 }
 .btn-donation {
   padding: 0.38rem 0.72rem;
-  white-space: nowrap;
-}
-.btn-logout {
-  padding: 0.38rem 0.7rem;
   white-space: nowrap;
 }
 .btn-menu {
@@ -927,10 +808,7 @@ body.donation-open {
   .topbar { padding: 0 0.9rem; gap: 0.5rem; }
   .topbar-brand span { display: none; }
   .topbar-actions { gap: 0.3rem; }
-  .btn-donation, .btn-logout { padding: 0.35rem 0.5rem; font-size: 0.56rem; }
-  .access-panel { padding: 1.5rem; }
-  .access-row { flex-direction: column; }
-  .access-button { width: 100%; }
+  .btn-donation { padding: 0.35rem 0.5rem; font-size: 0.56rem; }
   .donation-modal { padding: 0.8rem; }
   .donation-panel { max-height: calc(100vh - 1.6rem); overflow-y: auto; }
   .donation-content { padding: 1.55rem; }
@@ -942,25 +820,8 @@ body.donation-open {
 }
 </style>
 </head>
-<body class="locked">
+<body>
 
-<div class="access-gate" id="accessGate" role="dialog" aria-modal="true" aria-labelledby="accessTitle">
-  <div class="access-panel">
-    <span class="access-kicker">Acceso privado</span>
-    <h1 id="accessTitle">Ingresar a la guía</h1>
-    <p>Escribí la contraseña para abrir el material de estudio.</p>
-    <form class="access-form" id="accessForm" autocomplete="off">
-      <label class="access-label" for="accessPassword">Contraseña</label>
-      <div class="access-row">
-        <input class="access-input" id="accessPassword" type="password" required autocomplete="current-password">
-        <button class="access-button" type="submit">Entrar</button>
-      </div>
-      <div class="access-error" id="accessError" aria-live="polite"></div>
-    </form>
-  </div>
-</div>
-
-<div class="site-content" id="siteContent" aria-hidden="true">
 <div id="progress"></div>
 
 <!-- ══ TOPBAR ══ -->
@@ -978,7 +839,6 @@ body.donation-open {
   </nav>
   <div class="topbar-actions">
     <button class="btn-donation" id="btnDonation" type="button" aria-haspopup="dialog" aria-expanded="false">Donaciones</button>
-    <button class="btn-logout" id="btnLogout" type="button">Salir</button>
   </div>
 </header>
 
@@ -2202,60 +2062,16 @@ body.donation-open {
 
 </main>
 </div>
-</div>
 
 <script>
-// ── ACCESS CONTROL ──
-// Cambia solamente esta linea cuando quieras usar otra contrasena.
-const ACCESS_PASSWORD = 'alainal3n';
-const ACCESS_STORAGE_KEY = 'matematica-guia-access';
-
-const accessGate = document.getElementById('accessGate');
-const siteContent = document.getElementById('siteContent');
-const accessForm = document.getElementById('accessForm');
-const accessPassword = document.getElementById('accessPassword');
-const accessError = document.getElementById('accessError');
+// ── DONATION MODAL ──
 const btnDonation = document.getElementById('btnDonation');
-const btnLogout = document.getElementById('btnLogout');
 const donationModal = document.getElementById('donationModal');
 const donationClose = document.getElementById('donationClose');
 const donationStatus = document.getElementById('donationStatus');
 const DONATION_DELAY_MS = 30000;
 let donationTimer = null;
 let donationPromptUsed = false;
-
-function makeAccessToken(value) {
-  let hash = 2166136261;
-  for (let i = 0; i < value.length; i++) {
-    hash ^= value.charCodeAt(i);
-    hash = Math.imul(hash, 16777619);
-  }
-  return `ok-${(hash >>> 0).toString(36)}`;
-}
-
-function readAccessToken() {
-  try {
-    return localStorage.getItem(ACCESS_STORAGE_KEY);
-  } catch (error) {
-    return null;
-  }
-}
-
-function saveAccessToken() {
-  try {
-    localStorage.setItem(ACCESS_STORAGE_KEY, makeAccessToken(ACCESS_PASSWORD));
-  } catch (error) {
-    // Si el navegador bloquea localStorage, el acceso dura solo esta visita.
-  }
-}
-
-function clearAccessToken() {
-  try {
-    localStorage.removeItem(ACCESS_STORAGE_KEY);
-  } catch (error) {
-    // No hace falta hacer nada si el navegador no permite limpiar localStorage.
-  }
-}
 
 function clearDonationTimer() {
   if (donationTimer) {
@@ -2306,54 +2122,6 @@ function copyDonationAlias(value) {
   return Promise.resolve();
 }
 
-function unlockPage() {
-  document.body.classList.remove('locked');
-  accessGate.hidden = true;
-  siteContent.setAttribute('aria-hidden', 'false');
-  accessPassword.value = '';
-  accessError.textContent = '';
-  scheduleDonationPrompt();
-}
-
-function lockPage() {
-  clearDonationTimer();
-  closeDonationModal();
-  donationPromptUsed = false;
-  document.body.classList.add('locked');
-  accessGate.hidden = false;
-  siteContent.setAttribute('aria-hidden', 'true');
-  accessPassword.value = '';
-  accessError.textContent = '';
-  window.setTimeout(() => accessPassword.focus(), 60);
-}
-
-if (readAccessToken() === makeAccessToken(ACCESS_PASSWORD)) {
-  unlockPage();
-} else {
-  lockPage();
-}
-
-accessForm.addEventListener('submit', (event) => {
-  event.preventDefault();
-
-  if (accessPassword.value === ACCESS_PASSWORD) {
-    saveAccessToken();
-    unlockPage();
-    return;
-  }
-
-  accessError.textContent = 'Contraseña incorrecta. Probá nuevamente.';
-  accessForm.classList.remove('shake');
-  void accessForm.offsetWidth;
-  accessForm.classList.add('shake');
-  accessPassword.select();
-});
-
-btnLogout.addEventListener('click', () => {
-  clearAccessToken();
-  lockPage();
-});
-
 btnDonation.addEventListener('click', openDonationModal);
 donationClose.addEventListener('click', closeDonationModal);
 donationModal.addEventListener('click', (event) => {
@@ -2375,6 +2143,8 @@ document.querySelectorAll('.donation-copy').forEach(button => {
     });
   });
 });
+
+scheduleDonationPrompt();
 
 // ── PROGRESS BAR ──
 window.addEventListener('scroll', () => {
