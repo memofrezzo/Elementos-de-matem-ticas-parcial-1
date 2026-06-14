@@ -1,0 +1,2301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matemática · Guía de Estudio Completa</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:        #0d1526;
+  --navy-mid:    #162038;
+  --navy-light:  #1e2d4e;
+  --navy-card:   #243560;
+  --gold:        #c8903e;
+  --gold-light:  #e8b470;
+  --gold-pale:   #f5ddb0;
+  --cream:       #fdf8f0;
+  --cream-mid:   #f0e8d6;
+  --cream-dark:  #e4d8c0;
+  --white:       #ffffff;
+  --text:        #cda11a;
+  --text-soft:   #4a4768;
+  --text-muted:  #8888aa;
+  --green:       #2a7a5a;
+  --green-bg:    rgba(42,122,90,0.08);
+  --red:         #9a3020;
+  --red-bg:      rgba(154,48,32,0.08);
+  --border:      rgba(200,144,62,0.22);
+  --border-hard: rgba(200,144,62,0.45);
+  --shadow:      0 2px 16px rgba(13,21,38,0.10);
+  --shadow-md:   0 6px 28px rgba(13,21,38,0.14);
+  --shadow-lg:   0 16px 56px rgba(13,21,38,0.20);
+  --r:           14px;
+  --r-lg:        22px;
+  --sidebar:     272px;
+  --topbar:      68px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Crimson Pro', Georgia, serif;
+  background: var(--cream);
+  color: var(--text);
+  font-size: 1.1rem;
+  line-height: 1.8;
+  overflow-x: hidden;
+}
+/* ════════════════════════════════════
+   GENERAL CONTROLS
+════════════════════════════════════ */
+.btn-donation {
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+  background: var(--navy);
+  color: var(--gold-light);
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: transform 0.16s ease, background 0.16s ease, color 0.16s ease;
+}
+.btn-donation:hover {
+  background: var(--gold);
+  color: var(--navy);
+}
+.btn-donation:active {
+  transform: translateY(1px);
+}
+/* ════════════════════════════════════
+   DONATION MODAL
+════════════════════════════════════ */
+body.donation-open {
+  overflow: hidden;
+}
+.donation-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background: rgba(13,21,38,0.72);
+  backdrop-filter: blur(6px);
+}
+.donation-modal[hidden] {
+  display: none;
+}
+.donation-panel {
+  position: relative;
+  width: min(100%, 560px);
+  overflow: hidden;
+  border: 1px solid rgba(232,180,112,0.52);
+  border-radius: var(--r-lg);
+  background: var(--cream);
+  box-shadow: var(--shadow-lg);
+}
+.donation-panel::before {
+  content: '';
+  display: block;
+  height: 8px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+}
+.donation-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(200,144,62,0.35);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--navy);
+  cursor: pointer;
+  font-size: 1.4rem;
+  line-height: 1;
+  transition: background 0.16s ease, color 0.16s ease, transform 0.16s ease;
+}
+.donation-close:hover {
+  background: var(--navy);
+  color: var(--gold-light);
+}
+.donation-close:active {
+  transform: translateY(1px);
+}
+.donation-content {
+  padding: 2.2rem;
+}
+.donation-kicker {
+  display: inline-flex;
+  margin-bottom: 0.85rem;
+  padding: 0.25rem 0.65rem;
+  border: 1px solid var(--border-hard);
+  border-radius: 4px;
+  color: var(--gold);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.donation-content h2 {
+  max-width: 430px;
+  color: var(--navy);
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.65rem, 4vw, 2.2rem);
+  line-height: 1.14;
+  margin-bottom: 0.8rem;
+}
+.donation-content p {
+  color: var(--text-soft);
+  font-size: 1.02rem;
+  line-height: 1.62;
+}
+.donation-aliases {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.4rem;
+}
+.donation-alias {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.95rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  background: #fff;
+}
+.donation-method {
+  display: block;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+  margin-bottom: 0.28rem;
+  text-transform: uppercase;
+}
+.donation-value {
+  display: block;
+  color: var(--navy);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.donation-copy {
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+  background: rgba(200,144,62,0.1);
+  color: var(--navy);
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  padding: 0.55rem 0.7rem;
+  text-transform: uppercase;
+  transition: background 0.16s ease, color 0.16s ease, transform 0.16s ease;
+}
+.donation-copy:hover {
+  background: var(--navy);
+  color: var(--gold-light);
+}
+.donation-copy:active {
+  transform: translateY(1px);
+}
+.donation-status {
+  min-height: 1.2rem;
+  color: var(--green);
+  font-size: 0.9rem;
+  line-height: 1.3;
+  margin-top: 0.8rem;
+}
+.donation-note {
+  margin-top: 1.2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  color: var(--text-soft);
+  font-style: italic;
+}
+
+/* ════════════════════════════════════
+   PROGRESS BAR
+════════════════════════════════════ */
+#progress {
+  position: fixed; top: var(--topbar); left: 0;
+  height: 3px; width: 0%; background: var(--gold);
+  z-index: 200; transition: width 0.08s linear;
+  box-shadow: 0 0 8px rgba(200,144,62,0.6);
+}
+
+/* ════════════════════════════════════
+   TOPBAR
+════════════════════════════════════ */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: var(--topbar);
+  background: var(--navy);
+  border-bottom: 2px solid var(--gold);
+  display: flex; align-items: center;
+  padding: 0 1.6rem; gap: 1rem;
+  z-index: 150;
+}
+.topbar-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem; color: var(--gold-light); font-weight: 700;
+  letter-spacing: 0.02em; flex: 1; white-space: nowrap;
+}
+.topbar-brand span { color: rgba(255,255,255,0.55); font-weight: 400; font-style: italic; font-size: 0.95rem; }
+.topbar-links { display: flex; gap: 0.15rem; }
+.topbar-links a {
+  color: rgba(255,255,255,0.6); text-decoration: none;
+  font-size: 0.88rem; padding: 0.3rem 0.75rem; border-radius: 6px;
+  transition: all 0.2s; white-space: nowrap;
+  font-family: 'Crimson Pro', serif;
+}
+.topbar-links a:hover { color: var(--gold-light); background: rgba(200,144,62,0.12); }
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+.btn-donation {
+  padding: 0.38rem 0.72rem;
+  white-space: nowrap;
+}
+.btn-menu {
+  display: none; background: none;
+  border: 1px solid rgba(200,144,62,0.5); color: var(--gold-light);
+  padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer;
+  font-size: 1rem;
+}
+
+/* ════════════════════════════════════
+   LAYOUT
+════════════════════════════════════ */
+.layout { display: block; padding-top: var(--topbar); min-height: 100vh; }
+
+/* ════════════════════════════════════
+   SIDEBAR
+════════════════════════════════════ */
+.sidebar {
+  display: none;
+  width: var(--sidebar); position: fixed;
+  top: var(--topbar); bottom: 0; left: 0;
+  background: var(--navy-mid);
+  border-right: 1px solid rgba(200,144,62,0.18);
+  overflow-y: auto; z-index: 100;
+  padding: 1.2rem 0 3rem;
+  transition: transform 0.28s ease;
+}
+.sidebar::-webkit-scrollbar { width: 3px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--navy-light); border-radius: 2px; }
+
+.sb-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.18em;
+  padding: 0.8rem 1.3rem 0.4rem;
+}
+.sb-link {
+  display: flex; align-items: center; gap: 0.65rem;
+  padding: 0.55rem 1.3rem;
+  color: rgba(255,255,255,0.75); text-decoration: none;
+  font-family: 'Playfair Display', serif;
+  font-size: 0.9rem; font-weight: 600;
+  border-left: 3px solid transparent;
+  transition: all 0.18s;
+}
+.sb-link:hover, .sb-link.active {
+  color: var(--gold-light); background: rgba(200,144,62,0.1);
+  border-left-color: var(--gold);
+}
+.sb-link .ic { font-size: 1rem; width: 1.2rem; text-align: center; opacity: 0.85; }
+.sb-sub {
+  display: block; padding: 0.3rem 1.3rem 0.3rem 3.2rem;
+  color: rgba(255,255,255,0.42); font-size: 0.8rem;
+  text-decoration: none; font-style: italic;
+  transition: color 0.15s;
+}
+.sb-sub:hover { color: var(--gold-pale); }
+.sb-divider {
+  margin: 0.6rem 1.3rem;
+  border: none; border-top: 1px solid rgba(255,255,255,0.07);
+}
+
+/* ════════════════════════════════════
+   MAIN
+════════════════════════════════════ */
+.main { margin-left: 0; flex: 1; min-width: 0; }
+
+/* ════════════════════════════════════
+   HERO
+════════════════════════════════════ */
+.hero {
+  background: var(--navy);
+  padding: 4.5rem 4rem 3.5rem;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 55% 90% at 85% 50%, rgba(200,144,62,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 70% at 5% 95%, rgba(30,45,78,0.8) 0%, transparent 65%);
+}
+.hero-bg-text {
+  position: absolute; right: -3rem; bottom: -2rem;
+  font-family: 'Playfair Display', serif;
+  font-size: 13rem; font-weight: 700; line-height: 1;
+  color: rgba(255,255,255,0.025); pointer-events: none; user-select: none;
+  letter-spacing: -0.04em;
+}
+.hero-inner { position: relative; z-index: 1; max-width: 680px; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.14em;
+  color: var(--gold); border: 1px solid rgba(200,144,62,0.45);
+  padding: 0.28rem 0.75rem; border-radius: 4px; margin-bottom: 1.4rem;
+}
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4.5vw, 3.3rem);
+  font-weight: 700; color: #fff; line-height: 1.18;
+  margin-bottom: 1rem;
+}
+.hero h1 em { color: var(--gold-light); font-style: italic; }
+.hero-sub {
+  font-size: 1.08rem; color: rgba(255,255,255,0.62);
+  max-width: 540px; margin-bottom: 1.8rem; line-height: 1.75;
+}
+.hero-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
+.tag {
+  padding: 0.35rem 0.9rem; border-radius: 100px;
+  background: rgba(200,144,62,0.1); border: 1px solid rgba(200,144,62,0.3);
+  color: var(--gold-light); font-size: 0.85rem; font-family: 'Crimson Pro', serif;
+}
+.hero-method {
+  display: flex; gap: 0; margin-top: 1rem;
+  border: 1px solid rgba(200,144,62,0.25); border-radius: 10px; overflow: hidden;
+}
+.method-step {
+  flex: 1; padding: 0.8rem 1rem;
+  border-right: 1px solid rgba(200,144,62,0.2);
+  text-align: center;
+}
+.method-step:last-child { border-right: none; }
+.method-step .mn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; color: var(--gold); letter-spacing: 0.1em;
+  text-transform: uppercase; display: block; margin-bottom: 0.2rem;
+}
+.method-step p { color: rgba(255,255,255,0.55); font-size: 0.82rem; line-height: 1.4; }
+
+/* ════════════════════════════════════
+   SECTIONS GENERIC
+════════════════════════════════════ */
+.section {
+  padding: 3.5rem 4rem 3rem;
+  border-bottom: 1px solid var(--border);
+  scroll-margin-top: calc(var(--topbar) + 12px);
+}
+.section:nth-child(even) { background: rgba(238,228,210,0.35); }
+
+.sec-head {
+  display: flex; align-items: flex-start; gap: 1.3rem;
+  margin-bottom: 2.2rem; padding-bottom: 1.4rem;
+  border-bottom: 1.5px solid var(--border);
+}
+.sec-icon {
+  width: 52px; height: 52px; flex-shrink: 0;
+  background: var(--navy); border: 2px solid var(--gold);
+  border-radius: 13px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem;
+}
+.sec-titles h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.85rem; font-weight: 700; color: var(--navy); line-height: 1.2;
+}
+.sec-titles p { color: var(--text-soft); font-size: 1rem; margin-top: 0.3rem; }
+.sec-num {
+  margin-left: auto; flex-shrink: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; color: var(--gold);
+  background: var(--navy); border: 1px solid var(--gold);
+  padding: 0.25rem 0.55rem; border-radius: 4px;
+  letter-spacing: 0.1em; margin-top: 0.5rem;
+}
+
+/* ════════════════════════════════════
+   PANORAMA SECTION
+════════════════════════════════════ */
+.panorama-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+  gap: 1rem; margin-top: 1.5rem;
+}
+.pano-card {
+  background: var(--navy); border-radius: var(--r);
+  padding: 1.4rem 1.3rem; border: 1px solid rgba(200,144,62,0.25);
+}
+.pano-card .pc-icon { font-size: 1.8rem; margin-bottom: 0.6rem; }
+.pano-card h4 {
+  font-family: 'Playfair Display', serif;
+  color: var(--gold-light); font-size: 0.97rem; margin-bottom: 0.4rem;
+}
+.pano-card p { color: rgba(255,255,255,0.55); font-size: 0.86rem; line-height: 1.55; }
+
+.method-flow {
+  display: flex; align-items: stretch; gap: 0;
+  margin-top: 1.8rem; border-radius: var(--r); overflow: hidden;
+  border: 1px solid var(--border);
+}
+.mf-step {
+  flex: 1; padding: 1.2rem 1rem; text-align: center;
+  border-right: 1px solid var(--border); background: #fff;
+}
+.mf-step:last-child { border-right: none; }
+.mf-step .n {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.5rem; color: var(--gold); font-weight: 600;
+  display: block; margin-bottom: 0.4rem;
+}
+.mf-step strong { display: block; color: var(--navy); font-size: 0.92rem; margin-bottom: 0.25rem; }
+.mf-step span { color: var(--text-soft); font-size: 0.82rem; line-height: 1.4; }
+
+/* ════════════════════════════════════
+   TABLA DE SIMBOLOS SECTION
+════════════════════════════════════ */
+.sym-area-header {
+  display: flex; align-items: center; gap: 0.7rem;
+  background: var(--navy); color: var(--gold-light);
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem; font-weight: 700;
+  padding: 0.65rem 1.2rem;
+  border-top: 1px solid rgba(200,144,62,0.3);
+}
+.sym-area-header:first-child { border-top: none; }
+.sym-area-header .area-icon { font-size: 1rem; }
+.sym-table-wrap {
+  background: #fff; border: 1px solid var(--border);
+  border-radius: var(--r-lg); overflow: hidden;
+  box-shadow: var(--shadow);
+  margin-bottom: 1.5rem;
+}
+.sym-table-wrap table { width: 100%; border-collapse: collapse; }
+.sym-table-wrap thead th {
+  background: var(--navy-light); color: var(--gold-light);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.14em;
+  padding: 0.75rem 1.2rem; text-align: left; font-weight: 500;
+}
+.sym-table-wrap tbody td {
+  padding: 0.65rem 1.2rem; font-size: 0.97rem;
+  border-bottom: 1px solid rgba(0,0,0,0.05); vertical-align: middle;
+}
+.sym-table-wrap tbody tr:last-child td { border-bottom: none; }
+.sym-table-wrap tbody tr:hover td { background: rgba(200,144,62,0.04); }
+.sym-table-wrap td:nth-child(1) { /* Área */
+  color: var(--text-muted); font-size: 0.82rem;
+  font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em;
+  width: 130px;
+}
+.sym-table-wrap td:nth-child(2) { /* Símbolo */
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.15rem; color: var(--gold); font-weight: 600;
+  width: 110px;
+}
+.sym-table-wrap td:nth-child(3) { /* Significado */
+  color: var(--text-soft);
+}
+
+/* ════════════════════════════════════
+   TABS
+════════════════════════════════════ */
+.tabs { display: flex; gap: 0.4rem; margin-bottom: 1.8rem; flex-wrap: wrap; }
+.tab-btn {
+  padding: 0.45rem 1.1rem; border-radius: 8px;
+  border: 1px solid var(--border); background: transparent;
+  color: var(--text-soft); font-family: 'Crimson Pro', serif;
+  font-size: 0.95rem; cursor: pointer; transition: all 0.18s;
+}
+.tab-btn:hover { border-color: var(--gold); color: var(--navy); }
+.tab-btn.active {
+  background: var(--navy); color: var(--gold-light); border-color: var(--navy);
+}
+.tab-panel { display: none; }
+.tab-panel.active { display: block; animation: fadeIn 0.25s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; } }
+
+/* ════════════════════════════════════
+   THEORY BLOCKS
+════════════════════════════════════ */
+.theory-card {
+  background: #fff; border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 1.8rem 2rem;
+  margin-bottom: 1.3rem; box-shadow: var(--shadow);
+}
+.theory-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem; color: var(--navy);
+  margin-bottom: 0.9rem; display: flex; align-items: center; gap: 0.6rem;
+}
+.theory-card h3::before {
+  content: ''; display: inline-block;
+  width: 4px; height: 1.1em; background: var(--gold);
+  border-radius: 2px; flex-shrink: 0;
+}
+.theory-card p { color: var(--text-soft); margin-bottom: 0.7rem; }
+.theory-card p:last-child { margin-bottom: 0; }
+
+.key-card {
+  background: var(--navy); border-radius: var(--r-lg);
+  padding: 1.6rem 2rem; margin-bottom: 1.3rem;
+}
+.key-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem; color: var(--gold-light); margin-bottom: 1rem;
+}
+.key-card ul { list-style: none; }
+.key-card ul li {
+  color: rgba(255,255,255,0.72); font-size: 0.95rem;
+  padding: 0.42rem 0 0.42rem 1.7rem; position: relative;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.key-card ul li:last-child { border-bottom: none; }
+.key-card ul li::before {
+  content: '→'; position: absolute; left: 0; color: var(--gold);
+  font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
+}
+
+.formula-box {
+  background: var(--navy); border-radius: 10px;
+  padding: 0.9rem 1.4rem; margin: 0.9rem 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.92rem; color: var(--gold-light);
+  text-align: center; letter-spacing: 0.04em;
+  line-height: 1.6;
+}
+
+.inline-table {
+  background: #fff; border: 1px solid var(--border);
+  border-radius: var(--r); overflow: hidden; margin: 0.8rem 0;
+  box-shadow: var(--shadow);
+}
+.inline-table table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+.inline-table th {
+  background: var(--navy-light); color: var(--gold-light);
+  font-family: 'JetBrains Mono', monospace; font-size: 0.62rem;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  padding: 0.6rem 0.9rem; text-align: left; font-weight: 500;
+}
+.inline-table td {
+  padding: 0.55rem 0.9rem; color: var(--text-soft);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+.inline-table td:first-child {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--gold); font-size: 1rem; font-weight: 600;
+  width: 90px;
+}
+.inline-table tr:last-child td { border-bottom: none; }
+
+/* ════════════════════════════════════
+   EXERCISE CARDS
+════════════════════════════════════ */
+.ex-card {
+  background: #fff; border: 1px solid var(--border);
+  border-radius: var(--r-lg); overflow: hidden;
+  margin-bottom: 1.6rem; box-shadow: var(--shadow);
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.ex-card:hover { box-shadow: var(--shadow-md); }
+.ex-head {
+  background: var(--navy-mid); padding: 0.9rem 1.5rem;
+  display: flex; align-items: center; gap: 0.9rem;
+  cursor: pointer; user-select: none;
+}
+.ex-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; color: var(--gold);
+  background: rgba(200,144,62,0.14);
+  border: 1px solid rgba(200,144,62,0.35);
+  padding: 0.22rem 0.55rem; border-radius: 4px;
+  letter-spacing: 0.08em; flex-shrink: 0; order: 1;
+}
+.ex-head h4 {
+  font-family: 'Playfair Display', serif;
+  color: #fff; font-size: 1rem; font-weight: 600; flex: 1; order: 2;
+}
+.ex-video {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem;
+  color: var(--gold-light); text-decoration: none;
+  background: rgba(200,144,62,0.12);
+  border: 1px solid rgba(200,144,62,0.45);
+  border-radius: 999px;
+  padding: 0.28rem 0.68rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  white-space: nowrap; flex-shrink: 0; order: 3;
+  transition: background 0.16s ease, color 0.16s ease, border-color 0.16s ease, transform 0.16s ease;
+}
+.ex-video::before {
+  content: '\25B6';
+  font-size: 0.56rem;
+}
+.ex-video:hover {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--navy);
+}
+.ex-video:active {
+  transform: translateY(1px);
+}
+.ex-toggle {
+  color: var(--gold); font-size: 1.1rem;
+  transition: transform 0.28s; flex-shrink: 0; order: 4;
+  font-family: 'JetBrains Mono', monospace;
+}
+.ex-card.open .ex-toggle { transform: rotate(180deg); }
+.ex-body { display: none; padding: 1.8rem 2rem 1.5rem; }
+.ex-card.open .ex-body { display: block; animation: fadeIn 0.2s ease; }
+
+/* ─ Partes del ejercicio ─ */
+.enunciado {
+  background: rgba(200,144,62,0.07); border-left: 4px solid var(--gold);
+  border-radius: 0 10px 10px 0; padding: 1rem 1.2rem;
+  margin-bottom: 1.5rem; font-style: italic; color: var(--text);
+  font-size: 1.02rem;
+}
+.enunciado strong { font-style: normal; color: var(--navy); font-size: 0.82rem;
+  font-family: 'JetBrains Mono', monospace; letter-spacing: 0.06em;
+  text-transform: uppercase; display: block; margin-bottom: 0.35rem; }
+
+.obj-box {
+  background: rgba(30,45,78,0.06); border: 1px solid rgba(30,45,78,0.14);
+  border-radius: 10px; padding: 0.8rem 1.1rem; margin-bottom: 1.3rem;
+  display: flex; align-items: flex-start; gap: 0.7rem;
+}
+.obj-box .oi { font-size: 1.1rem; flex-shrink: 0; margin-top: 0.1rem; }
+.obj-box p { color: var(--text-soft); font-size: 0.95rem; margin: 0; }
+.obj-box strong { color: var(--navy); }
+
+.step {
+  background: var(--cream); border: 1px solid var(--cream-dark);
+  border-radius: var(--r); padding: 1.1rem 1.3rem;
+  margin-bottom: 1.1rem;
+}
+.step-lbl {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.14em;
+  color: var(--gold); margin-bottom: 0.4rem; display: block;
+}
+.step p { color: var(--text-soft); font-size: 0.98rem; margin-bottom: 0.4rem; }
+.step p:last-child { margin-bottom: 0; }
+
+.sym-callout {
+  background: rgba(22,32,56,0.07); border-left: 3px solid var(--navy-light);
+  border-radius: 0 8px 8px 0; padding: 0.7rem 1rem;
+  margin: 0.7rem 0; font-family: 'JetBrains Mono', monospace;
+  font-size: 0.88rem; color: var(--navy-card); line-height: 1.8;
+}
+
+.answer-box {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+  border-radius: var(--r); padding: 1.1rem 1.5rem;
+  display: flex; align-items: flex-start; gap: 0.9rem;
+  margin-top: 1.4rem; border: 1px solid rgba(200,144,62,0.3);
+}
+.answer-box .ai { font-size: 1.4rem; flex-shrink: 0; margin-top: 0.1rem; }
+.answer-box p { color: #fff; margin: 0; font-size: 1rem; line-height: 1.65; }
+.answer-box strong { color: var(--gold-light); }
+
+.warn-box {
+  background: var(--red-bg); border: 1px solid rgba(154,48,32,0.22);
+  border-radius: var(--r); padding: 0.8rem 1.1rem;
+  margin-top: 0.9rem;
+  display: flex; align-items: flex-start; gap: 0.7rem;
+}
+.warn-box .wi { font-size: 1rem; flex-shrink: 0; margin-top: 0.15rem; }
+.warn-box p { color: var(--red); font-size: 0.9rem; margin: 0; }
+
+.tip-box {
+  background: var(--green-bg); border: 1px solid rgba(42,122,90,0.22);
+  border-radius: var(--r); padding: 0.8rem 1.1rem;
+  margin-top: 0.9rem;
+  display: flex; align-items: flex-start; gap: 0.7rem;
+}
+.tip-box .ti { font-size: 1rem; flex-shrink: 0; margin-top: 0.15rem; }
+.tip-box p { color: var(--green); font-size: 0.9rem; margin: 0; }
+
+/* ════════════════════════════════════
+   SUMMARY CARD
+════════════════════════════════════ */
+.summary-card {
+  background: linear-gradient(135deg, var(--navy-light) 0%, var(--navy) 100%);
+  border-radius: var(--r-lg); padding: 1.8rem 2rem;
+  margin-top: 2rem; border: 1px solid rgba(200,144,62,0.3);
+}
+.summary-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem; color: var(--gold-light); margin-bottom: 0.8rem;
+}
+.summary-card p { color: rgba(255,255,255,0.68); font-size: 0.97rem; line-height: 1.72; }
+
+/* ════════════════════════════════════
+   OBSERVACIONES FINALES
+════════════════════════════════════ */
+.obs-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
+  gap: 1.1rem; margin-top: 1.5rem;
+}
+.obs-item {
+  background: #fff; border: 1px solid var(--border);
+  border-radius: var(--r); padding: 1.4rem 1.3rem;
+  box-shadow: var(--shadow);
+}
+.obs-item .oi { font-size: 1.6rem; margin-bottom: 0.5rem; }
+.obs-item h4 {
+  font-family: 'Playfair Display', serif;
+  color: var(--navy); font-size: 1rem; margin-bottom: 0.4rem;
+}
+.obs-item p { color: var(--text-soft); font-size: 0.88rem; line-height: 1.6; }
+
+/* ════════════════════════════════════
+   FOOTER
+════════════════════════════════════ */
+.footer {
+  background: var(--navy); border-top: 2px solid var(--gold);
+  padding: 2.2rem 4rem;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 1rem;
+}
+.footer-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem; color: var(--gold-light); font-weight: 700;
+}
+.footer p { color: rgba(255,255,255,0.42); font-size: 0.85rem; }
+
+/* ════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════ */
+@media (max-width: 800px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); box-shadow: var(--shadow-lg); }
+  .main { margin-left: 0; }
+  .btn-menu { display: none; }
+  .topbar-links { display: none; }
+  .hero { padding: 2.5rem 1.4rem 2rem; }
+  .hero-bg-text { display: none; }
+  .hero-method { flex-direction: column; }
+  .method-step { border-right: none; border-bottom: 1px solid rgba(200,144,62,0.2); }
+  .method-step:last-child { border-bottom: none; }
+  .section { padding: 2rem 1.4rem 1.8rem; }
+  .ex-head { flex-wrap: wrap; gap: 0.65rem; }
+  .ex-head h4 { flex-basis: calc(100% - 5.4rem); }
+  .ex-video { order: 3; }
+  .ex-toggle { margin-left: auto; }
+  .footer { padding: 1.8rem 1.4rem; flex-direction: column; text-align: center; }
+  .mf-step { padding: 0.9rem 0.6rem; }
+  .panorama-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 480px) {
+  .topbar { padding: 0 0.9rem; gap: 0.5rem; }
+  .topbar-brand span { display: none; }
+  .topbar-actions { gap: 0.3rem; }
+  .btn-donation { padding: 0.35rem 0.5rem; font-size: 0.56rem; }
+  .donation-modal { padding: 0.8rem; }
+  .donation-panel { max-height: calc(100vh - 1.6rem); overflow-y: auto; }
+  .donation-content { padding: 1.55rem; }
+  .donation-close { top: 0.75rem; right: 0.75rem; }
+  .donation-alias { grid-template-columns: 1fr; align-items: stretch; }
+  .donation-copy { width: 100%; }
+  .panorama-grid { grid-template-columns: 1fr; }
+  .obs-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<!-- ══ TOPBAR ══ -->
+<header class="topbar">
+  <div class="topbar-brand">Matemática <span>· Guía de Estudio</span></div>
+  <button class="btn-menu" id="btnMenu">☰</button>
+  <nav class="topbar-links">
+    <a href="#panorama">Panorama</a>
+    <a href="#simbolos">Símbolos</a>
+    <a href="#logica">Lógica</a>
+    <a href="#conjuntos">Conjuntos</a>
+    <a href="#trigonometria">Trigonometría</a>
+    <a href="#vectores">Vectores</a>
+    <a href="#obs-finales">Consejos</a>
+  </nav>
+  <div class="topbar-actions">
+    <button class="btn-donation" id="btnDonation" type="button" aria-haspopup="dialog" aria-expanded="false">Donaciones</button>
+  </div>
+</header>
+
+<div class="donation-modal" id="donationModal" role="dialog" aria-modal="true" aria-labelledby="donationTitle" hidden>
+  <div class="donation-panel">
+    <button class="donation-close" id="donationClose" type="button" aria-label="Cerrar donaciones">&times;</button>
+    <div class="donation-content">
+      <span class="donation-kicker">Gracias por estudiar ac&aacute;</span>
+      <h2 id="donationTitle">Si esta gu&iacute;a te sirvi&oacute;, un aporte ayuda much&iacute;simo.</h2>
+      <p>Este material est&aacute; hecho con dedicaci&oacute;n para que estudiar sea m&aacute;s claro, m&aacute;s amable y menos solitario. Si te gust&oacute; la p&aacute;gina o te ayud&oacute; a preparar un tema, cualquier colaboraci&oacute;n se agradece de coraz&oacute;n.</p>
+
+      <div class="donation-aliases" aria-label="Alias para donaciones">
+        <div class="donation-alias">
+          <div>
+            <span class="donation-method">Mercado Pago</span>
+            <span class="donation-value">alainal3n</span>
+          </div>
+          <button class="donation-copy" type="button" data-copy="alainal3n">Copiar</button>
+        </div>
+        <div class="donation-alias">
+          <div>
+            <span class="donation-method">BNA+</span>
+            <span class="donation-value">estudio.juegos.piano</span>
+          </div>
+          <button class="donation-copy" type="button" data-copy="estudio.juegos.piano">Copiar</button>
+        </div>
+      </div>
+
+      <div class="donation-status" id="donationStatus" aria-live="polite"></div>
+      <p class="donation-note">No es obligatorio: la gu&iacute;a sigue disponible igual. Es simplemente una forma linda de apoyar este trabajo si te nace hacerlo.</p>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar" id="sidebar">
+
+  <div class="sb-label">Inicio</div>
+  <a class="sb-link" href="#panorama"><span class="ic">🗺</span> Panorama general</a>
+  <a class="sb-link" href="#simbolos"><span class="ic">∑</span> Tabla de símbolos</a>
+
+  <hr class="sb-divider">
+  <div class="sb-label">Temas</div>
+
+  <a class="sb-link" href="#logica"><span class="ic">⊃</span> Lógica Proposicional</a>
+  <a class="sb-sub" href="#tab-logica-teoria">↳ Teoría</a>
+  <a class="sb-sub" href="#tab-logica-ej">↳ Ejercicios resueltos</a>
+
+  <a class="sb-link" href="#conjuntos"><span class="ic">∩</span> Conjuntos</a>
+  <a class="sb-sub" href="#tab-conj-teoria">↳ Teoría</a>
+  <a class="sb-sub" href="#tab-conj-ej">↳ Ejercicios resueltos</a>
+
+  <a class="sb-link" href="#trigonometria"><span class="ic">△</span> Trigonometría</a>
+  <a class="sb-sub" href="#tab-trig-teoria">↳ Teoría</a>
+  <a class="sb-sub" href="#tab-trig-ej">↳ Ejercicios resueltos</a>
+
+  <a class="sb-link" href="#vectores"><span class="ic">⃗v</span> Vectores</a>
+  <a class="sb-sub" href="#tab-vec-teoria">↳ Teoría</a>
+  <a class="sb-sub" href="#tab-vec-ej">↳ Ejercicios resueltos</a>
+
+  <hr class="sb-divider">
+  <a class="sb-link" href="#obs-finales"><span class="ic">📌</span> Observaciones finales</a>
+
+</aside>
+
+<!-- ══ MAIN ══ -->
+<main class="main">
+
+<!-- ════ HERO ════ -->
+<section class="hero">
+  <div class="hero-bg-text">MAT</div>
+  <div class="hero-inner">
+    <span class="hero-badge">📐 Material de estudio · Nivel preuniversitario</span>
+    <h1>Matemática:<br><em>clara, paso a paso.</em></h1>
+    <p class="hero-sub">Una guía completa con teoría didáctica, tabla de símbolos y resolución detallada de cada ejercicio. Pensada para estudiar solo, sin necesitar ayuda externa.</p>
+    <div class="hero-tags">
+      <span class="tag">⊃ Lógica proposicional</span>
+      <span class="tag">∩ Conjuntos</span>
+      <span class="tag">△ Trigonometría</span>
+      <span class="tag">→ Vectores</span>
+    </div>
+    <div class="hero-method">
+      <div class="method-step">
+        <span class="mn">01</span>
+        <p>Interpretar el enunciado e identificar la estructura</p>
+      </div>
+      <div class="method-step">
+        <span class="mn">02</span>
+        <p>Aplicar la propiedad o procedimiento correspondiente</p>
+      </div>
+      <div class="method-step">
+        <span class="mn">03</span>
+        <p>Verificar que la respuesta sea coherente con el dominio</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ PANORAMA GENERAL ════ -->
+<section class="section" id="panorama">
+  <div class="sec-head">
+    <div class="sec-icon">🗺</div>
+    <div class="sec-titles">
+      <h2>Panorama general del material</h2>
+      <p>¿De qué trata este material y cómo está organizado?</p>
+    </div>
+    <span class="sec-num">00</span>
+  </div>
+
+  <div class="theory-card">
+    <h3>¿Qué vas a encontrar acá?</h3>
+    <p>Este material reúne ejercicios de <strong>cuatro áreas fundamentales</strong> de la matemática preuniversitaria: lógica proposicional, conjuntos, trigonometría y vectores. Aunque cada tema trabaja objetos distintos, todos comparten una idea en común:</p>
+    <p>No se trata solo de calcular, sino también de <strong>interpretar correctamente cada enunciado</strong>, traducir información del lenguaje natural al simbólico, operar con precisión y justificar los resultados con reglas bien definidas.</p>
+  </div>
+
+  <div class="method-flow">
+    <div class="mf-step">
+      <span class="n">①</span>
+      <strong>Interpretar</strong>
+      <span>Identificar la estructura lógica o algebraica del enunciado</span>
+    </div>
+    <div class="mf-step">
+      <span class="n">②</span>
+      <strong>Aplicar</strong>
+      <span>Usar la propiedad, identidad o procedimiento correcto</span>
+    </div>
+    <div class="mf-step">
+      <span class="n">③</span>
+      <strong>Verificar</strong>
+      <span>Comprobar que la respuesta sea coherente con el dominio y el contexto</span>
+    </div>
+  </div>
+
+  <div class="panorama-grid" style="margin-top:1.5rem;">
+    <div class="pano-card">
+      <div class="pc-icon">⊃</div>
+      <h4>Lógica proposicional</h4>
+      <p>Negaciones, implicaciones y contrarrecíprocas. Traducir oraciones cotidianas a estructuras lógicas precisas.</p>
+    </div>
+    <div class="pano-card">
+      <div class="pc-icon">∩</div>
+      <h4>Conjuntos</h4>
+      <p>Extensión, comprensión, operaciones entre conjuntos y resolución de desigualdades con valor absoluto y fracciones.</p>
+    </div>
+    <div class="pano-card">
+      <div class="pc-icon">△</div>
+      <h4>Trigonometría</h4>
+      <p>Funciones trigonométricas, círculo unitario, identidades, ecuaciones y aplicaciones geométricas en triángulos.</p>
+    </div>
+    <div class="pano-card">
+      <div class="pc-icon">→</div>
+      <h4>Vectores</h4>
+      <p>Norma, producto escalar y vectorial, condiciones de perpendicularidad y resolución de parámetros desconocidos.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════ TABLA DE SÍMBOLOS ════ -->
+<section class="section" id="simbolos">
+  <div class="sec-head">
+    <div class="sec-icon">∑</div>
+    <div class="sec-titles">
+      <h2>Tabla de símbolos matemáticos</h2>
+      <p>Referencia rápida de toda la simbología usada en los ejercicios.</p>
+    </div>
+    <span class="sec-num">REF</span>
+  </div>
+
+  <div class="sym-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Área</th>
+          <th>Símbolo</th>
+          <th>Significado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- LÓGICA -->
+        <tr><td>Lógica</td><td>¬</td><td>Negación: "no es cierto que…"</td></tr>
+        <tr><td>Lógica</td><td>∧</td><td>Conjunción: "y" (ambas condiciones deben darse)</td></tr>
+        <tr><td>Lógica</td><td>∨</td><td>Disyunción: "o" (al menos una condición se da)</td></tr>
+        <tr><td>Lógica</td><td>⇒</td><td>Implicación: "si… entonces…"</td></tr>
+        <tr><td>Lógica</td><td>⇔</td><td>Equivalencia lógica: "si y solo si"</td></tr>
+        <!-- CONJUNTOS -->
+        <tr><td>Conjuntos</td><td>∈ / ∉</td><td>Pertenece / no pertenece a un conjunto</td></tr>
+        <tr><td>Conjuntos</td><td>ℤ / ℝ</td><td>Números enteros / números reales</td></tr>
+        <tr><td>Conjuntos</td><td>∪ / ∩</td><td>Unión / intersección de conjuntos</td></tr>
+        <tr><td>Conjuntos</td><td>\</td><td>Diferencia de conjuntos: A \ B = elementos de A que no están en B</td></tr>
+        <tr><td>Conjuntos</td><td>Ā</td><td>Complemento de A respecto del universo U</td></tr>
+        <tr><td>Conjuntos</td><td>|x|</td><td>Valor absoluto: distancia de x al cero</td></tr>
+        <!-- TRIGONOMETRÍA -->
+        <tr><td>Trigonometría</td><td>sen / cos</td><td>Funciones seno y coseno</td></tr>
+        <tr><td>Trigonometría</td><td>π</td><td>Número pi ≈ 3,14159… (media vuelta en radianes)</td></tr>
+        <tr><td>Trigonometría</td><td>°</td><td>Grados sexagesimales</td></tr>
+        <tr><td>Trigonometría</td><td>√</td><td>Raíz cuadrada</td></tr>
+        <!-- VECTORES -->
+        <tr><td>Vectores</td><td>u, v, w</td><td>Vectores (en negrita o con flecha)</td></tr>
+        <tr><td>Vectores</td><td>×</td><td>Producto vectorial (da un nuevo vector)</td></tr>
+        <tr><td>Vectores</td><td>·</td><td>Producto escalar (da un número)</td></tr>
+        <tr><td>Vectores</td><td>⊥</td><td>Perpendicularidad entre vectores</td></tr>
+        <tr><td>Vectores</td><td>∥</td><td>Paralelismo entre vectores</td></tr>
+        <tr><td>Vectores</td><td>‖·‖</td><td>Norma o módulo: longitud de un vector</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="theory-card">
+    <h3>¿Cómo usar esta tabla?</h3>
+    <p>Cuando encuentres un símbolo que no recordás, buscalo acá antes de seguir. En matemática, leer bien el enunciado ya es la mitad del trabajo: un símbolo mal interpretado lleva a un resultado completamente distinto.</p>
+    <p>Por ejemplo: <strong>A \ B</strong> (diferencia) y <strong>Ā</strong> (complemento) son cosas distintas. La diferencia depende de B; el complemento depende del universo U. Confundirlos es uno de los errores más frecuentes en conjuntos.</p>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     1. LÓGICA PROPOSICIONAL
+════════════════════════════════════ -->
+<section class="section" id="logica">
+  <div class="sec-head">
+    <div class="sec-icon">⊃</div>
+    <div class="sec-titles">
+      <h2>Lógica Proposicional</h2>
+      <p>Negaciones, implicaciones, contrarrecíprocas y leyes de De Morgan.</p>
+    </div>
+    <span class="sec-num">01</span>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-panel="logica-teoria">📖 Teoría fundamental</button>
+    <button class="tab-btn" data-panel="logica-ej">✏️ Ejercicios resueltos</button>
+  </div>
+
+  <!-- ─ TAB TEORÍA ─ -->
+  <div class="tab-panel active" id="logica-teoria">
+    <div class="theory-card">
+      <h3>La l&oacute;gica como traducci&oacute;n</h3>
+      <p>En l&oacute;gica proposicional, la dificultad no suele estar en hacer cuentas, sino en traducir bien. Una frase cotidiana puede esconder una estructura precisa: condici&oacute;n, consecuencia, negaci&oacute;n, conjunci&oacute;n o disyunci&oacute;n.</p>
+      <p>La estrategia es leer despacio y preguntarse: <strong>&iquest;cu&aacute;l es la condici&oacute;n?, &iquest;cu&aacute;l es la conclusi&oacute;n?, &iquest;qu&eacute; parte se est&aacute; negando?</strong> Una vez que esa estructura est&aacute; clara, las reglas se aplican casi mec&aacute;nicamente.</p>
+    </div>
+
+    <div class="theory-card">
+      <h3>¿Qué es una proposición?</h3>
+      <p>Una <strong>proposición</strong> es cualquier oración que puede ser verdadera o falsa, sin lugar a dudas. Por ejemplo: <em>"El número 2 es par"</em> es una proposición verdadera. <em>"La luna es de queso"</em> es una proposición falsa.</p>
+      <p>Las proposiciones simples (una sola idea) se combinan con <strong>conectivos lógicos</strong> para formar proposiciones compuestas. El valor de verdad del resultado depende de cada parte.</p>
+    </div>
+
+    <div class="theory-card">
+      <h3>Los conectivos lógicos fundamentales</h3>
+      <div class="inline-table">
+        <table>
+          <tr><th>Símbolo</th><th>Nombre</th><th>Se lee</th><th>Es verdadero cuando…</th></tr>
+          <tr><td>¬p</td><td>Negación</td><td>"No p"</td><td>p es falso</td></tr>
+          <tr><td>p ∧ q</td><td>Conjunción</td><td>"p y q"</td><td>Ambos son verdaderos</td></tr>
+          <tr><td>p ∨ q</td><td>Disyunción</td><td>"p o q"</td><td>Al menos uno es verdadero</td></tr>
+          <tr><td>p ⇒ q</td><td>Implicación</td><td>"Si p, entonces q"</td><td>Siempre, salvo que p=V y q=F</td></tr>
+          <tr><td>p ⇔ q</td><td>Equivalencia</td><td>"p si y solo si q"</td><td>Cuando ambos tienen el mismo valor</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="theory-card">
+      <h3>La implicación y sus formas relacionadas</h3>
+      <p>La implicación "Si p, entonces q" (p ⇒ q) tiene cuatro variantes. Solo una de ellas es lógicamente equivalente a la original:</p>
+      <div class="inline-table">
+        <table>
+          <tr><th>Forma</th><th>Estructura</th><th>¿Equivale a la original?</th></tr>
+          <tr><td>Original</td><td>p ⇒ q</td><td>—</td></tr>
+          <tr><td>Recíproca</td><td>q ⇒ p</td><td>No necesariamente</td></tr>
+          <tr><td>Inversa</td><td>¬p ⇒ ¬q</td><td>No necesariamente</td></tr>
+          <tr><td>Contrarrecíproca</td><td>¬q ⇒ ¬p</td><td>✔ Sí, siempre</td></tr>
+        </table>
+      </div>
+      <p style="margin-top:0.7rem;"><strong>Lo clave:</strong> la contrarrecíproca se forma haciendo <em>dos cosas a la vez</em>: se intercambia el antecedente con el consecuente, y se niegan ambos. Nunca se hace solo una de las dos.</p>
+    </div>
+
+    <div class="theory-card">
+      <h3>Cómo negar correctamente (Leyes de De Morgan)</h3>
+      <p>Negar una proposición compuesta tiene reglas específicas. No es simplemente poner "no" al principio de la oración:</p>
+      <div class="formula-box">Negar una implicación: &nbsp; ¬(p ⇒ q) ≡ p ∧ ¬q</div>
+      <div class="formula-box">De Morgan — conjunción: &nbsp; ¬(p ∧ q) ≡ ¬p ∨ ¬q</div>
+      <div class="formula-box">De Morgan — disyunción: &nbsp; ¬(p ∨ q) ≡ ¬p ∧ ¬q</div>
+      <p>La Ley de De Morgan es fundamental: al negar una conjunción (y), se convierte en disyunción (o), y viceversa. El "y" y el "o" se intercambian al negar.</p>
+    </div>
+
+    <div class="theory-card">
+      <h3>Un m&eacute;todo simple para traducir oraciones</h3>
+      <p>Cuando una oraci&oacute;n parece larga, no conviene intentar resolverla de una vez. Primero hay que separar el lenguaje cotidiano en piezas peque&ntilde;as. Cada pieza que pueda ser verdadera o falsa se convierte en una letra: p, q, r.</p>
+      <p>Despu&eacute;s se busca el conectivo principal. Si aparece una frase como <strong>"si..., entonces..."</strong>, casi siempre el conectivo principal es una implicaci&oacute;n. Si aparecen palabras como <strong>"y"</strong>, <strong>"o"</strong>, <strong>"no"</strong>, se traducen como conjunci&oacute;n, disyunci&oacute;n y negaci&oacute;n.</p>
+      <div class="inline-table">
+        <table>
+          <tr><th>Lenguaje cotidiano</th><th>Traducci&oacute;n l&oacute;gica</th><th>Pregunta que ayuda</th></tr>
+          <tr><td>"Voy al banco y estudio"</td><td>p &and; q</td><td>&iquest;Deben cumplirse las dos cosas?</td></tr>
+          <tr><td>"Voy al banco o estudio"</td><td>p &or; q</td><td>&iquest;Alcanza con que pase una?</td></tr>
+          <tr><td>"Si estudio, apruebo"</td><td>p &rArr; q</td><td>&iquest;Qu&eacute; es condici&oacute;n y qu&eacute; es consecuencia?</td></tr>
+          <tr><td>"No voy al cine"</td><td>&not;p</td><td>&iquest;Qu&eacute; proposici&oacute;n estoy negando?</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="theory-card">
+      <h3>Por qu&eacute; una implicaci&oacute;n solo falla en un caso</h3>
+      <p>La proposici&oacute;n <strong>p &rArr; q</strong> se lee: "si ocurre p, entonces ocurre q". Esta promesa solo se rompe cuando p ocurre y q no ocurre. Si p no ocurre, la promesa no llega a ponerse a prueba.</p>
+      <div class="inline-table">
+        <table>
+          <tr><th>p</th><th>q</th><th>p &rArr; q</th><th>Lectura</th></tr>
+          <tr><td>V</td><td>V</td><td>V</td><td>Se cumple la condici&oacute;n y tambi&eacute;n la consecuencia.</td></tr>
+          <tr><td>V</td><td>F</td><td>F</td><td>La condici&oacute;n ocurri&oacute;, pero la consecuencia no. Ah&iacute; falla.</td></tr>
+          <tr><td>F</td><td>V</td><td>V</td><td>No ocurri&oacute; la condici&oacute;n; la implicaci&oacute;n no queda contradicha.</td></tr>
+          <tr><td>F</td><td>F</td><td>V</td><td>Tampoco ocurri&oacute; la condici&oacute;n; no hay incumplimiento.</td></tr>
+        </table>
+      </div>
+      <p>Por eso la negaci&oacute;n de una implicaci&oacute;n es tan importante: <strong>&not;(p &rArr; q)</strong> significa exactamente <strong>p &and; &not;q</strong>. Es decir: pas&oacute; la condici&oacute;n, pero no pas&oacute; la consecuencia.</p>
+    </div>
+
+    <div class="key-card">
+      <h3>💡 Ideas clave — Lógica proposicional</h3>
+      <ul>
+        <li>Primero separar la oración en proposiciones simples y nombrarlas (p, q, r...).</li>
+        <li>Identificar el conectivo principal antes de operar con la proposición.</li>
+        <li>La contrarrecíproca de "Si A entonces B" es siempre "Si no-B entonces no-A".</li>
+        <li>Para negar una implicación: se conserva el antecedente y se niega el consecuente, unidos con "y".</li>
+        <li>Al negar una conjunción (y), el resultado usa "o". Al negar una disyunción (o), el resultado usa "y".</li>
+        <li>Verificar que el resultado tenga la estructura pedida: coloquial, simbólica, negación o contrarrecíproca.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ─ TAB EJERCICIOS ─ -->
+  <div class="tab-panel" id="logica-ej">
+
+    <!-- EJ 01 -->
+    <div class="ex-card open">
+      <div class="ex-head" onclick="toggleEx(this)">
+        <span class="ex-num">EJ 01</span>
+        <a class="ex-video" href="https://www.youtube.com/watch?v=NCbnDkMLhww" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" aria-label="Ver video de contrarreciproca en YouTube">Ver video</a>
+        <h4>Contrarrecíproca de una proposición condicional</h4>
+        <span class="ex-toggle">▾</span>
+      </div>
+      <div class="ex-body">
+        <div class="enunciado">
+          <strong>Enunciado original</strong>
+          Hallar la contrarrecíproca, en forma coloquial, de la proposición: "√2 es un número irracional, si −2 es divisor de 8 y 0 no es múltiplo de 4".
+        </div>
+
+        <div class="obj-box">
+          <span class="oi">🎯</span>
+          <p><strong>¿Qué se busca?</strong> Transformar la proposición aplicando la forma contrarrecíproca: invertir antecedente y consecuente, y negar ambos. El resultado debe expresarse en lenguaje coloquial (sin símbolos).</p>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 1 · Identificar la estructura de la proposición</span>
+          <p>La palabra "si" indica quién es la condición y quién es la conclusión. Lo que viene <em>después</em> del "si" es el antecedente; lo que va <em>antes</em> es el consecuente.</p>
+          <p>Entonces la proposición dice: <strong>Si (−2 es divisor de 8) y (0 no es múltiplo de 4), entonces (√2 es un número irracional).</strong></p>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 2 · Nombrar las proposiciones simples</span>
+          <p>Definimos letras para cada idea:</p>
+          <div class="sym-callout">
+            p = "−2 es divisor de 8"<br>
+            q = "0 no es múltiplo de 4"<br>
+            r = "√2 es un número irracional"<br><br>
+            Proposición original: (p ∧ q) ⇒ r
+          </div>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 3 · Negar cada parte</span>
+          <p><strong>Negar el consecuente r:</strong> "√2 NO es un número irracional" (equivale a decir que √2 es racional).</p>
+          <p><strong>Negar el antecedente (p ∧ q):</strong> por De Morgan, la negación de "A y B" es "no-A o no-B":</p>
+          <div class="sym-callout">¬(p ∧ q) = ¬p ∨ ¬q<br>"−2 NO es divisor de 8, o 0 es múltiplo de 4"</div>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 4 · Armar la contrarrecíproca</span>
+          <p>La contrarrecíproca invierte el orden y niega: primero va la negación del consecuente, y después la negación del antecedente.</p>
+          <div class="formula-box">Contrarrecíproca: ¬r ⇒ ¬(p ∧ q) &nbsp;≡&nbsp; ¬r ⇒ (¬p ∨ ¬q)</div>
+        </div>
+
+        <div class="answer-box">
+          <span class="ai">✓</span>
+          <p><strong>Respuesta:</strong> "Si √2 no es un número irracional, entonces −2 no es divisor de 8 o 0 es múltiplo de 4."</p>
+        </div>
+
+        <div class="warn-box">
+          <span class="wi">⚠️</span>
+          <p><strong>Error frecuente:</strong> confundir la contrarrecíproca con la negación simple, o solo negar sin invertir el orden. Las dos acciones (invertir y negar) deben hacerse a la vez. Además, al negar la conjunción "y" del antecedente, aparece una disyunción "o".</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- EJ 02 -->
+    <div class="ex-card">
+      <div class="ex-head" onclick="toggleEx(this)">
+        <span class="ex-num">EJ 02</span>
+        <a class="ex-video" href="https://www.youtube.com/watch?v=1tCqJU0bwkw" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" aria-label="Ver video de negacion en YouTube">Ver video</a>
+        <h4>Negar una proposición condicional (forma simbólica y coloquial)</h4>
+        <span class="ex-toggle">▾</span>
+      </div>
+      <div class="ex-body">
+        <div class="enunciado">
+          <strong>Enunciado original</strong>
+          Negar la siguiente proposición en forma simbólica, indicando las proposiciones simples que la componen: "Si voy al banco y me tomo un helado, entonces no voy al cine".
+        </div>
+
+        <div class="obj-box">
+          <span class="oi">🎯</span>
+          <p><strong>¿Qué se busca?</strong> Identificar las proposiciones simples, escribir la proposición en forma simbólica y luego expresar su negación también en forma simbólica. El resultado debe poder leerse también en lenguaje natural.</p>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 1 · Identificar y nombrar las proposiciones simples</span>
+          <p>Extraemos cada idea simple de la oración:</p>
+          <div class="sym-callout">
+            p = "voy al banco"<br>
+            q = "me tomo un helado"<br>
+            r = "voy al cine"<br><br>
+            Proposición original en forma simbólica: &nbsp; (p ∧ q) ⇒ ¬r
+          </div>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 2 · Aplicar la regla para negar una implicación</span>
+          <p>La regla es: la negación de "Si A entonces B" es <strong>"A y no-B"</strong>.</p>
+          <div class="formula-box">¬(A ⇒ B) ≡ A ∧ ¬B</div>
+          <p>Esto tiene sentido: una implicación solo es falsa cuando la condición se cumple pero la consecuencia no ocurre. Negar la implicación es justamente decir que ese caso sí ocurre.</p>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 3 · Aplicar la regla a nuestra proposición</span>
+          <p><strong>Antecedente A:</strong> (p ∧ q) → se conserva igual.</p>
+          <p><strong>Consecuente B:</strong> ¬r → se niega: ¬(¬r) = r.</p>
+          <div class="sym-callout">
+            ¬[(p ∧ q) ⇒ ¬r] &nbsp; ≡ &nbsp; (p ∧ q) ∧ ¬(¬r) &nbsp; ≡ &nbsp; (p ∧ q) ∧ r<br><br>
+            En símbolos: &nbsp; p ∧ q ∧ r
+          </div>
+          <p>En lenguaje coloquial: "Voy al banco, me tomo un helado <strong>y</strong> voy al cine."</p>
+        </div>
+
+        <div class="answer-box">
+          <span class="ai">✓</span>
+          <p>
+            <strong>Forma simbólica:</strong> p ∧ q ∧ r<br>
+            <strong>Forma coloquial:</strong> "Voy al banco, me tomo un helado y voy al cine."
+          </p>
+        </div>
+
+        <div class="warn-box">
+          <span class="wi">⚠️</span>
+          <p><strong>Error frecuente:</strong> poner el "no" en cualquier parte de la oración al azar, o negar solo la última parte sin aplicar la regla formal. La negación de una implicación tiene una estructura exacta que no puede modificarse.</p>
+        </div>
+
+        <div class="tip-box">
+          <span class="ti">💡</span>
+          <p><strong>Observación:</strong> al negar ¬r (que ya era una negación), las dos negaciones se cancelan y obtenemos r directamente. "No voy al cine" negado es "voy al cine".</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <h3>📌 Resumen — Lógica proposicional</h3>
+      <p>La lógica proposicional se domina identificando correctamente la estructura de cada oración. Los dos errores más comunes son: confundir contrarrecíproca con negación, y aplicar De Morgan sin darse cuenta de que el "y" se convierte en "o". Con la tabla de conectivos siempre a mano, las transformaciones se vuelven mecánicas.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     2. CONJUNTOS
+════════════════════════════════════ -->
+<section class="section" id="conjuntos">
+  <div class="sec-head">
+    <div class="sec-icon">∩</div>
+    <div class="sec-titles">
+      <h2>Conjuntos</h2>
+      <p>Extensión, comprensión, operaciones, valor absoluto y desigualdades.</p>
+    </div>
+    <span class="sec-num">02</span>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-panel="conj-teoria">📖 Teoría fundamental</button>
+    <button class="tab-btn" data-panel="conj-ej">✏️ Ejercicios resueltos</button>
+  </div>
+
+  <div class="tab-panel active" id="conj-teoria">
+    <div class="theory-card">
+      <h3>La idea antes de la cuenta</h3>
+      <p>Un conjunto responde siempre a la pregunta: <strong>&iquest;qu&eacute; elementos cumplen esta condici&oacute;n?</strong> A veces la condici&oacute;n ya est&aacute; listada; otras veces hay que resolver una desigualdad para descubrir qu&eacute; valores entran.</p>
+      <p>Si el conjunto se define dentro de un universo U, todo lo que hagas debe respetar ese universo. Aunque una desigualdad permita otros valores, solo se aceptan los que pertenecen a U cuando el enunciado lo exige.</p>
+    </div>
+
+    <div class="theory-card">
+      <h3>¿Qué es un conjunto?</h3>
+      <p>Un <strong>conjunto</strong> es una colección bien definida de elementos. "Bien definida" significa que, dado cualquier objeto, podemos decir sin duda si pertenece o no al conjunto.</p>
+      <p>Hay dos formas de describir un conjunto:</p>
+      <p>· <strong>Por extensión:</strong> listando todos los elementos. Ej: A = {1, 2, 3, 4}.</p>
+      <p>· <strong>Por comprensión:</strong> describiendo la propiedad que deben cumplir. Ej: A = {x ∈ ℤ : 1 ≤ x ≤ 4}.</p>
+    </div>
+
+    <div class="theory-card">
+      <h3>Las operaciones entre conjuntos</h3>
+      <p>Antes de operar, conviene imaginar que cada conjunto es una lista de elementos marcados. La uni&oacute;n junta todo, la intersecci&oacute;n conserva solo lo repetido, la diferencia empieza desde un conjunto y elimina lo que aparece en otro, y el complemento mira lo que falta dentro del universo.</p>
+      <p>La pregunta gu&iacute;a es: <strong>&iquest;desde d&oacute;nde empiezo?</strong> En A \ B se empieza desde A. En el complemento de A se empieza desde U. Esa diferencia cambia completamente el resultado.</p>
+      <div class="inline-table">
+        <table>
+          <tr><th>Símbolo</th><th>Nombre</th><th>Definición</th><th>Ejemplo</th></tr>
+          <tr><td>A ∪ B</td><td>Unión</td><td>Elementos en A, en B, o en ambos</td><td>{1,2} ∪ {2,3} = {1,2,3}</td></tr>
+          <tr><td>A ∩ B</td><td>Intersección</td><td>Solo los elementos comunes a ambos</td><td>{1,2} ∩ {2,3} = {2}</td></tr>
+          <tr><td>A \ B</td><td>Diferencia</td><td>Elementos de A que NO están en B</td><td>{1,2,3} \ {2} = {1,3}</td></tr>
+          <tr><td>Ā</td><td>Complemento</td><td>Elementos de U que no están en A</td><td>Si U={1,2,3,4}, A={1,2} → Ā={3,4}</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="theory-card">
+      <h3>El valor absoluto en desigualdades</h3>
+      <p>El valor absoluto |x| representa la <strong>distancia de x al cero</strong>. Esto permite traducir condiciones geométricas en algebraicas:</p>
+      <div class="formula-box">|x| ≤ a &nbsp; ⟺ &nbsp; −a ≤ x ≤ a &nbsp; (a > 0)</div>
+      <div class="formula-box">|expresión − c| ≤ a &nbsp; → &nbsp; despejar "expresión" entre (c−a) y (c+a)</div>
+      <p>Cuando la expresión dentro del valor absoluto es más compleja (como |2x − 4|), se trabaja igual: primero se despeja el valor absoluto, luego se arma la doble desigualdad y se divide.</p>
+    </div>
+
+    <div class="theory-card">
+      <h3>Desigualdades racionales (con fracciones)</h3>
+      <p>La idea principal es que una fracci&oacute;n puede cambiar de signo cuando cambia el signo del numerador o del denominador. Por eso se buscan los puntos cr&iacute;ticos y se arma una recta de signos.</p>
+      <p>En una recta de signos, cada intervalo se prueba con un valor sencillo. Si la fracci&oacute;n queda positiva, negativa o cero, se decide si ese intervalo entra en la soluci&oacute;n seg&uacute;n el signo pedido por el ejercicio.</p>
+      <p>Cuando la desigualdad tiene x en el denominador, hay que ser cuidadoso porque <strong>el denominador no puede ser cero</strong>. El método seguro:</p>
+      <p>1. Pasar todo al mismo lado (dejar cero del otro lado).<br>
+         2. Unificar en una sola fracción.<br>
+         3. Analizar los signos de numerador y denominador en cada intervalo.<br>
+         4. Excluir siempre el valor que anula el denominador.</p>
+      <div class="formula-box">fracción ≥ 0 &nbsp; cuando numerador y denominador tienen el mismo signo</div>
+    </div>
+
+    <div class="key-card">
+      <h3>💡 Ideas clave — Conjuntos</h3>
+      <ul>
+        <li>Primero definir bien el universo U, luego cada conjunto, y recién después operar entre ellos.</li>
+        <li>La diferencia A \ B conserva los de A que no están en B. El complemento depende de U.</li>
+        <li>La intersección conserva solo los elementos que están en ambos conjuntos a la vez.</li>
+        <li>Con valor absoluto: despejar la expresión interna y armar una doble desigualdad.</li>
+        <li>En fracciones con x: nunca multiplicar por el denominador sin saber si es positivo o negativo. Mejor analizar signos.</li>
+        <li>Al multiplicar o dividir por un número negativo, el sentido de la desigualdad se invierte.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="conj-ej">
+
+    <!-- EJ 03 -->
+    <div class="ex-card open">
+      <div class="ex-head" onclick="toggleEx(this)">
+        <span class="ex-num">EJ 03</span>
+        <a class="ex-video" href="https://www.youtube.com/watch?v=nRfQ7a8GMF0" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" aria-label="Ver video de operaciones complemento y diferencia en YouTube">Ver video</a>
+        <h4>Conjuntos por extensión y complemento de una diferencia</h4>
+        <span class="ex-toggle">▾</span>
+      </div>
+      <div class="ex-body">
+        <div class="enunciado">
+          <strong>Enunciado original</strong>
+          Dados los conjuntos U = {x ∈ ℤ : −3 ≤ x &lt; 7}, A = {x ∈ U : x es múltiplo de 3} y B = {x ∈ U : 1 + |2x − 4| ≤ 7}, definir por extensión los conjuntos y calcular (B \ A)̄ — el complemento de la diferencia B menos A.
+        </div>
+
+        <div class="obj-box">
+          <span class="oi">🎯</span>
+          <p><strong>¿Qué se busca?</strong> Escribir U, A y B listando sus elementos uno por uno, luego calcular la diferencia B \ A, y finalmente tomar el complemento de esa diferencia respecto de U.</p>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 1 · Construir U por extensión</span>
+          <p>U incluye los enteros desde −3 hasta 6 (el 7 queda afuera porque el intervalo es <em>abierto</em> en ese extremo: −3 ≤ x &lt; 7).</p>
+          <div class="sym-callout">U = {−3, −2, −1, 0, 1, 2, 3, 4, 5, 6}</div>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 2 · Construir A (múltiplos de 3 en U)</span>
+          <p>Revisamos uno por uno qué elementos de U son divisibles exactamente por 3:</p>
+          <p>−3 ÷ 3 = −1 ✔ &nbsp;|&nbsp; 0 ÷ 3 = 0 ✔ &nbsp;|&nbsp; 3 ÷ 3 = 1 ✔ &nbsp;|&nbsp; 6 ÷ 3 = 2 ✔</p>
+          <div class="sym-callout">A = {−3, 0, 3, 6}</div>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 3 · Resolver la desigualdad para construir B</span>
+          <p>La condición es: 1 + |2x − 4| ≤ 7</p>
+          <p><strong>Restamos 1 de ambos lados:</strong> |2x − 4| ≤ 6</p>
+          <p><strong>Aplicamos el valor absoluto</strong> (recordá: |expresión| ≤ a se convierte en −a ≤ expresión ≤ a):</p>
+          <div class="sym-callout">
+            −6 ≤ 2x − 4 ≤ 6<br>
+            Sumamos 4: &nbsp; −2 ≤ 2x ≤ 10<br>
+            Dividimos por 2: &nbsp; −1 ≤ x ≤ 5
+          </div>
+          <p>Los enteros de U que cumplen −1 ≤ x ≤ 5 son:</p>
+          <div class="sym-callout">B = {−1, 0, 1, 2, 3, 4, 5}</div>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 4 · Calcular la diferencia B \ A</span>
+          <p>B \ A = elementos de B que NO están en A. De B tenemos {−1, 0, 1, 2, 3, 4, 5}. Los que sí están en A son 0 y 3, así que los eliminamos:</p>
+          <div class="sym-callout">B \ A = {−1, 1, 2, 4, 5}</div>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 5 · Calcular el complemento de (B \ A) en U</span>
+          <p>El complemento de (B \ A) son todos los elementos de U que NO están en B \ A. U tiene {−3, −2, −1, 0, 1, 2, 3, 4, 5, 6}. Eliminamos {−1, 1, 2, 4, 5}. Quedan:</p>
+          <div class="sym-callout">Complemento de (B \ A) = {−3, −2, 0, 3, 6}</div>
+        </div>
+
+        <div class="answer-box">
+          <span class="ai">✓</span>
+          <p>
+            <strong>U</strong> = {−3, −2, −1, 0, 1, 2, 3, 4, 5, 6}<br>
+            <strong>A</strong> = {−3, 0, 3, 6}<br>
+            <strong>B</strong> = {−1, 0, 1, 2, 3, 4, 5}<br>
+            <strong>Complemento de (B \ A)</strong> = {−3, −2, 0, 3, 6}
+          </p>
+        </div>
+
+        <div class="warn-box">
+          <span class="wi">⚠️</span>
+          <p><strong>Error frecuente:</strong> incluir el 7 en U (el intervalo dice &lt; 7, no ≤ 7). También confundir "diferencia" con "complemento": la diferencia B \ A depende de B y A; el complemento depende de U.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- EJ 04 -->
+    <div class="ex-card">
+      <div class="ex-head" onclick="toggleEx(this)">
+        <span class="ex-num">EJ 04</span>
+        <a class="ex-video" href="https://www.youtube.com/watch?v=sGh2vKrzh7M" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" aria-label="Ver video de inecuaciones e intervalos en YouTube">Ver video</a>
+        <h4>Intersección de conjuntos definidos por desigualdades</h4>
+        <span class="ex-toggle">▾</span>
+      </div>
+      <div class="ex-body">
+        <div class="enunciado">
+          <strong>Enunciado original</strong>
+          Sean A = {x ∈ ℝ : (−2x)/(x − 3) ≤ 1} y B = {x ∈ ℝ : 4 − x² ≥ 0}. Hallar analíticamente el conjunto B ∩ A.
+        </div>
+
+        <div class="obj-box">
+          <span class="oi">🎯</span>
+          <p><strong>¿Qué se busca?</strong> Resolver cada desigualdad por separado para obtener los conjuntos A y B como intervalos en ℝ, y luego intersectarlos para encontrar los valores que los satisfacen a ambos al mismo tiempo.</p>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 1 · Resolver A — desigualdad racional</span>
+          <p>La condición es: (−2x)/(x − 3) ≤ 1. Pasamos todo al mismo lado:</p>
+          <div class="sym-callout">
+            (−2x)/(x − 3) − 1 ≤ 0<br>
+            Unificamos en una fracción: [−2x − (x − 3)] / (x − 3) ≤ 0<br>
+            Numerador: −2x − x + 3 = −3x + 3 = −3(x − 1)<br><br>
+            Resultado: −3(x − 1) / (x − 3) ≤ 0
+          </div>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 2 · Analizar el signo de A</span>
+          <p>Dividimos numerador y denominador por −3 (que es negativo, entonces el sentido de la desigualdad cambia a ≥ 0):</p>
+          <div class="sym-callout">
+            (x − 1) / (x − 3) ≥ 0
+          </div>
+          <p>Esta fracción es ≥ 0 cuando ambos factores tienen el mismo signo. Puntos críticos: x = 1 y x = 3.</p>
+          <p>· x &lt; 1: (neg)(neg) = positivo ✔<br>
+             · 1 &lt; x &lt; 3: (pos)(neg) = negativo ✗<br>
+             · x &gt; 3: (pos)(pos) = positivo ✔<br>
+             · x = 1: fracción = 0 → se incluye ✔<br>
+             · x = 3: denominador = 0 → se excluye ✗</p>
+          <div class="sym-callout">A = (−∞, 1] ∪ (3, +∞)</div>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 3 · Resolver B — desigualdad cuadrática</span>
+          <p>La condición es: 4 − x² ≥ 0, que equivale a x² ≤ 4.</p>
+          <p>Esto significa que x está a distancia máxima 2 del cero. En forma de intervalo:</p>
+          <div class="sym-callout">B = [−2, 2]</div>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 4 · Calcular B ∩ A</span>
+          <p>B va de −2 a 2. A cubre (−∞, 1] y luego (3, +∞). La intersección conserva solo lo que coincide:</p>
+          <p>· [−2, 2] ∩ (−∞, 1] = [−2, 1] ✔</p>
+          <p>· [−2, 2] ∩ (3, +∞) = vacío ✗ (3 está fuera de [−2, 2])</p>
+        </div>
+
+        <div class="formula-box">[−2, 2] ∩ ( (−∞, 1] ∪ (3, +∞) ) = [−2, 1]</div>
+
+        <div class="answer-box">
+          <span class="ai">✓</span>
+          <p><strong>B ∩ A = [−2, 1]</strong> — todos los números reales entre −2 y 1, incluyendo ambos extremos.</p>
+        </div>
+
+        <div class="warn-box">
+          <span class="wi">⚠️</span>
+          <p><strong>Error frecuente:</strong> incluir x = 3 en A (anula el denominador). Otro error: multiplicar la desigualdad por (x − 3) sin saber su signo, lo que puede cambiar o no el sentido de la desigualdad. Siempre es más seguro pasar todo al mismo lado y analizar signos.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <h3>📌 Resumen — Conjuntos</h3>
+      <p>La clave en conjuntos es el orden: universo → conjuntos individuales → operaciones. Las desigualdades racionales requieren analizar signos en intervalos, nunca multiplicar directamente por el denominador. Y siempre hay que distinguir si los extremos de un intervalo se incluyen o no.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     3. TRIGONOMETRÍA
+════════════════════════════════════ -->
+<section class="section" id="trigonometria">
+  <div class="sec-head">
+    <div class="sec-icon">△</div>
+    <div class="sec-titles">
+      <h2>Trigonometría</h2>
+      <p>Razones trigonométricas, círculo unitario, ecuaciones y problemas geométricos.</p>
+    </div>
+    <span class="sec-num">03</span>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-panel="trig-teoria">📖 Teoría fundamental</button>
+    <button class="tab-btn" data-panel="trig-ej">✏️ Ejercicios resueltos</button>
+  </div>
+
+  <div class="tab-panel active" id="trig-teoria">
+    <div class="theory-card">
+      <h3>C&oacute;mo pensar la trigonometr&iacute;a</h3>
+      <p>La trigonometr&iacute;a conecta &aacute;ngulos con longitudes. En un tri&aacute;ngulo rect&aacute;ngulo, sirve para relacionar un &aacute;ngulo con lados. En el c&iacute;rculo unitario, sirve para ubicar puntos y resolver ecuaciones con una vuelta completa.</p>
+      <p>Una idea que ayuda mucho: <strong>cos(x)</strong> se lee en horizontal y <strong>sen(x)</strong> se lee en vertical. Por eso, cuando una ecuaci&oacute;n pide un valor de seno, hay que buscar todos los puntos del c&iacute;rculo que tengan esa misma altura.</p>
+      <div class="inline-table">
+        <table>
+          <tr><th>Funci&oacute;n</th><th>Qu&eacute; mira</th><th>Signo positivo</th><th>Signo negativo</th></tr>
+          <tr><td>sen(x)</td><td>Altura del punto</td><td>Cuadrantes I y II</td><td>Cuadrantes III y IV</td></tr>
+          <tr><td>cos(x)</td><td>Posici&oacute;n horizontal</td><td>Cuadrantes I y IV</td><td>Cuadrantes II y III</td></tr>
+          <tr><td>tan(x)</td><td>Pendiente: sen/cos</td><td>Cuadrantes I y III</td><td>Cuadrantes II y IV</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="theory-card">
+      <h3>Razones trigonométricas en triángulo rectángulo</h3>
+      <p>Para un ángulo α en un triángulo rectángulo, las tres razones trigonométricas son:</p>
+      <div class="inline-table">
+        <table>
+          <tr><th>Función</th><th>Definición</th><th>Mnemotecnia</th></tr>
+          <tr><td>sen(α)</td><td>cateto opuesto ÷ hipotenusa</td><td>O / H</td></tr>
+          <tr><td>cos(α)</td><td>cateto adyacente ÷ hipotenusa</td><td>A / H</td></tr>
+          <tr><td>tan(α)</td><td>cateto opuesto ÷ cateto adyacente</td><td>O / A</td></tr>
+        </table>
+      </div>
+      <p>La <strong>hipotenusa</strong> es siempre el lado más largo, el opuesto al ángulo recto (90°). Los catetos son los otros dos lados.</p>
+    </div>
+
+    <div class="theory-card">
+      <h3>Valores notables del círculo unitario</h3>
+      <div class="inline-table">
+        <table>
+          <tr><th>Ángulo</th><th>Radianes</th><th>sen</th><th>cos</th><th>tan</th></tr>
+          <tr><td>0°</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+          <tr><td>30°</td><td>π/6</td><td>1/2</td><td>√3/2</td><td>√3/3</td></tr>
+          <tr><td>45°</td><td>π/4</td><td>√2/2</td><td>√2/2</td><td>1</td></tr>
+          <tr><td>60°</td><td>π/3</td><td>√3/2</td><td>1/2</td><td>√3</td></tr>
+          <tr><td>90°</td><td>π/2</td><td>1</td><td>0</td><td>—</td></tr>
+          <tr><td>180°</td><td>π</td><td>0</td><td>−1</td><td>0</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="theory-card">
+      <h3>Identidad trigonométrica clave</h3>
+      <p>Una identidad muy práctica que aparece en estos ejercicios:</p>
+      <div class="formula-box">cos(x − π/2) = sen(x)</div>
+      <p>Esta identidad viene de la fórmula de diferencia de ángulos. Es útil porque convierte un coseno de ángulo compuesto en un seno simple, reduciendo el trabajo.</p>
+      <div class="formula-box">sen(x − π/2) = −cos(x)</div>
+    </div>
+
+    <div class="theory-card">
+      <h3>Estrategia para ecuaciones trigonométricas</h3>
+      <p>1. <strong>Simplificar</strong> usando identidades si hay ángulos compuestos.<br>
+         2. <strong>Aislar</strong> la función (lograr que quede solo sen(x) = valor, o cos(x) = valor).<br>
+         3. <strong>Determinar</strong> los ángulos en el círculo trigonométrico que satisfacen la ecuación.<br>
+         4. <strong>Filtrar</strong> las soluciones al intervalo pedido (ej: [0, 2π)).</p>
+      <p>Recordá: en [0, 2π), el seno positivo tiene soluciones en el 1.er y 2.do cuadrante. El seno negativo, en el 3.er y 4.to cuadrante. Con el coseno, al revés.</p>
+    </div>
+
+    <div class="theory-card">
+      <h3>Conversión grados ↔ radianes</h3>
+      <div class="formula-box">radianes = grados × (π / 180) &nbsp;&nbsp;|&nbsp;&nbsp; grados = radianes × (180 / π)</div>
+      <p>En matemática avanzada y en identidades trigonométricas, se trabaja casi siempre en radianes. La relación fundamental es: una vuelta completa = 360° = 2π radianes.</p>
+    </div>
+
+    <div class="key-card">
+      <h3>💡 Ideas clave — Trigonometría</h3>
+      <ul>
+        <li>cos(x − π/2) = sen(x): esta transformación simplifica ecuaciones con ángulos compuestos.</li>
+        <li>El seno vale √2/2 en π/4 (45°) y 3π/4 (135°): dos soluciones en [0, 2π).</li>
+        <li>En triángulos rectángulos: sen = opuesto/hipotenusa; cos = adyacente/hipotenusa.</li>
+        <li>El intervalo [0, 2π) incluye el 0 y excluye el 2π (no son el mismo punto para contar soluciones).</li>
+        <li>sen(30°) = 1/2, cos(60°) = 1/2: muy comunes en problemas de aplicación.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="trig-ej">
+
+    <!-- EJ 05 -->
+    <div class="ex-card open">
+      <div class="ex-head" onclick="toggleEx(this)">
+        <span class="ex-num">EJ 05</span>
+        <a class="ex-video" href="https://www.youtube.com/watch?v=ZTRETZaSx0s" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" aria-label="Ver video de ecuaciones trigonometricas en YouTube">Ver video</a>
+        <h4>Ecuación trigonométrica con cos(x − π/2)</h4>
+        <span class="ex-toggle">▾</span>
+      </div>
+      <div class="ex-body">
+        <div class="enunciado">
+          <strong>Enunciado original</strong>
+          Hallar los valores de x ∈ [0, 2π) tales que: −√2/2 + cos(x − π/2) = 0.
+        </div>
+
+        <div class="obj-box">
+          <span class="oi">🎯</span>
+          <p><strong>¿Qué se busca?</strong> Encontrar todos los ángulos x en una vuelta completa [0, 2π) que satisfacen la ecuación. Se usará una identidad trigonométrica para simplificar antes de resolver.</p>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 1 · Aislar el coseno</span>
+          <p>Pasamos el término numérico al otro lado de la igualdad:</p>
+          <div class="sym-callout">cos(x − π/2) = √2/2</div>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 2 · Aplicar la identidad trigonométrica</span>
+          <p>Reconocemos que cos(x − π/2) es igual a sen(x). Esta es una identidad conocida que simplifica enormemente el problema:</p>
+          <div class="formula-box">cos(x − π/2) = sen(x)</div>
+          <p>La ecuación queda: <strong>sen(x) = √2/2</strong></p>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 3 · Leer el círculo unitario</span>
+          <p>¿En qué ángulos de [0, 2π) el seno vale √2/2 ≈ 0,707? El seno es positivo en el 1.er y 2.do cuadrante:</p>
+          <p>· <strong>1.er cuadrante:</strong> x = π/4 (45°) → sen(π/4) = √2/2 ✔</p>
+          <p>· <strong>2.do cuadrante:</strong> x = π − π/4 = 3π/4 (135°) → sen(3π/4) = √2/2 ✔</p>
+          <p>Ambos están dentro del intervalo [0, 2π), así que los dos son soluciones válidas.</p>
+        </div>
+
+        <div class="answer-box">
+          <span class="ai">✓</span>
+          <p><strong>Soluciones: x = π/4 y x = 3π/4</strong> (equivalentes a 45° y 135°).</p>
+        </div>
+
+        <div class="warn-box">
+          <span class="wi">⚠️</span>
+          <p><strong>Error frecuente:</strong> encontrar solo la primera solución (π/4) y olvidar la segunda (3π/4). El seno positivo siempre tiene dos soluciones por vuelta. La segunda se calcula como π menos la primera.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- EJ 06 -->
+    <div class="ex-card">
+      <div class="ex-head" onclick="toggleEx(this)">
+        <span class="ex-num">EJ 06</span>
+        <a class="ex-video" href="https://www.youtube.com/watch?v=aACcYHF5NCY" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" aria-label="Ver video de triangulo rectangulo poste y cable en YouTube">Ver video</a>
+        <h4>Longitud de un cable — trigonometría aplicada</h4>
+        <span class="ex-toggle">▾</span>
+      </div>
+      <div class="ex-body">
+        <div class="enunciado">
+          <strong>Enunciado original</strong>
+          Se desea sujetar un poste de 20 metros de altura con un cable que sale desde la parte superior hasta el suelo, formando un ángulo de 30° con el suelo. ¿Cuánta longitud de cable se necesita?
+        </div>
+
+        <div class="obj-box">
+          <span class="oi">🎯</span>
+          <p><strong>¿Qué se busca?</strong> La longitud del cable, que es la hipotenusa de un triángulo rectángulo. Conocemos la altura del poste (cateto opuesto) y el ángulo que forma el cable con el suelo.</p>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 1 · Visualizar el triángulo rectángulo</span>
+          <p>El poste está parado verticalmente (ángulo recto con el suelo). El cable va desde la punta del poste hasta el piso. Eso forma un triángulo rectángulo donde:</p>
+          <p>· El <strong>poste</strong> (20 m) es el cateto opuesto al ángulo de 30°.</p>
+          <p>· El <strong>cable</strong> es la hipotenusa (el lado que parte del ángulo).</p>
+          <p>· El ángulo entre el cable y el suelo es 30°.</p>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 2 · Elegir la razón trigonométrica adecuada</span>
+          <p>Tenemos el ángulo (30°) y el cateto opuesto (20 m). Queremos la hipotenusa. La función que relaciona opuesto e hipotenusa es el <strong>seno</strong>:</p>
+          <div class="formula-box">sen(30°) = cateto opuesto / hipotenusa = 20 / cable</div>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 3 · Resolver la ecuación</span>
+          <p>Sabemos que sen(30°) = 1/2. Sustituimos:</p>
+          <div class="sym-callout">
+            1/2 = 20 / cable<br>
+            cable = 20 × 2 = 40 metros
+          </div>
+          <p>Tiene sentido: con un ángulo de 30° (bastante inclinado respecto del suelo), el cable tiene que ser bastante más largo que el poste. De hecho, es exactamente el doble.</p>
+        </div>
+
+        <div class="answer-box">
+          <span class="ai">✓</span>
+          <p><strong>La longitud del cable es 40 metros.</strong></p>
+        </div>
+
+        <div class="warn-box">
+          <span class="wi">⚠️</span>
+          <p><strong>Error frecuente:</strong> confundir el ángulo que forma el cable <em>con el suelo</em> (30°) con el que forma <em>con el poste</em> (60°). Si se usa el ángulo equivocado, el resultado cambia. Siempre dibujar el triángulo y etiquetar bien cada parte antes de escribir cualquier fórmula.</p>
+        </div>
+
+        <div class="tip-box">
+          <span class="ti">💡</span>
+          <p><strong>Verificación intuitiva:</strong> cuanto más pequeño es el ángulo con el suelo, más "acostado" está el cable y más largo resulta. Con 30°, que es bastante tendido, es normal que el cable duplique la altura del poste.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <h3>📌 Resumen — Trigonometría</h3>
+      <p>En ecuaciones trigonométricas, las identidades son el atajo más importante: simplifican el problema antes de resolverlo. En problemas geométricos, dibujar el triángulo y etiquetar correctamente el ángulo dado es el primer paso indispensable. Y recordá siempre: el seno positivo da dos soluciones por vuelta completa.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     4. VECTORES
+════════════════════════════════════ -->
+<section class="section" id="vectores">
+  <div class="sec-head">
+    <div class="sec-icon">⃗v</div>
+    <div class="sec-titles">
+      <h2>Vectores</h2>
+      <p>Norma, producto escalar y vectorial, perpendicularidad y parámetros desconocidos.</p>
+    </div>
+    <span class="sec-num">04</span>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-panel="vec-teoria">📖 Teoría fundamental</button>
+    <button class="tab-btn" data-panel="vec-ej">✏️ Ejercicios resueltos</button>
+  </div>
+
+  <div class="tab-panel active" id="vec-teoria">
+    <div class="theory-card">
+      <h3>C&oacute;mo leer un ejercicio de vectores</h3>
+      <p>Un ejercicio de vectores casi siempre traduce una idea geom&eacute;trica a una ecuaci&oacute;n. Si dice "perpendicular", pens&aacute; en producto escalar igual a cero. Si dice "misma longitud", pens&aacute; en igualar normas. Si dice "paralelo", pens&aacute; en que un vector debe ser m&uacute;ltiplo del otro.</p>
+      <p>La clave es no empezar calculando al azar. Primero identific&aacute; qu&eacute; relaci&oacute;n geom&eacute;trica pide el enunciado y reci&eacute;n despu&eacute;s eleg&iacute; la herramienta algebraica.</p>
+      <div class="inline-table">
+        <table>
+          <tr><th>El enunciado dice...</th><th>Se traduce como...</th><th>Qu&eacute; se obtiene</th></tr>
+          <tr><td>u y v son perpendiculares</td><td>u &middot; v = 0</td><td>Una ecuaci&oacute;n</td></tr>
+          <tr><td>u y v tienen igual norma</td><td>||u||<sup>2</sup> = ||v||<sup>2</sup></td><td>Una ecuaci&oacute;n, muchas veces cuadr&aacute;tica</td></tr>
+          <tr><td>u es paralelo a v</td><td>u = k &middot; v</td><td>Un sistema con un par&aacute;metro k</td></tr>
+          <tr><td>u &times; v</td><td>Vector perpendicular a ambos</td><td>Un nuevo vector</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="theory-card">
+      <h3>¿Qué es un vector?</h3>
+      <p>Un <strong>vector</strong> en ℝ³ es un objeto con tres componentes: u = (x, y, z). Tiene <strong>magnitud</strong> (qué tan largo es), <strong>dirección</strong> (hacia dónde apunta) y <strong>sentido</strong> (hacia qué lado). Es distinto de un simple número: tiene geometría.</p>
+    </div>
+
+    <div class="theory-card">
+      <h3>La norma (módulo) de un vector</h3>
+      <p>La <strong>norma</strong> ‖u‖ es la longitud del vector. Se calcula extendiendo el teorema de Pitágoras al espacio:</p>
+      <div class="formula-box">‖u‖ = √(x² + y² + z²) &nbsp; para u = (x, y, z)</div>
+      <p>Cuando se pide igualar normas, conviene elevar al cuadrado para evitar raíces:</p>
+      <div class="formula-box">‖u‖ = ‖w‖ &nbsp; ⟹ &nbsp; ‖u‖² = ‖w‖²</div>
+    </div>
+
+    <div class="theory-card">
+      <h3>Producto escalar (o producto punto)</h3>
+      <p>El producto escalar de u = (u₁, u₂, u₃) y v = (v₁, v₂, v₃) es:</p>
+      <div class="formula-box">u · v = u₁v₁ + u₂v₂ + u₃v₃ &nbsp; (resultado: un número)</div>
+      <p>Su uso más importante en estos ejercicios es determinar perpendicularidad:</p>
+      <div class="formula-box">u · v = 0 &nbsp; ⟺ &nbsp; u ⊥ v (los vectores son perpendiculares)</div>
+    </div>
+
+    <div class="theory-card">
+      <h3>Producto vectorial (o producto cruz)</h3>
+      <p>El producto u × v genera un <strong>nuevo vector</strong> que es perpendicular a u y a v. Se calcula desarrollando el determinante:</p>
+      <div class="formula-box">
+        u × v = | i &nbsp; j &nbsp; k &nbsp; |<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | u₁ u₂ u₃ |<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | v₁ v₂ v₃ |
+      </div>
+      <p>Componente i: u₂v₃ − u₃v₂ &nbsp;|&nbsp; Componente j: u₃v₁ − u₁v₃ &nbsp;|&nbsp; Componente k: u₁v₂ − u₂v₁</p>
+    </div>
+
+    <div class="theory-card">
+      <h3>Relaciones geométricas entre vectores</h3>
+      <div class="inline-table">
+        <table>
+          <tr><th>Relación</th><th>Símbolo</th><th>Condición algebraica</th></tr>
+          <tr><td>Perpendiculares</td><td>u ⊥ v</td><td>u · v = 0</td></tr>
+          <tr><td>Paralelos</td><td>u ∥ v</td><td>u = k · v para algún escalar k</td></tr>
+          <tr><td>Igual norma</td><td>‖u‖ = ‖v‖</td><td>‖u‖² = ‖v‖²</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="key-card">
+      <h3>💡 Ideas clave — Vectores</h3>
+      <ul>
+        <li>Perpendicularidad: producto escalar = 0. Esta es la condición que hay que usar.</li>
+        <li>Para igualar normas: elevar al cuadrado y resolver ecuación cuadrática.</li>
+        <li>El producto vectorial da un vector; el producto escalar da un número.</li>
+        <li>Cuando hay un parámetro (a, x...), la condición geométrica genera una ecuación algebraica a resolver.</li>
+        <li>Una ecuación cuadrática puede tener 0, 1 o 2 soluciones. Verificar si todas tienen sentido geométrico.</li>
+        <li>Si el vector nulo (0,0,0) no es válido en el contexto, descartar a = 0 de las soluciones.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="vec-ej">
+
+    <!-- EJ 07 -->
+    <div class="ex-card open">
+      <div class="ex-head" onclick="toggleEx(this)">
+        <span class="ex-num">EJ 07</span>
+        <a class="ex-video" href="https://www.youtube.com/watch?v=-2ELkfk2FGw" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" aria-label="Ver video de producto vectorial y perpendicularidad en YouTube">Ver video</a>
+        <h4>Encontrar el parámetro "a" para perpendicularidad</h4>
+        <span class="ex-toggle">▾</span>
+      </div>
+      <div class="ex-body">
+        <div class="enunciado">
+          <strong>Enunciado original</strong>
+          Determinar el valor de a ∈ ℝ para que el vector (1/3)(u × v) sea perpendicular al vector w = (a, a, 0), siendo u = (3, −3, 6) y v = (a, 0, 4).
+        </div>
+
+        <div class="obj-box">
+          <span class="oi">🎯</span>
+          <p><strong>¿Qué se busca?</strong> Encontrar el valor de a que hace que el producto escalar entre (1/3)(u × v) y w sea igual a cero. La idea central: dos vectores son perpendiculares si y solo si su producto escalar vale 0.</p>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 1 · Calcular u × v</span>
+          <p>Desarrollamos el determinante con u = (3, −3, 6) y v = (a, 0, 4):</p>
+          <div class="sym-callout">
+            Componente i: (−3)(4) − (6)(0) = −12 − 0 = −12<br>
+            Componente j: −[ (3)(4) − (6)(a) ] = −(12 − 6a) = −12 + 6a<br>
+            Componente k: (3)(0) − (−3)(a) = 0 + 3a = 3a<br><br>
+            u × v = (−12, −12 + 6a, 3a)
+          </div>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 2 · Calcular (1/3)(u × v)</span>
+          <p>Dividimos cada componente por 3:</p>
+          <div class="sym-callout">(1/3)(u × v) = (−4, −4 + 2a, a)</div>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 3 · Aplicar la condición de perpendicularidad</span>
+          <p>Para que (1/3)(u × v) ⊥ w, su producto escalar debe ser cero:</p>
+          <div class="sym-callout">
+            (−4, −4 + 2a, a) · (a, a, 0) = 0<br><br>
+            (−4)(a) + (−4 + 2a)(a) + (a)(0) = 0<br>
+            −4a + (−4a + 2a²) + 0 = 0<br>
+            −4a − 4a + 2a² = 0<br>
+            2a² − 8a = 0
+          </div>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 4 · Resolver la ecuación</span>
+          <p>Factorizamos el factor común 2a:</p>
+          <div class="sym-callout">
+            2a(a − 4) = 0<br>
+            → a = 0 &nbsp;&nbsp; o &nbsp;&nbsp; a = 4
+          </div>
+          <p>Ambos valores hacen que el producto escalar sea cero, cumpliendo la condición.</p>
+        </div>
+
+        <div class="answer-box">
+          <span class="ai">✓</span>
+          <p><strong>Los valores son a = 0 y a = 4.</strong> Con cualquiera de los dos, el vector (1/3)(u × v) es perpendicular a w.</p>
+        </div>
+
+        <div class="warn-box">
+          <span class="wi">⚠️</span>
+          <p><strong>Nota:</strong> con a = 0, el vector w = (0, 0, 0) es el vector nulo. La perpendicularidad con el vector nulo es matemáticamente válida, pero puede no ser aceptada en algunos contextos. Si el enunciado pide vectores no nulos, solo vale a = 4.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- EJ 08 -->
+    <div class="ex-card">
+      <div class="ex-head" onclick="toggleEx(this)">
+        <span class="ex-num">EJ 08</span>
+        <a class="ex-video" href="https://www.youtube.com/watch?v=eWhYXoWXnqM" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" aria-label="Ver video de norma o modulo en YouTube">Ver video</a>
+        <h4>Igualar las normas de dos vectores</h4>
+        <span class="ex-toggle">▾</span>
+      </div>
+      <div class="ex-body">
+        <div class="enunciado">
+          <strong>Enunciado original</strong>
+          Dados los vectores u = (3, 2 − x, −1) y w = (2x, 1, −3), hallar el/los valores de x ∈ ℝ tales que ‖u‖ = ‖w‖.
+        </div>
+
+        <div class="obj-box">
+          <span class="oi">🎯</span>
+          <p><strong>¿Qué se busca?</strong> Encontrar los valores de x que hacen que u y w tengan la misma longitud. La estrategia es elevar al cuadrado para evitar trabajar con raíces.</p>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 1 · Calcular ‖u‖² y ‖w‖²</span>
+          <p>En lugar de raíces, trabajamos con el cuadrado de las normas:</p>
+          <div class="sym-callout">
+            ‖u‖² = 3² + (2 − x)² + (−1)² = 9 + (2 − x)² + 1 = 10 + (2 − x)²<br><br>
+            ‖w‖² = (2x)² + 1² + (−3)² = 4x² + 1 + 9 = 4x² + 10
+          </div>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 2 · Plantear la igualdad y simplificar</span>
+          <p>Si las normas son iguales, también lo son sus cuadrados:</p>
+          <div class="sym-callout">
+            10 + (2 − x)² = 4x² + 10<br>
+            Los 10 se cancelan: (2 − x)² = 4x²
+          </div>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 3 · Expandir y ordenar</span>
+          <div class="sym-callout">
+            (2 − x)² = 4 − 4x + x²<br><br>
+            4 − 4x + x² = 4x²<br>
+            0 = 4x² − x² + 4x − 4<br>
+            3x² + 4x − 4 = 0
+          </div>
+        </div>
+
+        <div class="step">
+          <span class="step-lbl">Paso 4 · Resolver la ecuación cuadrática</span>
+          <p>Aplicamos la fórmula cuadrática: x = (−b ± √(b² − 4ac)) / 2a con a=3, b=4, c=−4:</p>
+          <div class="sym-callout">
+            Discriminante: 4² − 4(3)(−4) = 16 + 48 = 64 → √64 = 8<br><br>
+            x₁ = (−4 + 8) / 6 = 4/6 = <strong>2/3</strong><br>
+            x₂ = (−4 − 8) / 6 = −12/6 = <strong>−2</strong>
+          </div>
+        </div>
+
+        <div class="answer-box">
+          <span class="ai">✓</span>
+          <p><strong>Los valores son x = 2/3 y x = −2.</strong> Con cualquiera de los dos, los vectores u y w tienen la misma norma.</p>
+        </div>
+
+        <div class="tip-box">
+          <span class="ti">💡</span>
+          <p><strong>Verificación con x = −2:</strong> ‖u‖² = 10 + (2−(−2))² = 10 + 16 = 26. ‖w‖² = 4(4) + 10 = 26. ✔ Coinciden. Siempre conviene verificar al menos una solución.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <h3>📌 Resumen — Vectores</h3>
+      <p>Los problemas de vectores con parámetros siempre siguen el mismo patrón: la condición geométrica (⊥, igual norma, ∥) se traduce en una ecuación algebraica. Perpendicularidad → producto escalar = 0. Igualdad de normas → elevar al cuadrado. Luego se resuelve y se verifica.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     OBSERVACIONES FINALES
+════════════════════════════════════ -->
+<section class="section" id="obs-finales">
+  <div class="sec-head">
+    <div class="sec-icon">📌</div>
+    <div class="sec-titles">
+      <h2>Observaciones finales para estudiar</h2>
+      <p>Consejos del material original para aprovechar mejor cada tema.</p>
+    </div>
+    <span class="sec-num">FIN</span>
+  </div>
+
+  <div class="theory-card">
+    <h3>El hilo conductor entre los cuatro temas</h3>
+    <p>Este conjunto de ejercicios mezcla <strong>traducción entre lenguaje natural y simbólico</strong>, <strong>manipulación algebraica</strong> y <strong>razonamiento geométrico</strong>. Por eso conviene estudiar cada tema por separado y luego practicar cómo se conectan entre sí.</p>
+    <p>Una buena forma de encarar cada ejercicio: hacer primero una <strong>lectura lenta del enunciado</strong>, identificar qué se pide exactamente, y escribir las definiciones o fórmulas que correspondan <em>antes</em> de operar.</p>
+  </div>
+
+  <div class="obs-grid">
+    <div class="obs-item">
+      <div class="oi">⊃</div>
+      <h4>Lógica y conjuntos</h4>
+      <p>La <strong>precisión en la notación</strong> es tan importante como el cálculo. Un símbolo mal leído (por ejemplo, ∧ vs ∨) cambia todo el resultado.</p>
+    </div>
+    <div class="obs-item">
+      <div class="oi">△</div>
+      <h4>Trigonometría</h4>
+      <p>Además de la fórmula correcta, hay que cuidar el <strong>dominio</strong>, las <strong>unidades</strong> (grados vs radianes) y las condiciones geométricas del problema.</p>
+    </div>
+    <div class="obs-item">
+      <div class="oi">→</div>
+      <h4>Vectores</h4>
+      <p>Cuando el ejercicio pide una condición sobre un <strong>parámetro desconocido</strong>, lo mejor es plantear la ecuación algebraica que surge de esa condición y resolverla.</p>
+    </div>
+    <div class="obs-item">
+      <div class="oi">✓</div>
+      <h4>Siempre verificar</h4>
+      <p>Al terminar, reemplazá la respuesta en el enunciado original y confirmá que funciona. Detectás errores aritméticos que podrían pasar desapercibidos.</p>
+    </div>
+  </div>
+
+  <div class="theory-card" style="margin-top:1.3rem;">
+    <h3>Cómo estudiar con este material</h3>
+    <p>1. <strong>Leé la teoría</strong> de cada tema antes de ver los ejercicios. No alcanza con saber "el nombre": tenés que entender qué hace cada operación.</p>
+    <p>2. <strong>Intentá el ejercicio vos mismo</strong> antes de leer la resolución. Aunque no lo termines, el intento te prepara para entender cada paso.</p>
+    <p>3. <strong>Compará tu camino con el propuesto.</strong> Si llegaste al mismo resultado por otro camino, está perfecto: hay más de una forma válida de resolver.</p>
+    <p>4. <strong>Prestale atención a las advertencias de errores frecuentes.</strong> Suelen ser exactamente donde uno se equivoca en el examen.</p>
+    <p>5. <strong>Revisá la tabla de símbolos</strong> cada vez que tengas duda sobre qué significa un signo. Con la notación clara, la mitad del trabajo ya está hecha.</p>
+  </div>
+</section>
+
+<!-- ════ FOOTER ════ -->
+<footer class="footer">
+  <div class="footer-brand">Matemática · Guía de Estudio</div>
+  <p>Lógica · Conjuntos · Trigonometría · Vectores · Material para estudio autónomo</p>
+</footer>
+
+</main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ── DONATION MODAL ──
+const btnDonation = document.getElementById('btnDonation');
+const donationModal = document.getElementById('donationModal');
+const donationClose = document.getElementById('donationClose');
+const donationStatus = document.getElementById('donationStatus');
+const DONATION_DELAY_MS = 30000;
+const SUPABASE_URL = 'https://jqwrrreeftehieuxblyy.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_mH7jK53aMSNKg0f5OPesHg_xnyJwEr8';
+const SUPABASE_DONATION_TABLE = 'donation_prompt_visitors';
+const DONATION_VISITOR_ID_KEY = 'matematica_donation_visitor_id';
+const DONATION_VIEW_RECORDED_KEY = 'matematica_donation_prompt_view_recorded';
+let donationTimer = null;
+let donationPromptUsed = false;
+const donationSupabaseClient = (
+  window.supabase &&
+  SUPABASE_URL &&
+  SUPABASE_ANON_KEY &&
+  !SUPABASE_ANON_KEY.includes('PEGAR_')
+)
+  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+        detectSessionInUrl: false
+      }
+    })
+  : null;
+
+function clearDonationTimer() {
+  if (donationTimer) {
+    window.clearTimeout(donationTimer);
+    donationTimer = null;
+  }
+}
+
+function getStoredDonationValue(key) {
+  try {
+    return window.localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function setStoredDonationValue(key, value) {
+  try {
+    window.localStorage.setItem(key, value);
+  } catch {
+    // Si el navegador bloquea localStorage, la pagina sigue funcionando.
+  }
+}
+
+function createDonationVisitorId() {
+  if (window.crypto && typeof window.crypto.randomUUID === 'function') {
+    return window.crypto.randomUUID();
+  }
+
+  if (window.crypto && typeof window.crypto.getRandomValues === 'function') {
+    const bytes = new Uint8Array(16);
+    window.crypto.getRandomValues(bytes);
+    return Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('');
+  }
+
+  return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function getDonationVisitorId() {
+  const storedId = getStoredDonationValue(DONATION_VISITOR_ID_KEY);
+  if (storedId) return storedId;
+
+  const visitorId = createDonationVisitorId();
+  setStoredDonationValue(DONATION_VISITOR_ID_KEY, visitorId);
+  return visitorId;
+}
+
+async function recordDonationPromptView() {
+  if (!donationSupabaseClient) {
+    console.info('Supabase no esta configurado todavia: falta pegar la anon public key.');
+    return;
+  }
+
+  if (getStoredDonationValue(DONATION_VIEW_RECORDED_KEY) === '1') return;
+
+  const payload = {
+    visitor_id: getDonationVisitorId(),
+    page_path: window.location.pathname || '/',
+    prompted_after_seconds: Math.round(DONATION_DELAY_MS / 1000),
+    source: 'donation_modal_auto'
+  };
+
+  const { error } = await donationSupabaseClient
+    .from(SUPABASE_DONATION_TABLE)
+    .insert(payload);
+
+  if (!error || error.code === '23505') {
+    setStoredDonationValue(DONATION_VIEW_RECORDED_KEY, '1');
+    return;
+  }
+
+  console.error('No se pudo registrar la vista del cartel de donaciones.', error);
+}
+
+function openDonationModal(options = {}) {
+  clearDonationTimer();
+  donationPromptUsed = true;
+  donationStatus.textContent = '';
+  donationModal.hidden = false;
+  document.body.classList.add('donation-open');
+  btnDonation.setAttribute('aria-expanded', 'true');
+  window.setTimeout(() => donationClose.focus(), 60);
+
+  if (options.trackPrompt) {
+    recordDonationPromptView();
+  }
+}
+
+function closeDonationModal() {
+  donationModal.hidden = true;
+  document.body.classList.remove('donation-open');
+  btnDonation.setAttribute('aria-expanded', 'false');
+}
+
+function scheduleDonationPrompt() {
+  if (donationPromptUsed || donationTimer) return;
+
+  donationTimer = window.setTimeout(() => {
+    donationTimer = null;
+    openDonationModal({ trackPrompt: true });
+  }, DONATION_DELAY_MS);
+}
+
+function copyDonationAlias(value) {
+  if (navigator.clipboard && window.isSecureContext) {
+    return navigator.clipboard.writeText(value);
+  }
+
+  const field = document.createElement('textarea');
+  field.value = value;
+  field.setAttribute('readonly', '');
+  field.style.position = 'fixed';
+  field.style.left = '-9999px';
+  document.body.appendChild(field);
+  field.select();
+  document.execCommand('copy');
+  field.remove();
+  return Promise.resolve();
+}
+
+btnDonation.addEventListener('click', () => openDonationModal());
+donationClose.addEventListener('click', closeDonationModal);
+donationModal.addEventListener('click', (event) => {
+  if (event.target === donationModal) closeDonationModal();
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && !donationModal.hidden) closeDonationModal();
+});
+
+document.querySelectorAll('.donation-copy').forEach(button => {
+  button.addEventListener('click', () => {
+    const alias = button.dataset.copy;
+
+    copyDonationAlias(alias).then(() => {
+      donationStatus.textContent = `Alias copiado: ${alias}`;
+    }).catch(() => {
+      donationStatus.textContent = `No pude copiarlo automaticamente. Alias: ${alias}`;
+    });
+  });
+});
+
+scheduleDonationPrompt();
+
+// ── PROGRESS BAR ──
+window.addEventListener('scroll', () => {
+  const d = document.documentElement;
+  const pct = d.scrollTop / (d.scrollHeight - d.clientHeight);
+  document.getElementById('progress').style.width = (pct * 100) + '%';
+});
+
+// ── MOBILE MENU ──
+const btnMenu = document.getElementById('btnMenu');
+const sidebar = document.getElementById('sidebar');
+
+if (btnMenu && sidebar) {
+  btnMenu.addEventListener('click', () => {
+    sidebar.classList.toggle('open');
+  });
+
+  document.querySelectorAll('.sidebar a').forEach(a => {
+    a.addEventListener('click', () => {
+      if (window.innerWidth <= 800) sidebar.classList.remove('open');
+    });
+  });
+}
+
+// ── EXERCISE TOGGLE ──
+function toggleEx(header) {
+  header.parentElement.classList.toggle('open');
+}
+
+// ── TABS ──
+document.querySelectorAll('.tabs').forEach(tabBar => {
+  tabBar.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const section = tabBar.closest('.section');
+      const panelId = btn.dataset.panel;
+
+      tabBar.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      section.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      const panel = document.getElementById(panelId);
+      if (panel) panel.classList.add('active');
+    });
+  });
+});
+
+// ── SIDEBAR ACTIVE HIGHLIGHT ──
+const sections = document.querySelectorAll('.section[id]');
+const sbLinks  = document.querySelectorAll('.sidebar .sb-link');
+
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      sbLinks.forEach(l => l.classList.remove('active'));
+      const match = document.querySelector(`.sidebar .sb-link[href="#${e.target.id}"]`);
+      if (match) match.classList.add('active');
+    }
+  });
+}, { threshold: 0.25 });
+
+sections.forEach(s => io.observe(s));
+</script>
+</body>
+</html>
