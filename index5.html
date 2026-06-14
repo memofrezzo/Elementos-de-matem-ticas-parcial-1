@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Derivadas — Guía paso a paso</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0F1B2D;
+    --navy-mid: #162236;
+    --navy-card: #1C2E44;
+    --navy-border: #243650;
+    --amber: #F5A623;
+    --amber-dim: rgba(245,166,35,0.15);
+    --teal: #4ECDC4;
+    --teal-dim: rgba(78,205,196,0.12);
+    --coral: #FF6B6B;
+    --coral-dim: rgba(255,107,107,0.12);
+    --white: #F7F3EE;
+    --muted: #8FA3BE;
+    --green: #56CF9E;
+    --green-dim: rgba(86,207,158,0.12);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, #0F1B2D 0%, #162236 50%, #0d2440 100%);
+    border-bottom: 1px solid var(--navy-border);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: "f'(x)";
+    position: absolute;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 180px;
+    font-weight: 600;
+    color: rgba(245,166,35,0.04);
+    top: -20px; right: -20px;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+  .hero-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--amber);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: block;
+  }
+  .hero h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(32px, 6vw, 60px);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .hero h1 span { color: var(--amber); }
+  .hero-sub {
+    color: var(--muted);
+    font-size: 16px;
+    max-width: 520px;
+    margin: 0 auto 36px;
+  }
+  .nav-pills {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .nav-pill {
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    color: var(--white);
+    padding: 10px 24px;
+    border-radius: 100px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .nav-pill:hover, .nav-pill.active {
+    background: var(--amber);
+    color: var(--navy);
+    border-color: var(--amber);
+  }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+  .section { padding: 64px 0; }
+  .section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 8px;
+  }
+  .section-heading {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 700;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .section-desc {
+    color: var(--muted);
+    margin-bottom: 40px;
+    max-width: 600px;
+    font-size: 15px;
+  }
+
+  /* ── CONCEPT CARDS ── */
+  .concept-card {
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    border-radius: 16px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .concept-card:hover { border-color: var(--navy-border); }
+  .concept-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 22px 24px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .concept-num {
+    width: 36px; height: 36px;
+    background: var(--amber-dim);
+    border: 1px solid var(--amber);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--amber);
+    flex-shrink: 0;
+  }
+  .concept-header-text { flex: 1; }
+  .concept-header-text h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 17px;
+    margin-bottom: 2px;
+  }
+  .concept-header-text p {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .concept-toggle {
+    width: 28px; height: 28px;
+    background: var(--navy-border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    transition: transform 0.3s, background 0.2s;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+  .concept-card.open .concept-toggle {
+    transform: rotate(45deg);
+    background: var(--amber);
+    color: var(--navy);
+  }
+  .concept-body {
+    display: none;
+    padding: 0 24px 24px;
+    border-top: 1px solid var(--navy-border);
+  }
+  .concept-card.open .concept-body { display: block; }
+
+  /* ── FORMULA BLOCK ── */
+  .formula-block {
+    background: var(--navy);
+    border: 1px solid var(--navy-border);
+    border-left: 3px solid var(--amber);
+    border-radius: 0 10px 10px 0;
+    padding: 16px 20px;
+    margin: 20px 0 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--amber);
+    letter-spacing: 0.02em;
+    overflow-x: auto;
+  }
+  .formula-block.teal { border-left-color: var(--teal); color: var(--teal); }
+  .formula-block.coral { border-left-color: var(--coral); color: var(--coral); }
+  .formula-block.green { border-left-color: var(--green); color: var(--green); }
+
+  /* ── PLAIN LANGUAGE BOX ── */
+  .plain-box {
+    background: var(--teal-dim);
+    border: 1px solid rgba(78,205,196,0.25);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 10px 0;
+    font-size: 14px;
+    color: var(--teal);
+    line-height: 1.6;
+  }
+  .plain-box strong { color: #7ee8e2; }
+  .plain-box.amber {
+    background: var(--amber-dim);
+    border-color: rgba(245,166,35,0.25);
+    color: #e8c56e;
+  }
+  .plain-box.amber strong { color: var(--amber); }
+  .plain-box.coral {
+    background: var(--coral-dim);
+    border-color: rgba(255,107,107,0.25);
+    color: #ffa0a0;
+  }
+  .plain-box.green {
+    background: var(--green-dim);
+    border-color: rgba(86,207,158,0.25);
+    color: #7edeba;
+  }
+
+  /* ── RULES GRID ── */
+  .rules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
+  @media (max-width: 620px) { .rules-grid { grid-template-columns: 1fr; } }
+
+  .rule-tile {
+    background: var(--navy);
+    border: 1px solid var(--navy-border);
+    border-radius: 12px;
+    padding: 18px;
+    transition: border-color 0.2s, transform 0.15s;
+    cursor: default;
+  }
+  .rule-tile:hover { border-color: var(--amber); transform: translateY(-2px); }
+  .rule-tile-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .rule-tile-formula {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--amber);
+    font-weight: 600;
+    margin-bottom: 10px;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .rule-tile-plain { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  /* ── EXERCISES ── */
+  .exercise-card {
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    border-radius: 16px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .exercise-header {
+    padding: 22px 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .ex-badge {
+    background: var(--coral-dim);
+    border: 1px solid var(--coral);
+    color: var(--coral);
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .ex-badge.medium { background: var(--amber-dim); border-color: var(--amber); color: var(--amber); }
+  .ex-badge.advanced { background: var(--green-dim); border-color: var(--green); color: var(--green); }
+  .exercise-header-info { flex: 1; }
+  .exercise-header-info h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 17px;
+    margin-bottom: 4px;
+  }
+  .exercise-header-info .ex-func {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--amber);
+  }
+  .ex-toggle {
+    background: var(--navy-border);
+    border: none;
+    color: var(--white);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .ex-toggle:hover { background: var(--coral); color: var(--navy); }
+  .exercise-card.open .ex-toggle { background: var(--coral); color: var(--navy); }
+
+  .exercise-body {
+    display: none;
+    border-top: 1px solid var(--navy-border);
+  }
+  .exercise-card.open .exercise-body { display: block; }
+
+  /* ── STEPS ── */
+  .steps-container { padding: 24px; }
+  .step {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 28px;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+  .step.visible { opacity: 1; transform: translateY(0); }
+  .step-num-col { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+  .step-num {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--amber);
+    color: var(--navy);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .step-line {
+    width: 2px;
+    flex: 1;
+    min-height: 24px;
+    background: var(--navy-border);
+    margin-top: 6px;
+  }
+  .step:last-child .step-line { display: none; }
+  .step-content { padding-top: 4px; flex: 1; min-width: 0; }
+  .step-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 8px;
+    color: var(--white);
+  }
+  .step-formula {
+    background: var(--navy);
+    border: 1px solid var(--navy-border);
+    border-left: 2px solid var(--amber);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--amber);
+    margin: 10px 0;
+    overflow-x: auto;
+    white-space: pre;
+    line-height: 1.8;
+  }
+  .step-formula.teal { border-left-color: var(--teal); color: var(--teal); }
+  .step-formula.green { border-left-color: var(--green); color: var(--green); }
+  .step-explain {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-top: 8px;
+  }
+  .step-explain .highlight { color: var(--teal); }
+  .step-explain .highlight-amber { color: var(--amber); }
+
+  .result-box {
+    background: linear-gradient(135deg, rgba(245,166,35,0.12), rgba(245,166,35,0.05));
+    border: 1px solid var(--amber);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-top: 8px;
+  }
+  .result-box-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 8px;
+  }
+  .result-box-formula {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--amber);
+    margin-bottom: 8px;
+  }
+  .result-box-plain { font-size: 14px; color: #e0c870; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    border: none;
+    height: 1px;
+    background: var(--navy-border);
+    margin: 0;
+  }
+
+  /* ── TRIG TABLE ── */
+  .trig-table-wrap { overflow-x: auto; margin-top: 16px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  thead tr { background: rgba(245,166,35,0.1); }
+  th {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--amber);
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--navy-border);
+  }
+  td {
+    padding: 11px 14px;
+    border-bottom: 1px solid rgba(36,54,80,0.6);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .td-formula { font-family: 'JetBrains Mono', monospace; color: var(--amber); font-size: 13px; }
+  .td-plain { color: var(--muted); font-size: 13px; }
+  tr:hover td { background: rgba(245,166,35,0.04); }
+
+  /* ── STICKY NAV ── */
+  .sticky-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(15,27,45,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--navy-border);
+    padding: 10px 24px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    overflow-x: auto;
+  }
+  .sticky-nav-label {
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+    margin-right: 4px;
+  }
+  .sticky-pill {
+    background: transparent;
+    border: 1px solid var(--navy-border);
+    color: var(--muted);
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-family: 'Space Grotesk', sans-serif;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .sticky-pill:hover { border-color: var(--amber); color: var(--amber); }
+
+  /* ── CALLOUT ── */
+  .callout {
+    display: flex;
+    gap: 12px;
+    background: var(--amber-dim);
+    border: 1px solid rgba(245,166,35,0.3);
+    border-radius: 12px;
+    padding: 16px;
+    margin: 20px 0;
+    align-items: flex-start;
+  }
+  .callout-icon { font-size: 18px; flex-shrink: 0; }
+  .callout-text { font-size: 14px; color: #e0c870; line-height: 1.6; }
+  .callout-text strong { color: var(--amber); }
+
+  /* ── PROGRESS INDICATOR ── */
+  .progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: var(--navy);
+    border-top: 1px solid var(--navy-border);
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .progress-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--navy-border);
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .progress-dot.active { background: var(--amber); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--navy-border);
+    padding: 40px 24px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  footer span { color: var(--amber); }
+
+  /* ── ANIMATION ── */
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-in { animation: fadeSlide 0.5s ease forwards; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .step-formula { font-size: 12px; }
+    .concept-header { padding: 16px; }
+    .exercise-header { flex-wrap: wrap; }
+    .ex-toggle { margin-top: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <span class="hero-label">Análisis Matemático · Unidad 7</span>
+  <h1>Derivadas<br><span>paso a paso</span></h1>
+  <p class="hero-sub">Cada fórmula explicada en palabras, cada ejercicio resuelto con razonamiento. Para que los símbolos tengan sentido.</p>
+  <div class="nav-pills">
+    <a href="#teoria" class="nav-pill">Parte 1 — Teoría</a>
+    <a href="#ejercicios" class="nav-pill">Parte 2 — Ejercicios</a>
+    <a href="#tabla" class="nav-pill">Tabla de fórmulas</a>
+  </div>
+</section>
+
+<!-- STICKY NAV -->
+<nav class="sticky-nav">
+  <span class="sticky-nav-label">Ir a:</span>
+  <a href="#definicion" class="sticky-pill">Definición</a>
+  <a href="#reglas" class="sticky-pill">Reglas</a>
+  <a href="#trig" class="sticky-pill">Trigonométricas</a>
+  <a href="#cadena" class="sticky-pill">Regla cadena</a>
+  <a href="#ejercicios" class="sticky-pill">Ejercicios</a>
+  <a href="#tabla" class="sticky-pill">Tabla</a>
+</nav>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PARTE 1: TEORÍA -->
+<!-- ═══════════════════════════════════════════ -->
+<main>
+<section class="section" id="teoria">
+  <div class="container">
+    <p class="section-title">Parte 1</p>
+    <h2 class="section-heading">Entendiendo la teoría</h2>
+    <p class="section-desc">Hacé clic en cada tarjeta para expandirla. Cada fórmula viene con una explicación en palabras que aclara qué significa realmente.</p>
+
+    <!-- ── DEFINICIÓN ── -->
+    <div id="definicion" class="concept-card open">
+      <div class="concept-header" onclick="toggleCard(this)">
+        <div class="concept-num">01</div>
+        <div class="concept-header-text">
+          <h3>¿Qué es una derivada?</h3>
+          <p>La idea fundamental detrás del símbolo f'(x)</p>
+        </div>
+        <div class="concept-toggle">+</div>
+      </div>
+      <div class="concept-body">
+        <div class="callout">
+          <span class="callout-icon">💡</span>
+          <div class="callout-text">
+            <strong>La idea central:</strong> La derivada mide <em>qué tan rápido cambia</em> una función en un punto dado. Geométricamente, es la pendiente de la recta tangente a la curva en ese punto.
+          </div>
+        </div>
+
+        <p style="color: var(--muted); font-size:14px; margin-bottom:12px;">La definición formal usa el concepto de límite. La derivada de f(x) en el punto x₀ se define como:</p>
+
+        <div class="formula-block">f'(x₀) = lím [f(x₀ + Δx) − f(x₀)] / Δx<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Δx→0</div>
+
+        <div class="plain-box">
+          📝 <strong>En palabras:</strong> Tomamos la función en el punto x₀ y la evaluamos un poquito más adelante (x₀ + Δx). Calculamos cuánto cambió el valor (eso es el numerador). Lo dividimos por cuánto nos movimos en x (el denominador). Cuando ese "poquito" tiende a cero, ese cociente es la derivada: la <strong>tasa instantánea de cambio</strong>.
+        </div>
+
+        <p style="color: var(--muted); font-size:14px; margin: 16px 0 8px;">También se puede escribir con la variable x tendiendo a x₀:</p>
+        <div class="formula-block teal">f'(x₀) = lím [f(x) − f(x₀)] / (x − x₀)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x→x₀</div>
+        <div class="plain-box">
+          📝 <strong>Es la misma idea:</strong> En vez de moverse "un Δx", hacemos que x se acerque al punto x₀ desde afuera. El resultado es el mismo: la pendiente de la tangente.
+        </div>
+
+        <p style="color: var(--muted); font-size:14px; margin: 20px 0 8px;">La <strong>interpretación geométrica</strong> es muy visual:</p>
+        <div class="plain-box amber">
+          <strong>Pensalo así:</strong> Dibujá una curva. En cualquier punto de esa curva, podés poner una regla que la "toque" sin cruzarla: esa es la recta tangente. La inclinación (pendiente) de esa recta es exactamente la derivada f'(x₀) en ese punto.
+          <br><br>
+          Si la pendiente es <strong>positiva → la función crece</strong>. Si es <strong>negativa → la función decrece</strong>. Si es <strong>cero → hay un máximo o mínimo</strong>.
+        </div>
+
+        <p style="color: var(--muted); font-size:14px; margin: 20px 0 8px;"><strong>Notaciones equivalentes</strong> — todas significan lo mismo:</p>
+        <div class="formula-block">f'(x) &nbsp;&nbsp;→ notación de Lagrange (la más común)<br>dy/dx &nbsp;&nbsp;→ notación de Leibnitz<br>Df(x)&nbsp;&nbsp;→ notación de Cauchy<br>ẏ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ notación de Newton</div>
+      </div>
+    </div>
+
+    <!-- ── REGLAS ── -->
+    <div id="reglas" class="concept-card">
+      <div class="concept-header" onclick="toggleCard(this)">
+        <div class="concept-num">02</div>
+        <div class="concept-header-text">
+          <h3>Reglas de derivación</h3>
+          <p>Las herramientas que usás para derivar sin volver a la definición</p>
+        </div>
+        <div class="concept-toggle">+</div>
+      </div>
+      <div class="concept-body">
+        <div class="callout">
+          <span class="callout-icon">🔧</span>
+          <div class="callout-text">
+            Estas reglas son <strong>atajos demostrados</strong>: se pueden probar usando la definición, pero en la práctica se aplican directamente para ahorrar tiempo.
+          </div>
+        </div>
+
+        <div class="rules-grid">
+          <div class="rule-tile">
+            <div class="rule-tile-label">Constante</div>
+            <div class="rule-tile-formula">D(k) = 0</div>
+            <div class="rule-tile-plain">Una constante no cambia nunca, entonces su "velocidad de cambio" es cero. La gráfica es una recta horizontal: pendiente nula.</div>
+          </div>
+          <div class="rule-tile">
+            <div class="rule-tile-label">Identidad</div>
+            <div class="rule-tile-formula">D(x) = 1</div>
+            <div class="rule-tile-plain">f(x) = x crece de manera uniforme: por cada unidad que aumenta x, el valor de la función también aumenta en 1. Pendiente siempre 1.</div>
+          </div>
+          <div class="rule-tile">
+            <div class="rule-tile-label">Potencia (la más usada)</div>
+            <div class="rule-tile-formula">D(xⁿ) = n·xⁿ⁻¹</div>
+            <div class="rule-tile-plain">El exponente "baja" como factor y al exponente se le resta 1. Vale para cualquier n real, positivo, negativo o fraccionario.</div>
+          </div>
+          <div class="rule-tile">
+            <div class="rule-tile-label">Constante por función</div>
+            <div class="rule-tile-formula">D(k·f) = k·f'(x)</div>
+            <div class="rule-tile-plain">Una constante que multiplica "pasa afuera". Solo derivás la función y multiplicás por la constante.</div>
+          </div>
+          <div class="rule-tile">
+            <div class="rule-tile-label">Suma o diferencia</div>
+            <div class="rule-tile-formula">(f ± g)' = f' ± g'</div>
+            <div class="rule-tile-plain">Se pueden derivar los términos por separado y sumar (o restar) los resultados. La derivada se "distribuye" sobre la suma.</div>
+          </div>
+          <div class="rule-tile">
+            <div class="rule-tile-label">Producto</div>
+            <div class="rule-tile-formula">(f·g)' = f'·g + f·g'</div>
+            <div class="rule-tile-plain">No es "derivada de uno por derivada del otro". Es: (derivada del primero × segundo) + (primero × derivada del segundo).</div>
+          </div>
+          <div class="rule-tile">
+            <div class="rule-tile-label">Cociente</div>
+            <div class="rule-tile-formula">(f/g)' = (f'g − fg') / g²</div>
+            <div class="rule-tile-plain">Numerador: (derivada de arriba × abajo) − (arriba × derivada de abajo). Denominador: el de abajo al cuadrado.</div>
+          </div>
+          <div class="rule-tile">
+            <div class="rule-tile-label">Logaritmo natural</div>
+            <div class="rule-tile-formula">D(ln x) = 1/x</div>
+            <div class="rule-tile-plain">La derivada del logaritmo natural es simplemente el inverso de x. Muy frecuente en cálculo.</div>
+          </div>
+          <div class="rule-tile">
+            <div class="rule-tile-label">Exponencial natural</div>
+            <div class="rule-tile-formula">D(eˣ) = eˣ</div>
+            <div class="rule-tile-plain">¡La función exponencial base e es su propia derivada! Es la única función con esta propiedad. El ritmo de crecimiento es igual a su valor actual.</div>
+          </div>
+          <div class="rule-tile">
+            <div class="rule-tile-label">Exponencial base a</div>
+            <div class="rule-tile-formula">D(aˣ) = aˣ · ln(a)</div>
+            <div class="rule-tile-plain">Como eˣ pero multiplicada por ln(a), el logaritmo natural de la base. Si a = e, ln(e) = 1 y recuperamos la regla anterior.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TRIGONOMÉTRICAS ── -->
+    <div id="trig" class="concept-card">
+      <div class="concept-header" onclick="toggleCard(this)">
+        <div class="concept-num">03</div>
+        <div class="concept-header-text">
+          <h3>Derivadas trigonométricas</h3>
+          <p>Seno, coseno, tangente y sus inversas</p>
+        </div>
+        <div class="concept-toggle">+</div>
+      </div>
+      <div class="concept-body">
+        <div class="callout">
+          <span class="callout-icon">📐</span>
+          <div class="callout-text">
+            Un truco mnémotécnico: <strong>sen y cos "se derivan en círculo"</strong>: D(sen) = cos, D(cos) = −sen, D(−sen) = −cos, D(−cos) = sen... y volvemos al principio. El signo negativo aparece en el coseno.
+          </div>
+        </div>
+        <div class="trig-table-wrap">
+          <table>
+            <thead>
+              <tr><th>Función</th><th>Derivada</th><th>¿Qué significa?</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="td-formula">sen(x)</td>
+                <td class="td-formula">cos(x)</td>
+                <td class="td-plain">El seno crece cuando el coseno es positivo, decrece cuando es negativo. Tiene sentido: el cos indica la "velocidad" del sen.</td>
+              </tr>
+              <tr>
+                <td class="td-formula">cos(x)</td>
+                <td class="td-formula">−sen(x)</td>
+                <td class="td-plain">El coseno disminuye donde el seno es positivo (primer cuadrante), de ahí el signo menos.</td>
+              </tr>
+              <tr>
+                <td class="td-formula">tg(x) = sen/cos</td>
+                <td class="td-formula">1/cos²(x) = sec²(x)</td>
+                <td class="td-plain">Se obtiene derivando sen/cos con la regla del cociente. El resultado es 1 sobre coseno al cuadrado.</td>
+              </tr>
+              <tr>
+                <td class="td-formula">arcsen(x)</td>
+                <td class="td-formula">1 / √(1 − x²)</td>
+                <td class="td-plain">La inversa del seno. Solo está definida para −1 &lt; x &lt; 1. La raíz en el denominador aparece de la relación pitagórica.</td>
+              </tr>
+              <tr>
+                <td class="td-formula">arccos(x)</td>
+                <td class="td-formula">−1 / √(1 − x²)</td>
+                <td class="td-plain">Igual que arcsen pero con signo menos: arccos decrece donde arcsen crece.</td>
+              </tr>
+              <tr>
+                <td class="td-formula">arctg(x)</td>
+                <td class="td-formula">1 / (1 + x²)</td>
+                <td class="td-plain">Definida para todo x real. La tangente inversa siempre crece, pero cada vez más lento al alejarse del cero.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── REGLA DE LA CADENA ── -->
+    <div id="cadena" class="concept-card">
+      <div class="concept-header" onclick="toggleCard(this)">
+        <div class="concept-num">04</div>
+        <div class="concept-header-text">
+          <h3>Regla de la cadena</h3>
+          <p>Para derivar funciones compuestas — la regla más importante</p>
+        </div>
+        <div class="concept-toggle">+</div>
+      </div>
+      <div class="concept-body">
+        <div class="callout">
+          <span class="callout-icon">⛓️</span>
+          <div class="callout-text">
+            <strong>¿Cuándo la uso?</strong> Cuando una función está "adentro" de otra. Por ejemplo: sen(x²), e^(3x), ln(x²+1), √(sen x). Hay una función exterior y una interior.
+          </div>
+        </div>
+
+        <div class="formula-block">Si y = f(u) con u = g(x), entonces:<br><br>y' = f'(g(x)) · g'(x)<br><br>En palabras: "derivada del exterior evaluada en el interior,<br>multiplicada por la derivada del interior"</div>
+
+        <div class="plain-box">
+          📝 <strong>La analogía del velocímetro:</strong> Si tu velocidad depende de la temperatura, y la temperatura depende del tiempo, entonces para saber cómo varía tu velocidad con el tiempo tenés que "encadenar" los dos cambios multiplicándolos.
+        </div>
+
+        <p style="color:var(--muted); font-size:14px; margin: 20px 0 8px;"><strong>Procedimiento en 3 pasos:</strong></p>
+
+        <div class="step" style="opacity:1; transform:none; margin-bottom:12px;">
+          <div class="step-num-col">
+            <div class="step-num">1</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-content">
+            <div class="step-title">Identificar la función exterior y la interior</div>
+            <div class="step-formula" style="white-space:pre-wrap;">Ejemplo: f(x) = sen(x²)
+Exterior: sen( )  →  derivada: cos( )
+Interior: x²      →  derivada: 2x</div>
+          </div>
+        </div>
+        <div class="step" style="opacity:1; transform:none; margin-bottom:12px;">
+          <div class="step-num-col">
+            <div class="step-num">2</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-content">
+            <div class="step-title">Derivar el exterior (dejando el interior intacto)</div>
+            <div class="step-formula" style="white-space:pre-wrap;">D[sen(x²)] = cos(x²) × ...</div>
+            <div class="step-explain">El seno se convierte en coseno, pero el argumento x² queda igual por ahora.</div>
+          </div>
+        </div>
+        <div class="step" style="opacity:1; transform:none;">
+          <div class="step-num-col">
+            <div class="step-num">3</div>
+          </div>
+          <div class="step-content">
+            <div class="step-title">Multiplicar por la derivada del interior</div>
+            <div class="step-formula teal" style="white-space:pre-wrap;">f'(x) = cos(x²) · 2x</div>
+            <div class="step-explain">Se multiplica por la derivada de lo que estaba adentro (x² → 2x). <span class="highlight">Este último multiplicador es el que la gente más frecuentemente olvida.</span></div>
+          </div>
+        </div>
+
+        <!-- Continuidad y derivabilidad -->
+        <div style="margin-top:28px; padding-top:24px; border-top: 1px solid var(--navy-border);">
+          <p style="font-family:'Space Grotesk',sans-serif; font-weight:600; margin-bottom:12px;">Continuidad y derivabilidad</p>
+          <div class="plain-box amber">
+            <strong>Regla importante:</strong> Si una función es derivable en un punto, entonces es continua en ese punto. Pero <strong>el recíproco no vale</strong>: hay funciones continuas que no son derivables.
+            <br><br>
+            <strong>Ejemplo clásico:</strong> f(x) = |x| es continua en x = 0 (no tiene salto), pero no es derivable ahí porque la gráfica forma un "pico" en V: la derivada por izquierda da −1 y por derecha da +1. Son distintas, entonces no existe la derivada en ese punto.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── DERIVADAS SUCESIVAS ── -->
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleCard(this)">
+        <div class="concept-num">05</div>
+        <div class="concept-header-text">
+          <h3>Derivadas sucesivas</h3>
+          <p>La derivada de la derivada, y más</p>
+        </div>
+        <div class="concept-toggle">+</div>
+      </div>
+      <div class="concept-body">
+        <div class="plain-box">
+          📝 <strong>¿Para qué sirven?</strong> La segunda derivada mide cómo <em>cambia la velocidad de cambio</em>. En Física: si la primera derivada de la posición es la velocidad, la segunda es la aceleración.
+          <br><br>
+          En Análisis Matemático: f''(x) > 0 indica que la curva es cóncava hacia arriba (como una "U"), f''(x) < 0 indica que es cóncava hacia abajo.
+        </div>
+        <div class="formula-block">f(x)   → función original
+f'(x)  → primera derivada: velocidad de cambio
+f''(x) → segunda derivada: aceleración del cambio
+f'''(x)→ tercera derivada, y así sucesivamente</div>
+        <div class="plain-box green">
+          <strong>Dato importante:</strong> Si f(x) es un polinomio de grado n, la derivada n+1 siempre vale cero y todas las siguientes también. Las funciones trigonométricas y exponenciales nunca se anulan: siguen generando derivadas indefinidamente.
+        </div>
+      </div>
+    </div>
+
+    <!-- ── RECTA TANGENTE ── -->
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggleCard(this)">
+        <div class="concept-num">06</div>
+        <div class="concept-header-text">
+          <h3>Recta tangente y recta normal</h3>
+          <p>Cómo usar la derivada para encontrar ecuaciones de rectas</p>
+        </div>
+        <div class="concept-toggle">+</div>
+      </div>
+      <div class="concept-body">
+        <div class="callout">
+          <span class="callout-icon">📏</span>
+          <div class="callout-text">
+            La derivada en un punto es la pendiente de la tangente. Con la pendiente y el punto, podés armar la ecuación de esa recta.
+          </div>
+        </div>
+
+        <p style="color:var(--muted);font-size:14px;margin-bottom:10px;">Fórmula de la recta tangente en P(x₀, y₀):</p>
+        <div class="formula-block">y − y₀ = f'(x₀) · (x − x₀)</div>
+        <div class="plain-box">
+          📝 <strong>Leelo así:</strong> "el cambio en y es igual a la pendiente (que es f'(x₀)) multiplicada por el cambio en x". Es la ecuación de cualquier recta que pasa por el punto (x₀, y₀) con pendiente f'(x₀).
+        </div>
+
+        <p style="color:var(--muted);font-size:14px;margin: 16px 0 10px;">La recta normal es perpendicular a la tangente. Su pendiente es el opuesto del inverso:</p>
+        <div class="formula-block teal">y − y₀ = −1/f'(x₀) · (x − x₀)</div>
+        <div class="plain-box">
+          📝 <strong>¿Por qué −1/m?</strong> Dos rectas son perpendiculares cuando el producto de sus pendientes es −1. Si la tangente tiene pendiente m, la normal tiene pendiente −1/m.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PARTE 2: EJERCICIOS -->
+<!-- ═══════════════════════════════════════════ -->
+<hr class="divider">
+<section class="section" id="ejercicios">
+  <div class="container">
+    <p class="section-title">Parte 2</p>
+    <h2 class="section-heading">Ejercicios resueltos</h2>
+    <p class="section-desc">Hacé clic en "Ver resolución" para ver el desarrollo completo, paso a paso, con explicación en cada etapa.</p>
+
+    <!-- ── EJERCICIO 1 ── -->
+    <div class="exercise-card" id="ex1">
+      <div class="exercise-header" onclick="toggleExercise('ex1')">
+        <div class="ex-badge">Básico</div>
+        <div class="exercise-header-info">
+          <h3>Regla de la potencia y suma</h3>
+          <div class="ex-func">f(x) = 3x⁴ − 2x³ + 5x − 7</div>
+        </div>
+        <button class="ex-toggle">Ver resolución ↓</button>
+      </div>
+      <div class="exercise-body">
+        <div class="progress-wrap" id="ex1-progress"></div>
+        <div class="steps-container" id="ex1-steps">
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">1</div><div class="step-line"></div></div>
+            <div class="step-content">
+              <div class="step-title">Identificar el tipo de función</div>
+              <div class="step-formula" style="white-space:pre-wrap;">f(x) = 3x⁴ − 2x³ + 5x − 7</div>
+              <div class="step-explain">Es un <span class="highlight-amber">polinomio</span>. Podemos derivar término a término usando la regla de la suma y la regla de la potencia. Cada término se deriva por separado.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">2</div><div class="step-line"></div></div>
+            <div class="step-content">
+              <div class="step-title">Derivar el primer término: 3x⁴</div>
+              <div class="step-formula" style="white-space:pre-wrap;">Regla: D(k·xⁿ) = k·n·xⁿ⁻¹
+D(3x⁴) = 3 · 4 · x⁴⁻¹ = 12x³</div>
+              <div class="step-explain">El exponente 4 "baja" como factor → queda 3×4 = 12. Al exponente se le resta 1 → queda x³.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">3</div><div class="step-line"></div></div>
+            <div class="step-content">
+              <div class="step-title">Derivar el segundo término: −2x³</div>
+              <div class="step-formula" style="white-space:pre-wrap;">D(−2x³) = −2 · 3 · x³⁻¹ = −6x²</div>
+              <div class="step-explain">El exponente 3 baja como factor → −2×3 = −6. El nuevo exponente es 3−1 = 2.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">4</div><div class="step-line"></div></div>
+            <div class="step-content">
+              <div class="step-title">Derivar el tercer término: 5x</div>
+              <div class="step-formula" style="white-space:pre-wrap;">D(5x) = 5 · D(x) = 5 · 1 = 5</div>
+              <div class="step-explain">La derivada de x es 1 (función identidad). Entonces 5x → 5×1 = 5.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">5</div><div class="step-line"></div></div>
+            <div class="step-content">
+              <div class="step-title">Derivar el último término: −7</div>
+              <div class="step-formula" style="white-space:pre-wrap;">D(−7) = 0</div>
+              <div class="step-explain">Las constantes siempre tienen derivada cero. Una constante no cambia, entonces su "velocidad de cambio" es nula.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">✓</div></div>
+            <div class="step-content">
+              <div class="result-box">
+                <div class="result-box-label">Resultado final</div>
+                <div class="result-box-formula">f'(x) = 12x³ − 6x² + 5</div>
+                <div class="result-box-plain">Juntamos todos los resultados: 12x³ (del primer término) − 6x² (del segundo) + 5 (del tercero) + 0 (la constante desaparece).</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── EJERCICIO 2 ── -->
+    <div class="exercise-card" id="ex2">
+      <div class="exercise-header" onclick="toggleExercise('ex2')">
+        <div class="ex-badge medium">Intermedio</div>
+        <div class="exercise-header-info">
+          <h3>Regla del producto</h3>
+          <div class="ex-func">f(x) = (x² − 4x) · (3x + 1)</div>
+        </div>
+        <button class="ex-toggle">Ver resolución ↓</button>
+      </div>
+      <div class="exercise-body">
+        <div class="steps-container" id="ex2-steps">
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">1</div><div class="step-line"></div></div>
+            <div class="step-content">
+              <div class="step-title">Identificar los dos factores</div>
+              <div class="step-formula" style="white-space:pre-wrap;">u = x² − 4x     →   u' = 2x − 4
+v = 3x + 1      →   v' = 3</div>
+              <div class="step-explain">Llamamos u al primer factor y v al segundo. Calculamos la derivada de cada uno por separado antes de aplicar la regla del producto.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">2</div><div class="step-line"></div></div>
+            <div class="step-content">
+              <div class="step-title">Aplicar la fórmula del producto</div>
+              <div class="step-formula" style="white-space:pre-wrap;">(u·v)' = u'·v + u·v'</div>
+              <div class="step-explain">Leído en voz alta: <span class="highlight">"derivada del primero por el segundo, más el primero por derivada del segundo"</span>. Son dos sumandos.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">3</div><div class="step-line"></div></div>
+            <div class="step-content">
+              <div class="step-title">Sustituir los valores</div>
+              <div class="step-formula" style="white-space:pre-wrap;">f'(x) = (2x − 4)·(3x + 1) + (x² − 4x)·3</div>
+              <div class="step-explain">Reemplazamos u', v, u, v' con sus expresiones concretas.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">4</div><div class="step-line"></div></div>
+            <div class="step-content">
+              <div class="step-title">Expandir el primer producto</div>
+              <div class="step-formula" style="white-space:pre-wrap;">(2x − 4)(3x + 1) = 6x² + 2x − 12x − 4
+                    = 6x² − 10x − 4</div>
+              <div class="step-explain">Multiplicamos término a término: 2x×3x = 6x², 2x×1 = 2x, −4×3x = −12x, −4×1 = −4. Juntamos los términos semejantes.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">5</div><div class="step-line"></div></div>
+            <div class="step-content">
+              <div class="step-title">Expandir el segundo producto</div>
+              <div class="step-formula" style="white-space:pre-wrap;">(x² − 4x) · 3 = 3x² − 12x</div>
+              <div class="step-explain">Distribuimos el 3 dentro del paréntesis.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">✓</div></div>
+            <div class="step-content">
+              <div class="result-box">
+                <div class="result-box-label">Resultado final</div>
+                <div class="result-box-formula">f'(x) = 9x² − 22x − 4</div>
+                <div class="result-box-plain">Sumamos: (6x² − 10x − 4) + (3x² − 12x) = 9x² − 22x − 4. Podría también haberse expandido f(x) antes de derivar y dar el mismo resultado.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── EJERCICIO 3 ── -->
+    <div class="exercise-card" id="ex3">
+      <div class="exercise-header" onclick="toggleExercise('ex3')">
+        <div class="ex-badge medium">Intermedio</div>
+        <div class="exercise-header-info">
+          <h3>Regla del cociente</h3>
+          <div class="ex-func">f(x) = (6x² − x) / (x + 5)</div>
+        </div>
+        <button class="ex-toggle">Ver resolución ↓</button>
+      </div>
+      <div class="exercise-body">
+        <div class="steps-container" id="ex3-steps">
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">1</div><div class="step-line"></div></div>
+            <div class="step-content">
+              <div class="step-title">Identificar numerador y denominador</div>
+              <div class="step-formula" style="white-space:pre-wrap;">u = 6x² − x     →   u' = 12x − 1
+v = x + 5       →   v' = 1</div>
+              <div class="step-explain">Llamamos u a "lo de arriba" y v a "lo de abajo". Primero calculamos la derivada de cada uno.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">2</div><div class="step-line"></div></div>
+            <div class="step-content">
+              <div class="step-title">Recordar la fórmula del cociente</div>
+              <div class="step-formula" style="white-space:pre-wrap;">(u/v)' = (u'·v − u·v') / v²</div>
+              <div class="step-explain">Memotécnica: <span class="highlight">"derivada de arriba por abajo, menos arriba por derivada de abajo, todo sobre el denominador al cuadrado"</span>. El orden importa: es resta, no suma.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">3</div><div class="step-line"></div></div>
+            <div class="step-content">
+              <div class="step-title">Sustituir</div>
+              <div class="step-formula" style="white-space:pre-wrap;">f'(x) = [(12x−1)(x+5) − (6x²−x)·1] / (x+5)²</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">4</div><div class="step-line"></div></div>
+            <div class="step-content">
+              <div class="step-title">Expandir el numerador</div>
+              <div class="step-formula" style="white-space:pre-wrap;">(12x−1)(x+5) = 12x² + 60x − x − 5
+             = 12x² + 59x − 5
+
+Restamos (6x² − x):
+12x² + 59x − 5 − 6x² + x = 6x² + 60x − 5</div>
+              <div class="step-explain">Expandimos el producto y luego restamos el segundo término del numerador. Cuidado con el signo: −(6x²−x) = −6x²+x.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">✓</div></div>
+            <div class="step-content">
+              <div class="result-box">
+                <div class="result-box-label">Resultado final</div>
+                <div class="result-box-formula">f'(x) = (6x² + 60x − 5) / (x + 5)²</div>
+                <div class="result-box-plain">El denominador siempre queda elevado al cuadrado. No se simplifica a menos que haya factores comunes con el numerador.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── EJERCICIO 4 ── -->
+    <div class="exercise-card" id="ex4">
+      <div class="exercise-header" onclick="toggleExercise('ex4')">
+        <div class="ex-badge advanced">Con cadena</div>
+        <div class="exercise-header-info">
+          <h3>Regla de la cadena — función compuesta</h3>
+          <div class="ex-func">f(x) = √(x³ − 2)</div>
+        </div>
+        <button class="ex-toggle">Ver resolución ↓</button>
+      </div>
+      <div class="exercise-body">
+        <div class="steps-container" id="ex4-steps">
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">1</div><div class="step-line"></div></div>
+            <div class="step-content">
+              <div class="step-title">Reescribir la raíz como potencia</div>
+              <div class="step-formula" style="white-space:pre-wrap;">f(x) = (x³ − 2)^(1/2)</div>
+              <div class="step-explain">La raíz cuadrada es lo mismo que elevar a 1/2. Esto nos permite aplicar la regla de la potencia directamente.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">2</div><div class="step-line"></div></div>
+            <div class="step-content">
+              <div class="step-title">Identificar exterior e interior</div>
+              <div class="step-formula" style="white-space:pre-wrap;">Exterior: ( )^(1/2)   →  derivada: (1/2)·( )^(−1/2)
+Interior: x³ − 2     →  derivada: 3x²</div>
+              <div class="step-explain">La función exterior es "elevar a 1/2". La función interior es "x³ − 2". Calculamos la derivada de cada una por separado.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">3</div><div class="step-line"></div></div>
+            <div class="step-content">
+              <div class="step-title">Aplicar la regla de la cadena</div>
+              <div class="step-formula" style="white-space:pre-wrap;">f'(x) = (1/2)·(x³−2)^(−1/2) · 3x²</div>
+              <div class="step-explain">Primero: derivada del exterior, con el interior intacto adentro. Luego: multiplicamos por la derivada del interior (3x²). <span class="highlight">¡No olvidar ese factor!</span></div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">4</div><div class="step-line"></div></div>
+            <div class="step-content">
+              <div class="step-title">Simplificar</div>
+              <div class="step-formula teal" style="white-space:pre-wrap;">f'(x) = 3x² / [2·√(x³ − 2)]</div>
+              <div class="step-explain">El exponente −1/2 en el denominador equivale a √ en el denominador. Multiplicamos 1/2 × 3 = 3/2 y reordenamos.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">✓</div></div>
+            <div class="step-content">
+              <div class="result-box">
+                <div class="result-box-label">Resultado final</div>
+                <div class="result-box-formula">f'(x) = 3x² / (2√(x³ − 2))</div>
+                <div class="result-box-plain">La derivada de √(algo) siempre da ese "algo" derivado dividido por el doble de la raíz. Es un patrón que conviene memorizar.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── EJERCICIO 5 ── -->
+    <div class="exercise-card" id="ex5">
+      <div class="exercise-header" onclick="toggleExercise('ex5')">
+        <div class="ex-badge advanced">Con cadena</div>
+        <div class="exercise-header-info">
+          <h3>Cadena con logaritmo natural</h3>
+          <div class="ex-func">f(x) = ln(x³ + 1)</div>
+        </div>
+        <button class="ex-toggle">Ver resolución ↓</button>
+      </div>
+      <div class="exercise-body">
+        <div class="steps-container" id="ex5-steps">
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">1</div><div class="step-line"></div></div>
+            <div class="step-content">
+              <div class="step-title">Identificar la composición</div>
+              <div class="step-formula" style="white-space:pre-wrap;">Exterior: ln( )     →  derivada: 1/( )
+Interior: x³ + 1   →  derivada: 3x²</div>
+              <div class="step-explain">La función exterior es el logaritmo, cuya derivada es 1 sobre el argumento. La función interior es x³+1.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">2</div><div class="step-line"></div></div>
+            <div class="step-content">
+              <div class="step-title">Aplicar la regla de la cadena</div>
+              <div class="step-formula" style="white-space:pre-wrap;">f'(x) = [1/(x³+1)] · 3x²</div>
+              <div class="step-explain">Derivada del exterior (1 sobre el interior, dejando el interior intacto) multiplicada por la derivada del interior (3x²).</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">✓</div></div>
+            <div class="step-content">
+              <div class="result-box">
+                <div class="result-box-label">Resultado final</div>
+                <div class="result-box-formula">f'(x) = 3x² / (x³ + 1)</div>
+                <div class="result-box-plain">En general: D[ln(g(x))] = g'(x)/g(x). La derivada de un logaritmo de algo es la derivada de ese algo dividida por ese algo.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── EJERCICIO 6 ── -->
+    <div class="exercise-card" id="ex6">
+      <div class="exercise-header" onclick="toggleExercise('ex6')">
+        <div class="ex-badge advanced">Aplicación</div>
+        <div class="exercise-header-info">
+          <h3>Recta tangente a una curva</h3>
+          <div class="ex-func">Recta tangente a f(x) = x² + 2 en P(1, 3)</div>
+        </div>
+        <button class="ex-toggle">Ver resolución ↓</button>
+      </div>
+      <div class="exercise-body">
+        <div class="steps-container" id="ex6-steps">
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">1</div><div class="step-line"></div></div>
+            <div class="step-content">
+              <div class="step-title">Calcular la derivada de f(x)</div>
+              <div class="step-formula" style="white-space:pre-wrap;">f(x) = x² + 2
+f'(x) = 2x</div>
+              <div class="step-explain">La constante 2 desaparece al derivar. La derivada de x² es 2x (regla de la potencia).</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">2</div><div class="step-line"></div></div>
+            <div class="step-content">
+              <div class="step-title">Calcular la pendiente en x₀ = 1</div>
+              <div class="step-formula" style="white-space:pre-wrap;">m = f'(1) = 2 · 1 = 2</div>
+              <div class="step-explain">La pendiente de la recta tangente en el punto P(1,3) es 2. Esto significa que la curva "sube 2 unidades por cada unidad que avanza en x" en ese punto.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">3</div><div class="step-line"></div></div>
+            <div class="step-content">
+              <div class="step-title">Armar la ecuación de la tangente</div>
+              <div class="step-formula" style="white-space:pre-wrap;">y − y₀ = m · (x − x₀)
+y − 3 = 2 · (x − 1)
+y − 3 = 2x − 2
+y = 2x + 1</div>
+              <div class="step-explain">Usamos la fórmula punto-pendiente con el punto P(1,3) y la pendiente m = 2. Despejamos y.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">4</div><div class="step-line"></div></div>
+            <div class="step-content">
+              <div class="step-title">Calcular la recta normal (bonus)</div>
+              <div class="step-formula teal" style="white-space:pre-wrap;">n = −1/m = −1/2
+
+y − 3 = −(1/2)·(x − 1)
+y = −(1/2)x + 7/2</div>
+              <div class="step-explain">La normal es perpendicular a la tangente. Su pendiente es el opuesto del inverso de m = 2, o sea −1/2.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">✓</div></div>
+            <div class="step-content">
+              <div class="result-box">
+                <div class="result-box-label">Resultado final</div>
+                <div class="result-box-formula">Tangente: y = 2x + 1
+Normal: y = −x/2 + 7/2</div>
+                <div class="result-box-plain">Las dos rectas se cortan en el punto P(1,3) formando un ángulo de 90°. La tangente "toca" la parábola suavemente en ese punto.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── EJERCICIO 7: TRIG ── -->
+    <div class="exercise-card" id="ex7">
+      <div class="exercise-header" onclick="toggleExercise('ex7')">
+        <div class="ex-badge advanced">Trigonométrica</div>
+        <div class="exercise-header-info">
+          <h3>Cadena con función trigonométrica</h3>
+          <div class="ex-func">f(x) = cos(sen(3x))</div>
+        </div>
+        <button class="ex-toggle">Ver resolución ↓</button>
+      </div>
+      <div class="exercise-body">
+        <div class="steps-container" id="ex7-steps">
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">1</div><div class="step-line"></div></div>
+            <div class="step-content">
+              <div class="step-title">Identificar las capas de composición</div>
+              <div class="step-formula" style="white-space:pre-wrap;">Capa 1 (exterior): cos( )   → derivada: −sen( )
+Capa 2 (medio):   sen( )   → derivada: cos( )
+Capa 3 (interior): 3x      → derivada: 3</div>
+              <div class="step-explain">Hay tres capas anidadas. La regla de la cadena se aplica de afuera hacia adentro, multiplicando cada derivada.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">2</div><div class="step-line"></div></div>
+            <div class="step-content">
+              <div class="step-title">Derivar de afuera hacia adentro</div>
+              <div class="step-formula" style="white-space:pre-wrap;">f'(x) = −sen(sen(3x)) · cos(3x) · 3</div>
+              <div class="step-explain">
+                Paso a paso:<br>
+                • Derivada de cos → −sen, con el argumento sen(3x) intacto: −sen(sen(3x))<br>
+                • Multiplicamos por la derivada de sen(3x) = cos(3x)·3<br>
+                • El 3 viene de la derivada del interior 3x
+              </div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num-col"><div class="step-num">✓</div></div>
+            <div class="step-content">
+              <div class="result-box">
+                <div class="result-box-label">Resultado final</div>
+                <div class="result-box-formula">f'(x) = −3·sen(sen(3x))·cos(3x)</div>
+                <div class="result-box-plain">Se reordena colocando la constante 3 adelante por convención. Con cadenas de varias capas, el truco es nunca apurarse: una capa por vez, de afuera hacia adentro.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- TABLA DE FÓRMULAS -->
+<!-- ═══════════════════════════════════════════ -->
+<hr class="divider">
+<section class="section" id="tabla">
+  <div class="container">
+    <p class="section-title">Referencia rápida</p>
+    <h2 class="section-heading">Tabla de fórmulas</h2>
+    <p class="section-desc">Todas las derivadas de funciones elementales, con su versión para funciones compuestas (regla de la cadena).</p>
+
+    <div class="concept-card open">
+      <div class="concept-header" onclick="toggleCard(this)">
+        <div class="concept-num">📋</div>
+        <div class="concept-header-text">
+          <h3>Derivadas de funciones elementales + regla de la cadena</h3>
+          <p>El "apéndice" del apunte, con explicaciones</p>
+        </div>
+        <div class="concept-toggle">+</div>
+      </div>
+      <div class="concept-body">
+        <div class="callout">
+          <span class="callout-icon">💡</span>
+          <div class="callout-text">
+            La columna derecha muestra la <strong>versión con función compuesta</strong>: si en lugar de x tenés una función u(x) adentro, la derivada se multiplica por u' (la derivada de esa función interior).
+          </div>
+        </div>
+        <div class="trig-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Función básica</th>
+                <th>Derivada básica</th>
+                <th>Con u = u(x) (cadena)</th>
+                <th>Significado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="td-formula">c (constante)</td>
+                <td class="td-formula">0</td>
+                <td class="td-formula">0</td>
+                <td class="td-plain">Lo que no cambia, tiene derivada cero</td>
+              </tr>
+              <tr>
+                <td class="td-formula">x</td>
+                <td class="td-formula">1</td>
+                <td class="td-formula">—</td>
+                <td class="td-plain">f(x)=x crece uniformemente con pendiente 1</td>
+              </tr>
+              <tr>
+                <td class="td-formula">xⁿ</td>
+                <td class="td-formula">n·xⁿ⁻¹</td>
+                <td class="td-formula">n·uⁿ⁻¹·u'</td>
+                <td class="td-plain">El exponente baja como factor; al exponente se le resta 1</td>
+              </tr>
+              <tr>
+                <td class="td-formula">√x = x^(1/2)</td>
+                <td class="td-formula">1/(2√x)</td>
+                <td class="td-formula">u'/(2√u)</td>
+                <td class="td-plain">Lo derivado del interior va dividido por el doble de la raíz</td>
+              </tr>
+              <tr>
+                <td class="td-formula">ln x</td>
+                <td class="td-formula">1/x</td>
+                <td class="td-formula">u'/u</td>
+                <td class="td-plain">La derivada del ln es 1 sobre el argumento; con cadena, el numerador es la derivada del argumento</td>
+              </tr>
+              <tr>
+                <td class="td-formula">logₐ x</td>
+                <td class="td-formula">1/(x·ln a)</td>
+                <td class="td-formula">u'/(u·ln a)</td>
+                <td class="td-plain">Como ln x pero dividido por ln(a). Si a=e, ln(e)=1 y recuperamos la regla anterior</td>
+              </tr>
+              <tr>
+                <td class="td-formula">eˣ</td>
+                <td class="td-formula">eˣ</td>
+                <td class="td-formula">eᵘ·u'</td>
+                <td class="td-plain">eˣ es su propia derivada. Con cadena, solo se multiplica por u'</td>
+              </tr>
+              <tr>
+                <td class="td-formula">aˣ</td>
+                <td class="td-formula">aˣ·ln(a)</td>
+                <td class="td-formula">aᵘ·u'·ln(a)</td>
+                <td class="td-plain">Como eˣ pero aparece ln(a) como factor extra por el cambio de base</td>
+              </tr>
+              <tr>
+                <td class="td-formula">sen(x)</td>
+                <td class="td-formula">cos(x)</td>
+                <td class="td-formula">cos(u)·u'</td>
+                <td class="td-plain">La velocidad de cambio del seno es el coseno</td>
+              </tr>
+              <tr>
+                <td class="td-formula">cos(x)</td>
+                <td class="td-formula">−sen(x)</td>
+                <td class="td-formula">−sen(u)·u'</td>
+                <td class="td-plain">La velocidad de cambio del coseno es el seno negativo</td>
+              </tr>
+              <tr>
+                <td class="td-formula">tg(x)</td>
+                <td class="td-formula">1/cos²(x)</td>
+                <td class="td-formula">u'/cos²(u)</td>
+                <td class="td-plain">Equivalente a sec²(x). Se obtiene derivando sen/cos con la regla del cociente</td>
+              </tr>
+              <tr>
+                <td class="td-formula">arcsen(x)</td>
+                <td class="td-formula">1/√(1−x²)</td>
+                <td class="td-formula">u'/√(1−u²)</td>
+                <td class="td-plain">Solo definida para |x| &lt; 1. La raíz en el denominador viene de la identidad pitagórica</td>
+              </tr>
+              <tr>
+                <td class="td-formula">arccos(x)</td>
+                <td class="td-formula">−1/√(1−x²)</td>
+                <td class="td-formula">−u'/√(1−u²)</td>
+                <td class="td-plain">Igual que arcsen pero con signo negativo (arccos decrece)</td>
+              </tr>
+              <tr>
+                <td class="td-formula">arctg(x)</td>
+                <td class="td-formula">1/(1+x²)</td>
+                <td class="td-formula">u'/(1+u²)</td>
+                <td class="td-plain">Definida para todo x real. Siempre positiva: arctg siempre crece</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout" style="margin-top:28px;">
+          <span class="callout-icon">⚡</span>
+          <div class="callout-text">
+            <strong>Regla de oro al ver una función compuesta:</strong> Preguntate siempre "¿hay algo más complicado que solo x adentro?" Si la respuesta es sí, tenés que aplicar la regla de la cadena y multiplicar al final por la derivada de "lo que está adentro".
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+</main>
+
+<footer>
+  <p>Derivadas — Unidad 7 · Análisis Matemático</p>
+  <p style="margin-top:6px;">Basado en el apunte teórico de <span>UNNOBA</span> y el resumen de Luis Barrios Calmaestra</p>
+</footer>
+
+<script>
+  // ── Toggle concept cards ──
+  function toggleCard(header) {
+    const card = header.closest('.concept-card');
+    card.classList.toggle('open');
+  }
+
+  // ── Toggle exercises with step animation ──
+  function toggleExercise(id) {
+    const card = document.getElementById(id);
+    const wasOpen = card.classList.contains('open');
+    card.classList.toggle('open');
+
+    if (!wasOpen) {
+      const steps = card.querySelectorAll('.step');
+      steps.forEach((step, i) => {
+        step.style.opacity = '0';
+        step.style.transform = 'translateY(12px)';
+        setTimeout(() => {
+          step.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+          step.style.opacity = '1';
+          step.style.transform = 'translateY(0)';
+        }, i * 120);
+      });
+
+      // Build progress dots
+      const progress = card.querySelector('[id$="-progress"]');
+      if (progress) {
+        progress.innerHTML = '<span style="color:var(--muted);font-size:11px;margin-right:4px;">Pasos:</span>';
+        steps.forEach((_, i) => {
+          const dot = document.createElement('div');
+          dot.className = 'progress-dot' + (i === 0 ? ' active' : '');
+          dot.title = 'Paso ' + (i + 1);
+          progress.appendChild(dot);
+        });
+      }
+    }
+  }
+
+  // ── Intersection observer for nav highlight ──
+  const sections = document.querySelectorAll('section[id], div[id]');
+  const pills = document.querySelectorAll('.sticky-pill');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        pills.forEach(p => {
+          if (p.getAttribute('href') === '#' + entry.target.id) {
+            p.style.borderColor = 'var(--amber)';
+            p.style.color = 'var(--amber)';
+          } else {
+            p.style.borderColor = '';
+            p.style.color = '';
+          }
+        });
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+
+  // ── Open first exercise by default on load ──
+  window.addEventListener('load', () => {
+    // All concept cards start closed except first
+    document.querySelectorAll('.concept-card').forEach((c, i) => {
+      if (i !== 0) c.classList.remove('open');
+    });
+  });
+</script>
+</body>
+</html>

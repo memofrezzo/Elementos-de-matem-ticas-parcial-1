@@ -1,0 +1,4312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gu&iacute;a interactiva de ejercicios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Patrick+Hand&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --bg-top: #f9f1e3;
+  --bg-bottom: #f3eadf;
+  --paper: rgba(255, 252, 246, 0.94);
+  --paper-strong: #fffdf9;
+  --paper-line: rgba(42, 75, 156, 0.05);
+  --ink: #1f1a17;
+  --ink-soft: #625a53;
+  --line: rgba(31, 26, 23, 0.1);
+  --line-strong: rgba(31, 26, 23, 0.16);
+  --blue: #2148b5;
+  --blue-soft: #eef3ff;
+  --red: #c73127;
+  --red-soft: #fff2ef;
+  --gold: #c48a39;
+  --shadow: 0 26px 70px rgba(47, 38, 31, 0.11);
+  --radius-xl: 32px;
+  --radius-lg: 24px;
+  --radius-md: 18px;
+  --font-title: "Caveat", cursive;
+  --font-body: "Patrick Hand", cursive;
+  --font-accent: "Fraunces", serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top left, rgba(255, 213, 170, 0.55), transparent 26%),
+    radial-gradient(circle at top right, rgba(202, 216, 255, 0.48), transparent 24%),
+    linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+  padding: 18px;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+.app {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+.topbar {
+  position: sticky;
+  top: 12px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 252, 246, 0.86);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 12px 30px rgba(35, 31, 29, 0.08);
+}
+
+.brand-btn,
+.ghost-btn,
+.topic-card,
+.exercise-card,
+.step-trigger {
+  cursor: pointer;
+}
+
+.brand-btn,
+.ghost-btn,
+.exercise-link {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: inherit;
+}
+
+.brand-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(31, 26, 23, 0.08);
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.brand-btn:hover,
+.ghost-btn:hover,
+.topic-card:hover,
+.exercise-card:hover,
+.step-card:hover {
+  transform: translateY(-2px);
+}
+
+.brand-mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-accent);
+  font-size: 0.95rem;
+  color: var(--paper-strong);
+  background: linear-gradient(135deg, var(--blue), var(--red));
+}
+
+.brand-copy {
+  display: grid;
+  gap: 1px;
+  text-align: left;
+}
+
+.brand-title {
+  font-family: var(--font-accent);
+  font-size: 0.92rem;
+  letter-spacing: 0.04em;
+}
+
+.brand-subtitle,
+.crumbs {
+  color: var(--ink-soft);
+}
+
+.brand-subtitle {
+  font-size: 0.92rem;
+}
+
+.crumbs {
+  font-family: var(--font-accent);
+  font-size: 0.88rem;
+  letter-spacing: 0.04em;
+  text-align: right;
+}
+
+.screen {
+  display: none;
+}
+
+.screen.is-active {
+  display: block;
+}
+
+.panel {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(255, 252, 246, 0.95)),
+    repeating-linear-gradient(
+      180deg,
+      transparent 0,
+      transparent 48px,
+      var(--paper-line) 49px,
+      transparent 50px
+    );
+  border: 1px solid rgba(31, 26, 23, 0.08);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow);
+}
+
+.hero-panel {
+  padding: clamp(24px, 4vw, 42px);
+  margin-bottom: 20px;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  font-family: var(--font-accent);
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.hero-panel h1,
+.topic-head h2,
+.exercise-head h2,
+.banner-title,
+.final-title,
+.obs-title {
+  margin: 0;
+  line-height: 0.95;
+}
+
+.hero-panel h1,
+.topic-head h2,
+.exercise-head h2 {
+  font-family: var(--font-title);
+  font-size: clamp(2.9rem, 7vw, 4.7rem);
+}
+
+.hero-panel h1 {
+  color: var(--red);
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 10px;
+}
+
+.hero-copy,
+.topic-copy,
+.exercise-copy,
+.banner-copy,
+.step-summary,
+.detail-card p,
+.detail-card li,
+.empty-copy,
+.note-copy,
+.final-answer {
+  font-size: clamp(1.18rem, 2vw, 1.55rem);
+  line-height: 1.5;
+}
+
+.hero-copy,
+.topic-copy,
+.exercise-copy {
+  margin: 14px 0 0;
+  max-width: 880px;
+}
+
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.topic-card,
+.exercise-card {
+  width: 100%;
+  text-align: left;
+  appearance: none;
+  border: 1px solid rgba(31, 26, 23, 0.08);
+  background: rgba(255, 255, 255, 0.78);
+  border-radius: var(--radius-lg);
+  padding: 18px 18px 20px;
+  box-shadow: 0 12px 28px rgba(36, 33, 31, 0.05);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.topic-card:hover,
+.exercise-card:hover {
+  border-color: rgba(33, 72, 181, 0.18);
+  box-shadow: 0 16px 32px rgba(36, 33, 31, 0.09);
+}
+
+.topic-pill,
+.exercise-pill,
+.mini-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-family: var(--font-accent);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+}
+
+.topic-pill,
+.mini-pill.blue {
+  color: var(--blue);
+  background: var(--blue-soft);
+}
+
+.exercise-pill,
+.mini-pill.red {
+  color: var(--red);
+  background: var(--red-soft);
+}
+
+.topic-name,
+.exercise-name,
+.step-name {
+  margin: 12px 0 8px;
+  font-size: clamp(1.55rem, 2.3vw, 2rem);
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+.topic-name,
+.exercise-name {
+  font-family: var(--font-title);
+}
+
+.topic-desc,
+.exercise-desc,
+.meta-copy {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 1.12rem;
+  line-height: 1.45;
+}
+
+.topic-meta,
+.exercise-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.topic-screen,
+.exercise-screen {
+  padding: clamp(22px, 4vw, 36px);
+}
+
+.nav-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.ghost-btn {
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(31, 26, 23, 0.08);
+  background: rgba(255, 255, 255, 0.76);
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.ghost-btn.primary {
+  color: var(--paper-strong);
+  background: linear-gradient(135deg, var(--blue), #365dd3);
+}
+
+.exercise-list {
+  display: grid;
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.empty-state {
+  margin-top: 22px;
+  padding: 22px;
+  border-radius: var(--radius-lg);
+  border: 1px dashed rgba(31, 26, 23, 0.16);
+  background: rgba(255, 255, 255, 0.66);
+}
+
+.empty-title {
+  margin: 0 0 8px;
+  font-family: var(--font-title);
+  font-size: clamp(1.8rem, 2.7vw, 2.4rem);
+  color: var(--blue);
+}
+
+.empty-copy {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.exercise-frame {
+  margin-top: 18px;
+}
+
+.resolution-sheet {
+  padding: clamp(18px, 3vw, 28px);
+}
+
+.exercise-banner {
+  padding: clamp(20px, 3vw, 28px);
+  margin-bottom: 18px;
+  border: 1px solid rgba(31, 26, 23, 0.08);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.banner-label {
+  margin: 0 0 10px;
+  font-family: var(--font-accent);
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.banner-title {
+  font-family: var(--font-title);
+  font-size: clamp(2.3rem, 5vw, 3.6rem);
+  color: var(--red);
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 10px;
+}
+
+.banner-copy {
+  margin: 14px 0 0;
+  max-width: 940px;
+}
+
+.study-note {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(33, 72, 181, 0.14);
+  background: rgba(238, 243, 255, 0.72);
+}
+
+.study-note strong {
+  font-family: var(--font-accent);
+  font-size: 0.92rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+
+.study-note p {
+  margin: 8px 0 0;
+  font-size: 1.14rem;
+  line-height: 1.45;
+}
+
+.resolution-flow {
+  display: grid;
+  gap: 16px;
+}
+
+.step-card,
+.final-panel,
+.observation-panel {
+  border: 1px solid rgba(31, 26, 23, 0.08);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 14px 28px rgba(39, 33, 30, 0.06);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.step-card.is-open {
+  border-color: rgba(33, 72, 181, 0.16);
+  box-shadow: 0 18px 32px rgba(33, 72, 181, 0.08);
+}
+
+.step-trigger {
+  width: 100%;
+  appearance: none;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  color: inherit;
+  padding: 20px;
+}
+
+.step-trigger:focus-visible,
+.topic-card:focus-visible,
+.exercise-card:focus-visible,
+.brand-btn:focus-visible,
+.ghost-btn:focus-visible {
+  outline: 3px solid rgba(33, 72, 181, 0.22);
+  outline-offset: 2px;
+}
+
+.step-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.step-index {
+  font-family: var(--font-accent);
+  font-size: 1rem;
+  color: var(--blue);
+}
+
+.step-name {
+  margin: 0;
+  color: var(--blue);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+
+.step-summary {
+  margin: 0 0 14px;
+}
+
+.preview-stack,
+.equation-stack,
+.detail-stack {
+  display: grid;
+  gap: 12px;
+}
+
+.equation-stack {
+  gap: 10px;
+}
+
+.eq-line,
+.math-block,
+.note-copy,
+.final-answer {
+  color: var(--ink);
+}
+
+.eq-line {
+  font-size: clamp(1.28rem, 2.4vw, 1.9rem);
+  line-height: 1.45;
+}
+
+.eq-line.blue-note,
+.mini-note,
+.result-note {
+  color: var(--blue);
+}
+
+.math-block,
+.result-box,
+.note-cloud {
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.math-block {
+  padding: 16px 18px;
+  border: 1px solid rgba(31, 26, 23, 0.08);
+}
+
+.math-block.soft {
+  background: rgba(250, 248, 243, 0.88);
+}
+
+.result-box {
+  display: inline-flex;
+  align-items: center;
+  padding: 14px 18px;
+  border: 2px solid var(--red);
+  font-size: clamp(1.35rem, 2.5vw, 1.95rem);
+  line-height: 1.4;
+}
+
+.answer-box {
+  display: inline-flex;
+  align-items: center;
+  padding: 16px 20px;
+  border: 3px solid var(--blue);
+  background: rgba(247, 250, 255, 0.92);
+  border-radius: 10px;
+  font-size: clamp(1.6rem, 3vw, 2.3rem);
+  line-height: 1.35;
+}
+
+.note-cloud {
+  padding: 16px 18px;
+  border: 2px dashed rgba(33, 72, 181, 0.32);
+  background: rgba(238, 243, 255, 0.72);
+  color: var(--blue);
+  font-size: clamp(1.12rem, 2vw, 1.4rem);
+  line-height: 1.5;
+}
+
+.workspace-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.calc-guide {
+  margin-top: 12px;
+  padding: 14px;
+  border: 1px solid rgba(33, 72, 181, 0.18);
+  border-radius: var(--radius-md);
+  background: rgba(238, 243, 255, 0.64);
+}
+
+.calc-guide-title,
+.side-title {
+  margin: 0 0 10px;
+  font-family: var(--font-accent);
+  font-size: 0.88rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+
+.minor-grid {
+  display: grid;
+  gap: 8px;
+}
+
+.minor-row {
+  display: grid;
+  grid-template-columns: 90px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(31, 26, 23, 0.08);
+}
+
+.minor-label {
+  font-family: var(--font-accent);
+  font-size: 0.84rem;
+  color: var(--ink-soft);
+}
+
+.minor-formula,
+.minor-result {
+  font-size: 1.2rem;
+  line-height: 1.35;
+}
+
+.minor-result {
+  color: var(--red);
+  white-space: nowrap;
+}
+
+.identity-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.identity-item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(58, 135, 51, 0.22);
+  background: rgba(241, 250, 238, 0.78);
+  font-size: 1.2rem;
+}
+
+.identity-dot {
+  width: 10px;
+  height: 10px;
+  flex: 0 0 10px;
+  border-radius: 50%;
+  background: #3a8733;
+}
+
+.visual-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  align-items: stretch;
+}
+
+.unit-card,
+.triangle-card,
+.calculator-card,
+.verify-card {
+  padding: 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(31, 26, 23, 0.08);
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.unit-circle {
+  position: relative;
+  width: min(260px, 100%);
+  aspect-ratio: 1;
+  margin: 10px auto 0;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background:
+    linear-gradient(90deg, transparent calc(50% - 1px), var(--ink) calc(50% - 1px), var(--ink) calc(50% + 1px), transparent calc(50% + 1px)),
+    linear-gradient(0deg, transparent calc(50% - 1px), var(--ink) calc(50% - 1px), var(--ink) calc(50% + 1px), transparent calc(50% + 1px));
+}
+
+.unit-point {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--blue);
+  transform: translate(-50%, -50%);
+}
+
+.unit-point.p1 {
+  left: 76%;
+  top: 24%;
+}
+
+.unit-point.p2 {
+  left: 24%;
+  top: 24%;
+}
+
+.unit-label {
+  position: absolute;
+  color: var(--blue);
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.unit-label.pi4 {
+  right: 4%;
+  top: 12%;
+}
+
+.unit-label.threepi4 {
+  left: 2%;
+  top: 12%;
+}
+
+.unit-label.pi2 {
+  left: 52%;
+  top: -4%;
+}
+
+.unit-label.pi {
+  left: -8%;
+  top: 48%;
+}
+
+.unit-label.zero {
+  right: -7%;
+  top: 48%;
+}
+
+.unit-dash {
+  position: absolute;
+  left: 24%;
+  right: 24%;
+  top: 24%;
+  border-top: 2px dashed rgba(33, 72, 181, 0.38);
+}
+
+.triangle-visual {
+  position: relative;
+  min-height: 260px;
+  overflow: hidden;
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.36)),
+    repeating-linear-gradient(135deg, transparent 0 12px, rgba(58, 135, 51, 0.08) 12px 14px);
+}
+
+.triangle-ground {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: 42px;
+  height: 4px;
+  background: #3a8733;
+}
+
+.triangle-post {
+  position: absolute;
+  right: 18%;
+  bottom: 42px;
+  width: 8px;
+  height: 160px;
+  background: var(--gold);
+  border: 1px solid var(--ink);
+  border-radius: 8px 8px 0 0;
+}
+
+.triangle-cable {
+  position: absolute;
+  left: 16%;
+  right: 18%;
+  bottom: 42px;
+  height: 4px;
+  background: #e56f18;
+  transform-origin: left center;
+  transform: rotate(-31deg);
+}
+
+.triangle-label {
+  position: absolute;
+  font-size: 1.25rem;
+  line-height: 1.1;
+}
+
+.triangle-label.cable {
+  left: 34%;
+  top: 64px;
+  color: var(--blue);
+  transform: rotate(-28deg);
+}
+
+.triangle-label.post {
+  right: 6%;
+  top: 88px;
+  color: #e56f18;
+}
+
+.triangle-label.ground {
+  left: 46%;
+  bottom: 10px;
+  color: #3a8733;
+}
+
+.triangle-label.angle {
+  left: 19%;
+  bottom: 48px;
+  color: var(--ink);
+}
+
+.exercise-screen.exam-mode {
+  padding: 10px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.exercise-screen.exam-mode .exercise-head {
+  display: none;
+}
+
+.exercise-screen.exam-mode .nav-row {
+  margin: 0 0 10px;
+}
+
+.exam-sheet {
+  background: #fffefa;
+  border: 2px solid #6b32b0;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 18px 45px rgba(47, 24, 91, 0.12);
+  font-family: var(--font-body);
+  color: #1e1425;
+}
+
+.exam-header {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  padding: 10px 16px;
+  border-bottom: 2px solid rgba(107, 50, 176, 0.35);
+}
+
+.exam-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 5px 13px;
+  border-radius: 5px;
+  background: #56309a;
+  color: #fff;
+  font-family: var(--font-accent);
+  font-size: 0.98rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.exam-prompt,
+.exam-equation {
+  margin: 0;
+  font-size: 1.55rem;
+  line-height: 1.28;
+}
+
+.exam-equation {
+  text-align: right;
+  font-size: 1.9rem;
+  white-space: normal;
+}
+
+.exam-body {
+  display: grid;
+  grid-template-columns: 47% 53%;
+}
+
+.exam-body.equal {
+  grid-template-columns: 48% 52%;
+}
+
+.exam-col {
+  padding: 14px 18px 16px;
+}
+
+.exam-col + .exam-col {
+  border-left: 2px solid rgba(107, 50, 176, 0.22);
+}
+
+.exam-title {
+  margin: 0 0 12px;
+  color: #5a28a6;
+  text-align: center;
+  font-family: var(--font-accent);
+  font-size: 1.05rem;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  text-transform: uppercase;
+}
+
+.exam-side-title {
+  margin: 0 0 10px;
+  color: #006b1b;
+  font-family: var(--font-accent);
+  font-size: 1rem;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  text-transform: uppercase;
+}
+
+.exam-side-title.blue {
+  color: #0b5cb7;
+}
+
+.exam-side-title.red {
+  color: #d22b5b;
+}
+
+.exam-step {
+  position: relative;
+  padding: 8px 0 12px 42px;
+  border-bottom: 1px dashed rgba(107, 50, 176, 0.38);
+}
+
+.exam-step[data-step-key] {
+  cursor: pointer;
+  transition: background-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.exam-step[data-step-key]:hover {
+  background: rgba(107, 50, 176, 0.04);
+}
+
+.exam-step.is-open {
+  background: rgba(107, 50, 176, 0.05);
+}
+
+.exam-step:last-child {
+  border-bottom: 0;
+}
+
+.exam-number {
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #6b32b0;
+  border-radius: 50%;
+  color: #5a28a6;
+  font-family: var(--font-accent);
+  font-size: 1rem;
+  background: #fbf5ff;
+}
+
+.exam-step h4 {
+  margin: 0 0 8px;
+  color: #5a28a6;
+  font-family: var(--font-body);
+  font-size: 1.22rem;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.exam-step h4.blue {
+  color: #0b5cb7;
+}
+
+.exam-step-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0 2px;
+  color: #5a28a6;
+  font-family: var(--font-accent);
+  font-size: 0.82rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.exam-step-hint::before {
+  content: "+";
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+.exam-step.is-open .exam-step-hint::before {
+  content: "-";
+}
+
+.exam-text,
+.exam-list,
+.exam-note,
+.exam-summary li {
+  font-size: 1.05rem;
+  line-height: 1.4;
+}
+
+.exam-text {
+  margin: 0 0 8px;
+}
+
+.exam-list {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.exam-list li + li {
+  margin-top: 5px;
+}
+
+.exam-math {
+  margin: 8px 0;
+  font-size: 1.38rem;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.exam-math.small {
+  font-size: 1.14rem;
+  text-align: left;
+}
+
+.exam-mathbox {
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1.8px solid #8c57df;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.exam-mathbox.green {
+  border-color: #5aa45c;
+}
+
+.exam-mathbox.yellow {
+  border-color: #e6d16b;
+  background: #fff8ce;
+}
+
+.exam-mathbox.blue {
+  border-color: #3e88da;
+}
+
+.exam-mathbox.red {
+  border-color: #e0647c;
+}
+
+.exam-green-note,
+.exam-purple-note,
+.exam-blue-note,
+.exam-red-note {
+  margin: 10px 0;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 1.05rem;
+  line-height: 1.42;
+  background: #fff;
+}
+
+.exam-green-note {
+  border: 1.8px solid #62b166;
+  color: #0f6d20;
+  background: #fbfff7;
+}
+
+.exam-purple-note {
+  border: 1.8px solid #8c57df;
+}
+
+.exam-blue-note {
+  border: 1.8px solid #4c93e6;
+}
+
+.exam-red-note {
+  border: 1.8px solid #e56c84;
+}
+
+.exam-answer {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 10px 18px;
+  border: 2px solid #6b32b0;
+  border-radius: 4px;
+  background: #fffdf0;
+  font-size: 1.35rem;
+  line-height: 1.35;
+}
+
+.exam-answer.green {
+  border-color: #49a84f;
+  background: #f6fff1;
+}
+
+.exam-step-explain {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.28s ease, opacity 0.22s ease, margin-top 0.22s ease, padding-top 0.22s ease;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.exam-step.is-open .exam-step-explain {
+  max-height: 560px;
+  opacity: 1;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(107, 50, 176, 0.28);
+}
+
+.exam-explain-grid {
+  display: grid;
+  gap: 8px;
+}
+
+.exam-explain-card {
+  padding: 10px 12px;
+  border: 1px solid rgba(107, 50, 176, 0.18);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.exam-explain-card strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #5a28a6;
+  font-family: var(--font-accent);
+  font-size: 0.84rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.exam-explain-card p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.42;
+}
+
+.exam-summary {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border: 1.8px solid #88b8ea;
+  border-radius: 6px;
+  background: #f8fbff;
+}
+
+.exam-summary h5 {
+  margin: 0 0 6px;
+  color: #0b5cb7;
+  font-family: var(--font-accent);
+  font-size: 0.92rem;
+  text-transform: uppercase;
+}
+
+.exam-summary ol {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.exam-panel {
+  margin-bottom: 14px;
+  padding: 12px;
+  border: 1.8px solid #4c93e6;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.exam-panel.green {
+  border-color: #54a74d;
+  background: #fbfff7;
+}
+
+.exam-panel.red {
+  border-color: #ea6f8a;
+  background: #fffafa;
+}
+
+.logic-head-copy {
+  margin: 8px 0 0;
+  color: #625a53;
+  font-size: 1.02rem;
+  line-height: 1.35;
+}
+
+.logic-task-list,
+.logic-prop-grid,
+.logic-split-grid,
+.logic-summary-grid,
+.logic-formula-stack {
+  display: grid;
+  gap: 10px;
+}
+
+.logic-task-list {
+  margin-top: 8px;
+  color: #625a53;
+  font-size: 1rem;
+  line-height: 1.32;
+}
+
+.logic-prop-grid,
+.logic-split-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.logic-prop-card,
+.logic-box,
+.logic-variant-card,
+.logic-summary-card {
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.logic-prop-card {
+  border: 1.8px solid #8c57df;
+}
+
+.logic-prop-card.blue,
+.logic-box.blue,
+.logic-summary-card.blue {
+  border-color: #4c93e6;
+  background: #f8fbff;
+}
+
+.logic-prop-card.green,
+.logic-box.green,
+.logic-summary-card.green {
+  border-color: #62b166;
+  background: #fbfff7;
+}
+
+.logic-prop-card.gold,
+.logic-summary-card.gold {
+  border-color: #e2ab53;
+  background: #fffaf0;
+}
+
+.logic-prop-card.purple {
+  border-color: #8c57df;
+  background: #fbf5ff;
+}
+
+.logic-summary-card.red {
+  border-color: #e56c84;
+  background: #fff8fa;
+}
+
+.logic-prop-card strong,
+.logic-box strong,
+.logic-variant-card strong,
+.logic-summary-card strong {
+  display: block;
+  margin-bottom: 5px;
+  font-family: var(--font-accent);
+  font-size: 0.86rem;
+  text-transform: uppercase;
+}
+
+.logic-prop-card span,
+.logic-box p,
+.logic-variant-card p,
+.logic-summary-card p {
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.logic-prop-card.blue strong,
+.logic-box.blue strong,
+.logic-summary-card.blue strong {
+  color: #0b5cb7;
+}
+
+.logic-prop-card.green strong,
+.logic-box.green strong,
+.logic-summary-card.green strong {
+  color: #0f6d20;
+}
+
+.logic-prop-card.gold strong,
+.logic-summary-card.gold strong {
+  color: #a56400;
+}
+
+.logic-prop-card.purple strong {
+  color: #5a28a6;
+}
+
+.logic-summary-card.red strong {
+  color: #d22b5b;
+}
+
+.logic-box {
+  border: 1.8px solid #8c57df;
+}
+
+.logic-box p,
+.logic-summary-card p {
+  margin: 0;
+}
+
+.logic-quote {
+  margin-top: 8px;
+  padding: 12px 14px;
+  border-radius: 6px;
+  border: 1.8px solid #e2ab53;
+  background: #fffaf0;
+  font-size: 1.08rem;
+  line-height: 1.45;
+}
+
+.logic-inline-chip {
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1.6px solid #8c57df;
+  border-radius: 999px;
+  background: #fff;
+  font-size: 1.02rem;
+  line-height: 1.2;
+}
+
+.logic-inline-chip.blue {
+  border-color: #4c93e6;
+  color: #0b5cb7;
+}
+
+.logic-inline-chip.green {
+  border-color: #62b166;
+  color: #0f6d20;
+}
+
+.logic-variant-card {
+  margin-top: 10px;
+  border: 1px solid rgba(107, 50, 176, 0.18);
+  background: rgba(255, 255, 255, 0.94);
+}
+
+.logic-variant-card.blue {
+  border-color: rgba(76, 147, 230, 0.45);
+  background: #f8fbff;
+}
+
+.logic-variant-card.green {
+  border-color: rgba(98, 177, 102, 0.45);
+  background: #fbfff7;
+}
+
+.logic-variant-card p {
+  margin: 0;
+}
+
+.logic-summary-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 10px;
+}
+
+.logic-summary-card {
+  border: 1.8px solid rgba(107, 50, 176, 0.25);
+}
+
+.logic-final-section {
+  padding-top: 0;
+  border-top: 2px solid rgba(107, 50, 176, 0.22);
+}
+
+.logic-final-step {
+  border-bottom: 0;
+}
+
+.trig-circle {
+  position: relative;
+  width: min(360px, 100%);
+  aspect-ratio: 1;
+  margin: 6px auto 12px;
+  border: 2px solid #111;
+  border-radius: 50%;
+  background:
+    linear-gradient(90deg, transparent calc(50% - 1px), #111 calc(50% - 1px), #111 calc(50% + 1px), transparent calc(50% + 1px)),
+    linear-gradient(0deg, transparent calc(50% - 1px), #111 calc(50% - 1px), #111 calc(50% + 1px), transparent calc(50% + 1px));
+}
+
+.trig-circle::after {
+  content: "";
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  top: 25%;
+  border-top: 2px dashed rgba(107, 50, 176, 0.55);
+}
+
+.trig-point {
+  position: absolute;
+  z-index: 2;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #5a28a6;
+  transform: translate(-50%, -50%);
+}
+
+.trig-point.left {
+  left: 24%;
+  top: 25%;
+}
+
+.trig-point.right {
+  left: 76%;
+  top: 25%;
+}
+
+.trig-label {
+  position: absolute;
+  color: #5a28a6;
+  font-size: 1.15rem;
+  line-height: 1.05;
+}
+
+.trig-label.pi4 { right: 8%; top: 9%; }
+.trig-label.threepi4 { left: 5%; top: 9%; }
+.trig-label.pi2 { left: 52%; top: -1%; color: #111; }
+.trig-label.threepi2 { left: 52%; bottom: -3%; color: #111; }
+.trig-label.zero { right: -4%; top: 49%; color: #111; }
+.trig-label.twopi { right: -5%; top: 56%; color: #111; }
+.trig-label.pi { left: -6%; top: 49%; color: #111; }
+.trig-label.yval { right: -16%; top: 19%; }
+.trig-label.one { left: 48%; top: 3%; color: #111; font-size: 1rem; }
+.trig-label.minusone { left: 47%; bottom: 3%; color: #111; font-size: 1rem; }
+
+.exam-diagram {
+  position: relative;
+  min-height: 255px;
+  margin: 8px 0 16px;
+  overflow: hidden;
+}
+
+.exam-ground {
+  position: absolute;
+  left: 8%;
+  right: 11%;
+  bottom: 42px;
+  height: 4px;
+  background: #249b37;
+}
+
+.exam-post {
+  position: absolute;
+  right: 22%;
+  bottom: 42px;
+  width: 10px;
+  height: 158px;
+  border: 2px solid #1e1425;
+  border-radius: 9px 9px 0 0;
+  background: #e9c16d;
+}
+
+.exam-post::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: -4px;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #1e1425;
+  border-radius: 50%;
+  background: #f1cf81;
+}
+
+.exam-cable {
+  position: absolute;
+  left: 12%;
+  right: 22%;
+  bottom: 42px;
+  height: 4px;
+  background: #e66b00;
+  transform-origin: left center;
+  transform: rotate(-30deg);
+}
+
+.exam-angle {
+  position: absolute;
+  left: 18%;
+  bottom: 52px;
+  font-size: 1.25rem;
+}
+
+.exam-diagram-label {
+  position: absolute;
+  font-size: 1.28rem;
+  line-height: 1.08;
+}
+
+.exam-diagram-label.cable {
+  left: 31%;
+  top: 60px;
+  color: #0b5cb7;
+  transform: rotate(-28deg);
+}
+
+.exam-diagram-label.post {
+  right: 7%;
+  top: 86px;
+  color: #e66b00;
+}
+
+.exam-diagram-label.ground {
+  left: 44%;
+  bottom: 9px;
+  color: #249b37;
+}
+
+.calc-check {
+  position: relative;
+  min-height: 165px;
+  padding-right: 122px;
+}
+
+.calculator-illo {
+  position: absolute;
+  right: 0;
+  bottom: -8px;
+  width: 104px;
+  height: 142px;
+  border-radius: 13px;
+  background: #69717a;
+  border: 2px solid #4e565f;
+  transform: rotate(3deg);
+  box-shadow: 0 9px 18px rgba(0, 0, 0, 0.16);
+}
+
+.calculator-screen {
+  margin: 12px auto 9px;
+  width: 78px;
+  height: 35px;
+  border-radius: 4px;
+  background: #dfe8d7;
+  border: 2px solid #353b40;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 3px 6px;
+  font-size: 1rem;
+}
+
+.calculator-keys {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+  padding: 0 12px;
+}
+
+.calculator-keys span {
+  display: block;
+  height: 10px;
+  border-radius: 999px;
+  background: #2f353a;
+}
+
+.calculator-keys span:nth-child(4n) {
+  background: #1b78c7;
+}
+
+.exam-check {
+  color: #0d8a2a;
+  font-size: 1.2rem;
+}
+
+.vector-theory {
+  margin-bottom: 14px;
+}
+
+.vector-theory .exam-text:last-of-type {
+  margin-bottom: 10px;
+}
+
+.determinant-row,
+.minor-determinants {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.minor-determinants {
+  gap: 14px 18px;
+  margin-top: 10px;
+}
+
+.det-equals {
+  font-family: var(--font-accent);
+  font-size: 1.05rem;
+  color: #5a28a6;
+}
+
+.det-grid {
+  position: relative;
+  display: inline-grid;
+  gap: 6px 14px;
+  padding: 8px 18px;
+  background: #fff;
+  border-radius: 6px;
+}
+
+.det-grid.large {
+  grid-template-columns: repeat(3, auto);
+}
+
+.det-grid.small {
+  grid-template-columns: repeat(2, auto);
+  gap: 5px 12px;
+  padding: 7px 14px;
+}
+
+.det-grid::before,
+.det-grid::after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: #1e1425;
+}
+
+.det-grid::before {
+  left: 8px;
+}
+
+.det-grid::after {
+  right: 8px;
+}
+
+.det-grid span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  font-size: 1.08rem;
+  line-height: 1;
+}
+
+.minor-term {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: nowrap;
+}
+
+.minor-term-top {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.minor-arrowline {
+  font-size: 0.92rem;
+  line-height: 1.25;
+  color: #0b5cb7;
+  text-align: center;
+}
+
+.minor-arrowline .down {
+  color: #e66b00;
+}
+
+.minor-arrowline .up {
+  color: #5a28a6;
+}
+
+.minor-sign {
+  font-size: 1.12rem;
+  color: #5a28a6;
+}
+
+.vector-result {
+  margin-top: 12px;
+}
+
+.truth-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 4px;
+  font-family: var(--font-accent);
+  font-size: 0.96rem;
+  letter-spacing: 0;
+  border: 1.6px solid currentColor;
+  background: #fff;
+}
+
+.truth-chip.true {
+  color: #2c972f;
+  background: #f6fff3;
+}
+
+.truth-chip.false {
+  color: #d64545;
+  background: #fff6f6;
+}
+
+.conj-condition-stack {
+  display: grid;
+  gap: 12px;
+  margin: 12px 0 8px;
+}
+
+.conj-condition-box {
+  padding: 12px 14px;
+  border: 1.8px solid #8c57df;
+  border-radius: 10px;
+  background: #fff;
+  text-align: center;
+  line-height: 1.45;
+}
+
+.conj-condition-box strong {
+  display: block;
+  margin-bottom: 5px;
+  font-family: var(--font-accent);
+  font-size: 1.1rem;
+}
+
+.conj-condition-box small {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.94rem;
+}
+
+.conj-condition-box.blue {
+  border-color: #7f74df;
+  background: #faf9ff;
+}
+
+.conj-condition-box.green {
+  border-color: #67b56b;
+  background: #fbfff8;
+}
+
+.conj-condition-box.orange {
+  border-color: #ea9b44;
+  background: #fffaf3;
+}
+
+.conj-numberline {
+  margin: 12px 0 10px;
+  padding: 14px 10px 10px;
+  border: 1.5px dashed rgba(107, 50, 176, 0.28);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.conj-scale {
+  position: relative;
+  display: grid;
+  align-items: end;
+  gap: 0;
+  padding-top: 12px;
+}
+
+.conj-scale.ten {
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+}
+
+.conj-scale.eighteen {
+  grid-template-columns: repeat(18, minmax(0, 1fr));
+}
+
+.conj-scale.fourteen {
+  grid-template-columns: repeat(14, minmax(0, 1fr));
+}
+
+.conj-scale::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 20px;
+  height: 2px;
+  background: #252525;
+}
+
+.conj-scale-item {
+  position: relative;
+  min-height: 54px;
+  text-align: center;
+  font-size: 0.96rem;
+  color: #1e1425;
+}
+
+.conj-scale-item::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 14px;
+  width: 2px;
+  height: 14px;
+  background: #252525;
+  transform: translateX(-50%);
+}
+
+.conj-scale-item .conj-scale-badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 25px;
+  min-height: 25px;
+  padding: 2px 6px;
+  margin-top: 28px;
+  border-radius: 4px;
+  background: transparent;
+}
+
+.conj-scale-item.hit .conj-scale-badge {
+  border: 1.8px solid #7eb05a;
+  background: #edf9df;
+}
+
+.conj-scale-item.green-dot::after,
+.conj-scale-item.endpoint-open::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 14px;
+  width: 10px;
+  height: 10px;
+  transform: translate(-50%, -4px);
+  border-radius: 50%;
+}
+
+.conj-scale-item.green-dot::after {
+  background: #42a33f;
+  border: 2px solid #42a33f;
+}
+
+.conj-scale-item.endpoint-open::after {
+  background: #fff;
+  border: 2px solid #4164da;
+}
+
+.conj-scale-item.green-dot::before,
+.conj-scale-item.endpoint-open::before {
+  display: none;
+}
+
+.conj-scale-item .conj-scale-under {
+  display: block;
+  margin-top: 5px;
+  color: #249b37;
+  font-size: 0.92rem;
+}
+
+.conj-prop-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.conj-prop-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 11px;
+  border: 1.8px solid #5d82e7;
+  border-radius: 6px;
+  background: #fff;
+  color: #2756c4;
+  font-family: var(--font-accent);
+  font-size: 1.15rem;
+}
+
+.conj-prop-chip.green {
+  border-color: #5aa45c;
+  color: #257f2a;
+}
+
+.conj-prop-chip.orange {
+  border-color: #ef8f2f;
+  color: #d46600;
+}
+
+.conj-prop-chip.purple {
+  border-color: #8c57df;
+  color: #6a2ac7;
+}
+
+.truth-panel {
+  margin-left: auto;
+  min-width: 164px;
+  padding: 12px 14px;
+  border: 2px dashed #73a0f1;
+  border-radius: 12px;
+  background: #fff;
+  text-align: center;
+  color: #215fd2;
+}
+
+.truth-panel span,
+.truth-panel em {
+  display: block;
+  font-style: normal;
+}
+
+.truth-panel span {
+  font-size: 0.96rem;
+}
+
+.truth-panel strong {
+  display: block;
+  margin: 4px 0 2px;
+  font-family: var(--font-accent);
+  font-size: 1.38rem;
+}
+
+.truth-panel em {
+  font-size: 1.24rem;
+}
+
+.truth-panel.green {
+  border-color: #8fd08d;
+  color: #328a2f;
+}
+
+.truth-panel.orange {
+  border-color: #f1a456;
+  color: #dd6f07;
+}
+
+.truth-panel.purple {
+  border-color: #b78eef;
+  color: #6a2ac7;
+}
+
+.conj-summary-strip {
+  margin-top: 10px;
+  padding: 12px 14px;
+  border: 1.8px solid #f2c95c;
+  border-radius: 10px;
+  background: #fffaf0;
+}
+
+.conj-summary-strip h5 {
+  margin: 0 0 8px;
+  color: #6a2ac7;
+  font-family: var(--font-accent);
+  font-size: 1rem;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.conj-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 14px;
+}
+
+.conj-summary-grid p {
+  margin: 0;
+  font-size: 1.05rem;
+  text-align: center;
+}
+
+.conj-meaning-box {
+  margin: 10px 0;
+  padding: 10px 12px;
+  border: 1.8px solid #9d7ee5;
+  border-radius: 8px;
+  background: #fcf9ff;
+  font-size: 1rem;
+  line-height: 1.42;
+}
+
+.conj-venn {
+  position: relative;
+  width: min(360px, 100%);
+  min-height: 212px;
+  margin: 10px auto 12px;
+}
+
+.conj-venn-circle {
+  position: absolute;
+  top: 38px;
+  width: 178px;
+  height: 128px;
+  border: 2px solid #47994a;
+  border-radius: 50%;
+  background: rgba(109, 200, 106, 0.06);
+}
+
+.conj-venn-circle.right {
+  right: 18px;
+  border-color: #ef6060;
+  background: rgba(239, 96, 96, 0.05);
+}
+
+.conj-venn-circle.left {
+  left: 18px;
+}
+
+.conj-venn-label {
+  position: absolute;
+  top: 12px;
+  font-family: var(--font-accent);
+  font-size: 1.26rem;
+}
+
+.conj-venn-label.left {
+  left: 34px;
+  color: #2b8f31;
+}
+
+.conj-venn-label.right {
+  right: 34px;
+  color: #d62828;
+}
+
+.conj-venn-group {
+  position: absolute;
+  top: 82px;
+  width: 94px;
+  text-align: center;
+  font-size: 1.04rem;
+  line-height: 1.5;
+}
+
+.conj-venn-group.left {
+  left: 52px;
+}
+
+.conj-venn-group.right {
+  right: 48px;
+}
+
+.conj-venn-group.middle {
+  left: 50%;
+  width: 72px;
+  transform: translateX(-50%);
+}
+
+.conj-venn-label.right.purple {
+  color: #6a2ac7;
+}
+
+.conj-venn-circle.right.purple {
+  border-color: #8c57df;
+  background: rgba(140, 87, 223, 0.05);
+}
+
+.conj-arrow-note {
+  position: absolute;
+  right: 12px;
+  top: 24px;
+  color: #6a2ac7;
+  font-family: var(--font-accent);
+  font-size: 1.14rem;
+}
+
+.conj-final-step {
+  padding: 14px 18px 18px 54px;
+  border-top: 2px solid rgba(107, 50, 176, 0.22);
+}
+
+.conj-final-banner {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px;
+  border: 1.8px solid #f0ca5e;
+  border-radius: 10px;
+  background: #fffaf0;
+}
+
+.conj-final-banner span,
+.conj-final-banner strong {
+  text-align: center;
+}
+
+.conj-final-banner span {
+  color: #6a2ac7;
+  font-family: var(--font-accent);
+  font-size: 1.02rem;
+  text-transform: uppercase;
+}
+
+.conj-final-banner strong {
+  font-size: 1.22rem;
+  font-weight: 500;
+}
+
+.conj-try-box {
+  margin: 10px 0;
+  padding: 10px 12px;
+  border: 1.8px solid #8c57df;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.conj-try-box p {
+  margin: 0 0 6px;
+}
+
+.conj-try-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+  padding: 3px 0;
+  font-size: 1.03rem;
+}
+
+.conj-check-ok {
+  color: #238e2e;
+  font-weight: 700;
+}
+
+.conj-check-bad {
+  color: #d63030;
+  font-weight: 700;
+}
+
+.conj-signline {
+  margin: 10px 0;
+  padding: 8px 6px 12px;
+  border: 1.5px dashed rgba(107, 50, 176, 0.28);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.conj-sign-track {
+  position: relative;
+  height: 58px;
+}
+
+.conj-sign-track::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: 28px;
+  height: 2px;
+  background: #1e1425;
+}
+
+.conj-sign-point {
+  position: absolute;
+  top: 18px;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #2c64d8;
+  border-radius: 50%;
+  background: #fff;
+  transform: translateX(-50%);
+}
+
+.conj-sign-point.p1 {
+  left: 26%;
+}
+
+.conj-sign-point.p2 {
+  left: 74%;
+}
+
+.conj-sign-mark {
+  position: absolute;
+  top: 4px;
+  transform: translateX(-50%);
+  font-family: var(--font-accent);
+  font-size: 1.36rem;
+}
+
+.conj-sign-mark.m1 {
+  left: 14%;
+}
+
+.conj-sign-mark.m2 {
+  left: 50%;
+}
+
+.conj-sign-mark.m3 {
+  left: 86%;
+}
+
+.conj-sign-mark.positive {
+  color: #265fd3;
+}
+
+.conj-sign-mark.negative {
+  color: #c32d2d;
+}
+
+.conj-sign-fill {
+  position: absolute;
+  left: calc(26% + 1px);
+  right: calc(26% + 1px);
+  top: 26px;
+  height: 6px;
+  border-radius: 999px;
+  background: repeating-linear-gradient(135deg, #74b64b 0 7px, #d9f1c8 7px 14px);
+}
+
+.conj-sign-label {
+  position: absolute;
+  top: 40px;
+  transform: translateX(-50%);
+  font-size: 0.98rem;
+}
+
+.conj-sign-label.l1 {
+  left: 26%;
+}
+
+.conj-sign-label.l2 {
+  left: 74%;
+}
+
+.conj-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0 4px;
+}
+
+.conj-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  padding: 3px 8px;
+  border-radius: 7px;
+  border: 1.6px solid #54a74d;
+  background: #f6fff1;
+  font-size: 1rem;
+}
+
+.conj-chip.muted {
+  border-color: #c9ced8;
+  background: #f6f7f9;
+  color: #6b7383;
+}
+
+.conj-hit {
+  color: #1f5fcf;
+  font-weight: 600;
+}
+
+.conj-final-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.conj-reminder {
+  padding: 12px;
+  border: 1.8px dashed #8c57df;
+  border-radius: 10px;
+  background: #fcf9ff;
+}
+
+.conj-reminder h5 {
+  margin: 0 0 8px;
+  color: #5a28a6;
+  font-family: var(--font-accent);
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+
+.conj-reminder p {
+  margin: 0 0 6px;
+  font-size: 0.98rem;
+  line-height: 1.4;
+}
+
+.conj-cut {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  padding: 1px 6px;
+  border: 1.7px solid #e36363;
+  border-radius: 6px;
+  background: #fff7f7;
+}
+
+.matrix-pre {
+  margin: 0;
+  font-family: "Courier New", monospace;
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.detail-card {
+  padding: 16px 18px;
+  border: 1px solid rgba(33, 72, 181, 0.12);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.detail-card h5 {
+  margin: 0 0 8px;
+  font-family: var(--font-accent);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+}
+
+.detail-card p,
+.detail-card ul {
+  margin: 0;
+}
+
+.detail-card ul {
+  padding-left: 18px;
+}
+
+.detail-card li + li {
+  margin-top: 6px;
+}
+
+.step-detail {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.32s ease, padding 0.32s ease;
+  border-top: 0 solid transparent;
+  background: linear-gradient(180deg, rgba(238, 243, 255, 0.44), rgba(255, 255, 255, 0.9));
+}
+
+.step-card.is-open .step-detail {
+  max-height: 2200px;
+  padding: 0 20px 20px;
+  border-top: 1px solid rgba(33, 72, 181, 0.12);
+}
+
+.closing-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.final-panel,
+.observation-panel {
+  padding: 20px;
+}
+
+.final-title,
+.obs-title {
+  font-family: var(--font-title);
+  font-size: clamp(2rem, 4vw, 3rem);
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 8px;
+}
+
+.final-title {
+  color: var(--red);
+}
+
+.obs-title {
+  color: var(--blue);
+}
+
+.final-answer {
+  margin-top: 16px;
+}
+
+.obs-copy {
+  margin: 14px 0 0;
+  color: var(--ink);
+  font-size: clamp(1.16rem, 2vw, 1.5rem);
+  line-height: 1.5;
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-family: var(--font-accent);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  border: 1px solid rgba(31, 26, 23, 0.1);
+  background: rgba(255, 255, 255, 0.84);
+  color: var(--ink-soft);
+}
+
+.muted {
+  color: var(--ink-soft);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+sup {
+  font-size: 0.72em;
+}
+
+@media (max-width: 900px) {
+  .topbar {
+    position: static;
+    border-radius: 24px;
+  }
+
+  .workspace-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .visual-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .exam-header {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .exam-equation {
+    text-align: left;
+    white-space: normal;
+  }
+
+  .exam-body,
+  .exam-body.equal {
+    grid-template-columns: 1fr;
+  }
+
+  .exam-col + .exam-col {
+    border-left: 0;
+    border-top: 2px solid rgba(107, 50, 176, 0.22);
+  }
+
+  .logic-prop-grid,
+  .logic-split-grid,
+  .logic-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .trig-label.yval {
+    right: -6%;
+  }
+
+  .truth-panel {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  body {
+    padding: 12px;
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: left;
+  }
+
+  .crumbs {
+    text-align: left;
+  }
+
+  .hero-panel,
+  .topic-screen,
+  .exercise-screen,
+  .resolution-sheet,
+  .exercise-banner,
+  .step-trigger,
+  .step-card.is-open .step-detail,
+  .final-panel,
+  .observation-panel {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .home-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .topic-card,
+  .exercise-card {
+    padding: 16px;
+  }
+
+  .answer-box {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .minor-row {
+    grid-template-columns: 1fr;
+  }
+
+  .minor-result {
+    white-space: normal;
+  }
+
+  .exam-step {
+    padding-left: 36px;
+  }
+
+  .exam-col {
+    padding: 12px;
+  }
+
+  .exam-prompt,
+  .exam-equation {
+    font-size: 1.28rem;
+  }
+
+  .exam-math {
+    font-size: 1.18rem;
+  }
+
+  .conj-summary-grid,
+  .conj-final-banner {
+    grid-template-columns: 1fr;
+  }
+
+  .conj-final-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .conj-prop-head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .truth-panel {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .conj-venn {
+    min-height: 240px;
+  }
+
+  .conj-venn-circle {
+    width: 150px;
+    height: 120px;
+  }
+
+  .conj-venn-circle.left {
+    left: 4px;
+  }
+
+  .conj-venn-circle.right {
+    right: 4px;
+  }
+
+  .conj-venn-group.left {
+    left: 24px;
+    width: 82px;
+  }
+
+  .conj-venn-group.middle {
+    width: 58px;
+  }
+
+  .conj-venn-group.right {
+    right: 18px;
+    width: 82px;
+  }
+
+  .calc-check {
+    padding-right: 0;
+    padding-bottom: 138px;
+  }
+
+  .calculator-illo {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%) rotate(3deg);
+  }
+}
+</style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <button class="brand-btn" type="button" data-go-home>
+        <span class="brand-mark">G</span>
+        <span class="brand-copy">
+          <span class="brand-title">Gu&iacute;a de ejercicios</span>
+          <span class="brand-subtitle">Resoluciones paso a paso</span>
+        </span>
+      </button>
+      <div class="crumbs" id="crumbs">Inicio / Eleg&iacute; un tema</div>
+    </header>
+
+    <section class="screen is-active" id="screen-home">
+      <div class="panel hero-panel">
+        <p class="eyebrow">Inicio</p>
+        <h1>Eleg&iacute; un tema</h1>
+        <p class="hero-copy">
+          Esta p&aacute;gina est&aacute; pensada como una gu&iacute;a de estudio. Primero eleg&iacute;s un tema, despu&eacute;s ves los ejercicios
+          disponibles de ese tema y, al entrar a uno, acced&eacute;s a una resoluci&oacute;n completa con pasos desplegables,
+          explicaci&oacute;n en palabras y justificaci&oacute;n formal.
+        </p>
+      </div>
+
+      <section class="home-grid" aria-label="Temas">
+        <button class="topic-card" type="button" data-topic="logica">
+          <span class="topic-pill">Tema</span>
+          <h2 class="topic-name">L&oacute;gica proposicional</h2>
+          <p class="topic-desc">Traducci&oacute;n simb&oacute;lica, negaci&oacute;n, rec&iacute;proca y contrarrec&iacute;proca.</p>
+          <div class="topic-meta">
+            <span class="mini-pill blue">1 ejercicio</span>
+            <span class="mini-pill red">Disponible ahora</span>
+          </div>
+        </button>
+
+        <button class="topic-card" type="button" data-topic="conjuntos">
+          <span class="topic-pill">Tema</span>
+          <h2 class="topic-name">Conjuntos</h2>
+          <p class="topic-desc">Pertenencia, inclusi&oacute;n, intersecci&oacute;n y diferencia entre conjuntos.</p>
+          <div class="topic-meta">
+            <span class="mini-pill blue">2 ejercicios</span>
+            <span class="mini-pill red">Disponible ahora</span>
+          </div>
+        </button>
+
+        <button class="topic-card" type="button" data-topic="trigonometria">
+          <span class="topic-pill">Tema</span>
+          <h2 class="topic-name">Trigonometr&iacute;a</h2>
+          <p class="topic-desc">Ecuaciones trigonom&eacute;tricas y problemas con tri&aacute;ngulos rect&aacute;ngulos.</p>
+          <div class="topic-meta">
+            <span class="mini-pill blue">2 ejercicios</span>
+            <span class="mini-pill red">Disponible ahora</span>
+          </div>
+        </button>
+
+        <button class="topic-card" type="button" data-topic="vectores">
+          <span class="topic-pill">Tema</span>
+          <h2 class="topic-name">Vectores</h2>
+          <p class="topic-desc">Normas, perpendicularidad, producto escalar y producto vectorial.</p>
+          <div class="topic-meta">
+            <span class="mini-pill blue">2 ejercicios</span>
+            <span class="mini-pill red">Disponible ahora</span>
+          </div>
+        </button>
+      </section>
+    </section>
+
+    <section class="screen" id="screen-topic">
+      <div class="panel topic-screen">
+        <div class="nav-row">
+          <button class="ghost-btn" type="button" data-go-home>Volver al inicio</button>
+        </div>
+
+        <div class="topic-head">
+          <p class="eyebrow" id="topic-eyebrow">Tema</p>
+          <h2 id="topic-title">Tema</h2>
+          <p class="topic-copy" id="topic-copy"></p>
+        </div>
+
+        <div class="exercise-list" id="exercise-list"></div>
+
+        <div class="empty-state" id="topic-empty" hidden>
+          <h3 class="empty-title">Todav&iacute;a no hay ejercicios cargados</h3>
+          <p class="empty-copy">
+            La estructura ya est&aacute; lista. Cuando quieras, podemos sumar ejercicios de este tema con el mismo formato
+            paso a paso que ya tienen los de Vectores.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-exercise">
+      <div class="panel exercise-screen">
+        <div class="nav-row">
+          <button class="ghost-btn" type="button" id="back-topic">Volver al tema</button>
+          <button class="ghost-btn primary" type="button" data-go-home>Ir al inicio</button>
+        </div>
+
+        <div class="exercise-head">
+          <p class="eyebrow" id="exercise-eyebrow">Resoluci&oacute;n</p>
+          <h2 id="exercise-title">Ejercicio</h2>
+          <p class="exercise-copy" id="exercise-copy"></p>
+        </div>
+
+        <div class="exercise-frame" id="exercise-frame"></div>
+      </div>
+    </section>
+  </div>
+
+  <template id="tpl-logica-1">
+    <article class="exam-sheet">
+      <header class="exam-header">
+        <span class="exam-badge">Ejercicio 1</span>
+        <div>
+          <p class="exam-prompt">
+            Trabajamos con una proposici&oacute;n compuesta formada por dos implicaciones y un bicondicional.
+          </p>
+          <div class="logic-task-list">
+            <span>1. Escribirla en forma coloquial.</span>
+            <span>2. Negarla simb&oacute;licamente.</span>
+            <span>3. Hallar la rec&iacute;proca y la contrarrec&iacute;proca de cada implicaci&oacute;n.</span>
+          </div>
+        </div>
+        <p class="exam-equation">&Phi; = [(p &and; q) &rarr; &not;r] &hArr; [s &rarr; (p &or; r)]</p>
+      </header>
+
+      <div class="exam-body equal">
+        <section class="exam-col">
+          <h3 class="exam-title">1. Forma coloquial</h3>
+
+          <div class="exam-step" data-step-key="logica-1-1">
+            <span class="exam-number">1</span>
+            <h4>Nombramos las proposiciones simples</h4>
+            <p class="exam-text">Antes de operar, recordamos qu&eacute; significa cada letra dentro de la f&oacute;rmula.</p>
+            <div class="logic-prop-grid">
+              <div class="logic-prop-card blue">
+                <strong>p</strong>
+                <span>&ldquo;Voy al banco&rdquo;</span>
+              </div>
+              <div class="logic-prop-card green">
+                <strong>q</strong>
+                <span>&ldquo;Me tomo un helado&rdquo;</span>
+              </div>
+              <div class="logic-prop-card gold">
+                <strong>r</strong>
+                <span>&ldquo;Voy al cine&rdquo;</span>
+              </div>
+              <div class="logic-prop-card purple">
+                <strong>s</strong>
+                <span>&ldquo;Estudio para el examen&rdquo;</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="exam-step" data-step-key="logica-1-2">
+            <span class="exam-number">2</span>
+            <h4>Separamos la proposici&oacute;n en dos bloques</h4>
+            <p class="exam-text">Llamamos <strong>A</strong> a la implicaci&oacute;n de la izquierda y <strong>B</strong> a la de la derecha.</p>
+            <div class="logic-split-grid">
+              <div class="logic-box blue">
+                <strong>Bloque A</strong>
+                <p>A = (p &and; q) &rarr; &not;r</p>
+              </div>
+              <div class="logic-box green">
+                <strong>Bloque B</strong>
+                <p>B = s &rarr; (p &or; r)</p>
+              </div>
+            </div>
+            <p class="exam-text">Entonces la proposici&oacute;n completa queda escrita como <strong>&Phi; = A &hArr; B</strong>.</p>
+          </div>
+
+          <div class="exam-step" data-step-key="logica-1-3">
+            <span class="exam-number">3</span>
+            <h4>Traducimos cada implicaci&oacute;n por separado</h4>
+            <p class="exam-text">Conviene leer primero cada mitad de la expresi&oacute;n antes de juntar todo.</p>
+            <div class="exam-blue-note">
+              <strong>A en palabras:</strong> Si voy al banco y me tomo un helado, entonces no voy al cine.
+            </div>
+            <div class="exam-green-note">
+              <strong>B en palabras:</strong> Si estudio para el examen, entonces voy al banco o voy al cine.
+            </div>
+          </div>
+
+          <div class="exam-step" data-step-key="logica-1-4">
+            <span class="exam-number">4</span>
+            <h4>Escribimos la proposici&oacute;n completa en lenguaje coloquial</h4>
+            <p class="exam-text">Como el conectivo principal es <strong>&hArr;</strong>, se lee &ldquo;si y solo si&rdquo;.</p>
+            <div class="logic-quote">
+              &ldquo;Si voy al banco y me tomo un helado, entonces no voy al cine, si y solo si, si estudio para el examen, entonces voy al banco o voy al cine.&rdquo;
+            </div>
+          </div>
+        </section>
+
+        <section class="exam-col">
+          <h3 class="exam-side-title">2. Negaci&oacute;n simb&oacute;lica</h3>
+
+          <div class="exam-panel red">
+            <h3 class="exam-side-title red">Regla de negaci&oacute;n del bicondicional</h3>
+            <p class="exam-math"><span class="exam-mathbox red">&not;(A &hArr; B) &equiv; (A &and; &not;B) &or; (&not;A &and; B)</span></p>
+            <p class="exam-text">
+              Una equivalencia es falsa cuando una de las dos partes se cumple y la otra no.
+            </p>
+          </div>
+
+          <div class="exam-step" data-step-key="logica-1-5">
+            <span class="exam-number">5</span>
+            <h4>Aplicamos la regla a &Phi;</h4>
+            <p class="exam-text">Tomamos los mismos bloques definidos antes:</p>
+            <p class="exam-math small">
+              A = (p &and; q) &rarr; &not;r<br>
+              B = s &rarr; (p &or; r)
+            </p>
+            <p class="exam-math"><span class="exam-mathbox blue">&not;&Phi; = (A &and; &not;B) &or; (&not;A &and; B)</span></p>
+          </div>
+
+          <div class="exam-step" data-step-key="logica-1-6">
+            <span class="exam-number">6</span>
+            <h4>Hallamos &not;A</h4>
+            <p class="exam-text">Para negar una implicaci&oacute;n usamos <strong>&not;(X &rarr; Y) &equiv; X &and; &not;Y</strong>.</p>
+            <p class="exam-math small">
+              A = (p &and; q) &rarr; &not;r<br>
+              &not;A = (p &and; q) &and; &not;(&not;r)
+            </p>
+            <p class="exam-math"><span class="exam-mathbox green">&not;A = (p &and; q) &and; r</span></p>
+          </div>
+
+          <div class="exam-step" data-step-key="logica-1-7">
+            <span class="exam-number">7</span>
+            <h4>Hallamos &not;B</h4>
+            <p class="exam-text">Primero negamos la implicaci&oacute;n y despu&eacute;s la disyunci&oacute;n con De Morgan.</p>
+            <p class="exam-math small">
+              B = s &rarr; (p &or; r)<br>
+              &not;B = s &and; &not;(p &or; r)<br>
+              &not;(p &or; r) = &not;p &and; &not;r
+            </p>
+            <p class="exam-math"><span class="exam-mathbox green">&not;B = s &and; &not;p &and; &not;r</span></p>
+          </div>
+
+          <div class="exam-step" data-step-key="logica-1-8">
+            <span class="exam-number">8</span>
+            <h4>Sustituimos en la negaci&oacute;n total</h4>
+            <p class="exam-text">Reemplazamos las expresiones halladas para <strong>&not;A</strong> y <strong>&not;B</strong>.</p>
+            <div class="logic-formula-stack">
+              <p class="exam-math small">
+                &not;&Phi; = (A &and; &not;B) &or; (&not;A &and; B)<br>
+                = ([(p &and; q) &rarr; &not;r] &and; [s &and; &not;p &and; &not;r])<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&or; ([(p &and; q) &and; r] &and; [s &rarr; (p &or; r)])
+              </p>
+            </div>
+            <div class="exam-answer">
+              <strong>&not;&Phi; = ([(p &and; q) &rarr; &not;r] &and; [s &and; &not;p &and; &not;r]) &or; ([(p &and; q) &and; r] &and; [s &rarr; (p &or; r)])</strong>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="exam-body equal">
+        <section class="exam-col">
+          <h3 class="exam-title">3.1 Primera implicaci&oacute;n</h3>
+
+          <div class="exam-step" data-step-key="logica-1-9">
+            <span class="exam-number">9</span>
+            <h4>Rec&iacute;proca y contrarrec&iacute;proca de A</h4>
+            <p class="exam-math"><span class="logic-inline-chip blue">A = (p &and; q) &rarr; &not;r</span></p>
+
+            <div class="logic-variant-card blue">
+              <strong>Rec&iacute;proca</strong>
+              <p class="exam-math"><span class="exam-mathbox blue">&not;r &rarr; (p &and; q)</span></p>
+              <p class="exam-text">En palabras: si no voy al cine, entonces voy al banco y me tomo un helado.</p>
+            </div>
+
+            <div class="logic-variant-card green">
+              <strong>Contrarrec&iacute;proca</strong>
+              <p class="exam-math small">r &rarr; &not;(p &and; q) = r &rarr; (&not;p &or; &not;q)</p>
+              <p class="exam-math"><span class="exam-mathbox green">r &rarr; (&not;p &or; &not;q)</span></p>
+              <p class="exam-text">En palabras: si voy al cine, entonces no voy al banco o no me tomo un helado.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="exam-col">
+          <h3 class="exam-side-title">3.2 Segunda implicaci&oacute;n</h3>
+
+          <div class="exam-step" data-step-key="logica-1-10">
+            <span class="exam-number">10</span>
+            <h4>Rec&iacute;proca y contrarrec&iacute;proca de B</h4>
+            <p class="exam-math"><span class="logic-inline-chip green">B = s &rarr; (p &or; r)</span></p>
+
+            <div class="logic-variant-card blue">
+              <strong>Rec&iacute;proca</strong>
+              <p class="exam-math"><span class="exam-mathbox blue">(p &or; r) &rarr; s</span></p>
+              <p class="exam-text">En palabras: si voy al banco o voy al cine, entonces estudio para el examen.</p>
+            </div>
+
+            <div class="logic-variant-card green">
+              <strong>Contrarrec&iacute;proca</strong>
+              <p class="exam-math small">&not;(p &or; r) &rarr; &not;s = (&not;p &and; &not;r) &rarr; &not;s</p>
+              <p class="exam-math"><span class="exam-mathbox green">(&not;p &and; &not;r) &rarr; &not;s</span></p>
+              <p class="exam-text">En palabras: si no voy al banco y no voy al cine, entonces no estudio para el examen.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <section class="exam-col logic-final-section">
+        <div class="exam-step logic-final-step" data-step-key="logica-1-11">
+          <span class="exam-number">11</span>
+          <h4>Resumen final</h4>
+          <p class="exam-text">Cerramos reuniendo los tres pedidos del ejercicio en un mismo vistazo.</p>
+
+          <div class="logic-summary-grid">
+            <div class="logic-summary-card blue">
+              <strong>Forma coloquial</strong>
+              <p>
+                &ldquo;Si voy al banco y me tomo un helado, entonces no voy al cine, si y solo si, si estudio para el examen,
+                entonces voy al banco o voy al cine.&rdquo;
+              </p>
+            </div>
+
+            <div class="logic-summary-card red">
+              <strong>Negaci&oacute;n simb&oacute;lica</strong>
+              <p>
+                &not;&Phi; = (A &and; &not;B) &or; (&not;A &and; B), con
+                &not;A = (p &and; q) &and; r y &not;B = s &and; &not;p &and; &not;r.
+              </p>
+            </div>
+
+            <div class="logic-summary-card green">
+              <strong>Rec&iacute;procas y contrarrec&iacute;procas</strong>
+              <p>
+                Para A: &not;r &rarr; (p &and; q) y r &rarr; (&not;p &or; &not;q).<br>
+                Para B: (p &or; r) &rarr; s y (&not;p &and; &not;r) &rarr; &not;s.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </article>
+  </template>
+
+  <template id="tpl-vectores-1">
+    <article class="exam-sheet">
+      <header class="exam-header">
+        <span class="exam-badge">Ejercicio 1</span>
+        <p class="exam-prompt">
+          Dados <strong>u&#x20d7; = (3, 2 - x, -1)</strong> y <strong>w&#x20d7; = (2x, 1, -3)</strong>, hallar
+          <strong>x &isin; R</strong> tal que:
+        </p>
+        <p class="exam-equation">||u&#x20d7;|| = ||w&#x20d7;||</p>
+      </header>
+
+      <div class="exam-body">
+        <section class="exam-col">
+          <h3 class="exam-title">Resoluci&oacute;n paso a paso</h3>
+
+          <div class="exam-step" data-step-key="vectores-1-1">
+            <span class="exam-number">1</span>
+            <h4>&iquest;Qu&eacute; est&aacute; pidiendo?</h4>
+            <p class="exam-text">
+              Hay que encontrar los valores de <strong>x</strong> para que ambos vectores tengan la misma longitud.
+              Como las normas tienen ra&iacute;ces, trabajamos con las normas al cuadrado.
+            </p>
+            <p class="exam-math"><span class="exam-mathbox yellow">||u&#x20d7;||<sup>2</sup> = ||w&#x20d7;||<sup>2</sup></span></p>
+          </div>
+
+          <div class="exam-step" data-step-key="vectores-1-2">
+            <span class="exam-number">2</span>
+            <h4>Paso 1: calculamos ||u&#x20d7;||<sup>2</sup></h4>
+            <p class="exam-text">Sumamos los cuadrados de las componentes de <strong>u&#x20d7;</strong>:</p>
+            <p class="exam-math small">
+              ||u&#x20d7;||<sup>2</sup> = 3<sup>2</sup> + (2 - x)<sup>2</sup> + (-1)<sup>2</sup><br>
+              = 9 + (2 - x)<sup>2</sup> + 1
+            </p>
+            <p class="exam-math"><span class="exam-mathbox green">||u&#x20d7;||<sup>2</sup> = (2 - x)<sup>2</sup> + 10</span></p>
+          </div>
+
+          <div class="exam-step" data-step-key="vectores-1-3">
+            <span class="exam-number">3</span>
+            <h4>Paso 2: calculamos ||w&#x20d7;||<sup>2</sup></h4>
+            <p class="exam-text">Repetimos el mismo procedimiento con <strong>w&#x20d7;</strong>:</p>
+            <p class="exam-math small">
+              ||w&#x20d7;||<sup>2</sup> = (2x)<sup>2</sup> + 1<sup>2</sup> + (-3)<sup>2</sup><br>
+              = 4x<sup>2</sup> + 1 + 9
+            </p>
+            <p class="exam-math"><span class="exam-mathbox green">||w&#x20d7;||<sup>2</sup> = 4x<sup>2</sup> + 10</span></p>
+          </div>
+
+          <div class="exam-green-note">
+            <strong>Dato clave:</strong> elevar las normas al cuadrado no cambia el problema, porque las normas siempre son
+            mayores o iguales a cero.
+          </div>
+        </section>
+
+        <section class="exam-col">
+          <h3 class="exam-side-title">Desarrollo algebraico</h3>
+
+          <div class="exam-step" data-step-key="vectores-1-4">
+            <span class="exam-number">4</span>
+            <h4>Igualamos ambas expresiones</h4>
+            <p class="exam-math small">
+              (2 - x)<sup>2</sup> + 10 = 4x<sup>2</sup> + 10<br>
+              (2 - x)<sup>2</sup> = 4x<sup>2</sup>
+            </p>
+            <p class="exam-text">Desarrollamos el cuadrado:</p>
+            <p class="exam-math small">
+              x<sup>2</sup> - 4x + 4 = 4x<sup>2</sup><br>
+              0 = 3x<sup>2</sup> + 4x - 4
+            </p>
+          </div>
+
+          <div class="exam-step" data-step-key="vectores-1-5">
+            <span class="exam-number">5</span>
+            <h4>Resolvemos la ecuaci&oacute;n cuadr&aacute;tica</h4>
+            <p class="exam-math small">
+              3x<sup>2</sup> + 4x - 4 = 0<br>
+              x = (-4 &plusmn; &radic;(4<sup>2</sup> - 4 . 3 . (-4))) / (2 . 3)<br>
+              x = (-4 &plusmn; &radic;64) / 6 = (-4 &plusmn; 8) / 6
+            </p>
+            <div class="exam-purple-note">
+              x = (-4 + 8) / 6 = 4 / 6 = <strong>2 / 3</strong><br>
+              x = (-4 - 8) / 6 = -12 / 6 = <strong>-2</strong>
+            </div>
+          </div>
+
+          <div class="exam-panel red">
+            <h3 class="exam-side-title red">Comprobaci&oacute;n r&aacute;pida</h3>
+            <p class="exam-text">
+              Si reemplazamos cualquiera de los dos valores en las expresiones
+              <strong>(2 - x)<sup>2</sup> + 10</strong> y <strong>4x<sup>2</sup> + 10</strong>, ambas dan el mismo resultado.
+            </p>
+            <p class="exam-text"><span class="exam-check">&#10003;</span> Por lo tanto, ambos valores son v&aacute;lidos.</p>
+          </div>
+
+          <div class="exam-step" data-step-key="vectores-1-6">
+            <span class="exam-number">6</span>
+            <h4>Respuesta final</h4>
+            <div class="exam-answer">
+              <strong>x = 2 / 3</strong> &nbsp; o &nbsp; <strong>x = -2</strong>
+            </div>
+            <div class="exam-summary">
+              <h5>Resumen clave</h5>
+              <ol>
+                <li>Igualamos las normas al cuadrado.</li>
+                <li>Calculamos cada norma con suma de cuadrados.</li>
+                <li>Igualamos y ordenamos la ecuaci&oacute;n.</li>
+                <li>Resolvemos la cuadr&aacute;tica.</li>
+              </ol>
+            </div>
+          </div>
+        </section>
+      </div>
+    </article>
+  </template>
+
+  <template id="tpl-vectores-2">
+    <article class="exam-sheet">
+      <header class="exam-header">
+        <span class="exam-badge">Ejercicio 2</span>
+        <p class="exam-prompt">
+          Determinar <strong>A &isin; R</strong> para que <strong>(1 / 3)(u&#x20d7; &times; v&#x20d7;)</strong>
+          sea perpendicular a <strong>w&#x20d7; = (A, A, 0)</strong>.
+        </p>
+        <p class="exam-equation">u&#x20d7; = (3, -3, 6), v&#x20d7; = (A, 0, 4)</p>
+      </header>
+
+      <div class="exam-body equal">
+        <section class="exam-col">
+          <h3 class="exam-title">Producto vectorial</h3>
+
+          <div class="exam-panel green vector-theory">
+            <h3 class="exam-side-title blue">Como se calcula en general</h3>
+            <p class="exam-text">
+              Para calcular el producto vectorial entre dos vectores <strong>a</strong> y <strong>b</strong> de
+              <strong>R<sup>3</sup></strong> definimos como
+            </p>
+            <p class="exam-math small"><strong>a</strong> = (a<sub>x</sub>, a<sub>y</sub>, a<sub>z</sub>) &nbsp; y &nbsp; <strong>b</strong> = (b<sub>x</sub>, b<sub>y</sub>, b<sub>z</sub>), primero se arma un determinante de tercer orden y se desarrolla los tres determinantes de orden dos, tal como se muestra a continuaci&oacute;n:</p>
+            <div class="determinant-row">
+              <span class="det-equals">&#x21E8; a &times; b =</span>
+              <div class="det-grid large" aria-label="Determinante general de producto vectorial">
+                <span>i</span><span>j</span><span>k</span>
+                <span>a<sub>x</sub></span><span>a<sub>y</sub></span><span>a<sub>z</sub></span>
+                <span>b<sub>x</sub></span><span>b<sub>y</sub></span><span>b<sub>z</sub></span>
+              </div>
+            </div>
+            <p class="exam-text">
+              Luego, al calcular cada determinante de orden dos, se obtienen las componentes del vector que resulta del producto vectorial, esto es:
+            </p>
+            <div class="minor-determinants">
+              <div class="minor-term">
+                <div class="minor-term-top">
+                  <div class="det-grid small" aria-hidden="true">
+                    <span>a<sub>y</sub></span><span>a<sub>z</sub></span>
+                    <span>b<sub>y</sub></span><span>b<sub>z</sub></span>
+                  </div>
+                  <span>i</span>
+                </div>
+                <div class="minor-arrowline"><span class="down">↘</span> a<sub>y</sub>b<sub>z</sub> &nbsp; - &nbsp; <span class="up">↗</span> a<sub>z</sub>b<sub>y</sub></div>
+              </div>
+              <span class="minor-sign">-</span>
+              <div class="minor-term">
+                <div class="minor-term-top">
+                  <div class="det-grid small" aria-hidden="true">
+                    <span>a<sub>x</sub></span><span>a<sub>z</sub></span>
+                    <span>b<sub>x</sub></span><span>b<sub>z</sub></span>
+                  </div>
+                  <span>j</span>
+                </div>
+                <div class="minor-arrowline"><span class="down">↘</span> a<sub>x</sub>b<sub>z</sub> &nbsp; - &nbsp; <span class="up">↗</span> a<sub>z</sub>b<sub>x</sub></div>
+              </div>
+              <span class="minor-sign">+</span>
+              <div class="minor-term">
+                <div class="minor-term-top">
+                  <div class="det-grid small" aria-hidden="true">
+                    <span>a<sub>x</sub></span><span>a<sub>y</sub></span>
+                    <span>b<sub>x</sub></span><span>b<sub>y</sub></span>
+                  </div>
+                  <span>k</span>
+                </div>
+                <div class="minor-arrowline"><span class="down">↘</span> a<sub>x</sub>b<sub>y</sub> &nbsp; - &nbsp; <span class="up">↗</span> a<sub>y</sub>b<sub>x</sub></div>
+              </div>
+            </div>
+            <p class="exam-math small vector-result">
+              <strong>a &times; b = (a<sub>y</sub>b<sub>z</sub> - a<sub>z</sub>b<sub>y</sub>)i - (a<sub>x</sub>b<sub>z</sub> - a<sub>z</sub>b<sub>x</sub>)j + (a<sub>x</sub>b<sub>y</sub> - a<sub>y</sub>b<sub>x</sub>)k</strong>
+            </p>
+          </div>
+
+          <div class="exam-step" data-step-key="vectores-2-1">
+            <span class="exam-number">1</span>
+            <h4>Calculamos u&#x20d7; &times; v&#x20d7;</h4>
+            <p class="exam-text">Armamos el determinante con las componentes de los vectores:</p>
+            <div class="exam-panel">
+              <pre class="matrix-pre">u&#x20d7; &times; v&#x20d7; = |  i    j    k |
+       |  3   -3    6 |
+       |  A    0    4 |</pre>
+            </div>
+
+            <div class="calc-guide">
+              <p class="calc-guide-title">Cuadrito de multiplicaciones</p>
+              <div class="minor-grid">
+                <div class="minor-row">
+                  <span class="minor-label">Componente i</span>
+                  <span class="minor-formula">↘ (-3 . 4) - ↗ (6 . 0)</span>
+                  <span class="minor-result">= -12</span>
+                </div>
+                <div class="minor-row">
+                  <span class="minor-label">Componente j</span>
+                  <span class="minor-formula">- [↘ (3 . 4) - ↗ (6 . A)]</span>
+                  <span class="minor-result">= -12 + 6A</span>
+                </div>
+                <div class="minor-row">
+                  <span class="minor-label">Componente k</span>
+                  <span class="minor-formula">↘ (3 . 0) - ↗ (-3 . A)</span>
+                  <span class="minor-result">= 3A</span>
+                </div>
+              </div>
+            </div>
+
+            <p class="exam-math"><span class="exam-mathbox red">u&#x20d7; &times; v&#x20d7; = (-12, -12 + 6A, 3A)</span></p>
+          </div>
+
+          <div class="exam-step" data-step-key="vectores-2-2">
+            <span class="exam-number">2</span>
+            <h4>Multiplicamos por 1 / 3</h4>
+            <p class="exam-text">El factor <strong>1 / 3</strong> multiplica a cada componente del vector:</p>
+            <p class="exam-math">
+              <span class="exam-mathbox green">(1 / 3)(u&#x20d7; &times; v&#x20d7;) = (-4, 2A - 4, A)</span>
+            </p>
+            <div class="exam-blue-note">
+              Este es el vector que debe ser perpendicular a <strong>w&#x20d7; = (A, A, 0)</strong>.
+            </div>
+          </div>
+        </section>
+
+        <section class="exam-col">
+          <h3 class="exam-side-title">Perpendicularidad</h3>
+
+          <div class="exam-step" data-step-key="vectores-2-3">
+            <span class="exam-number">3</span>
+            <h4>Usamos producto escalar igual a cero</h4>
+            <p class="exam-text">Dos vectores son perpendiculares si su producto escalar vale cero:</p>
+            <p class="exam-math"><span class="exam-mathbox blue">(-4, 2A - 4, A) . (A, A, 0) = 0</span></p>
+          </div>
+
+          <div class="exam-step" data-step-key="vectores-2-4">
+            <span class="exam-number">4</span>
+            <h4>Resolvemos la ecuaci&oacute;n</h4>
+            <p class="exam-math small">
+              (-4)(A) + (2A - 4)(A) + (A)(0) = 0<br>
+              -4A + 2A<sup>2</sup> - 4A = 0<br>
+              2A<sup>2</sup> - 8A = 0<br>
+              2A(A - 4) = 0
+            </p>
+            <p class="exam-math"><span class="exam-mathbox red">A = 0 &nbsp; o &nbsp; A = 4</span></p>
+          </div>
+
+          <div class="exam-panel red">
+            <h3 class="exam-side-title red">Observaci&oacute;n</h3>
+            <p class="exam-text">
+              Si <strong>A = 0</strong>, entonces <strong>w&#x20d7; = (0, 0, 0)</strong>. El producto escalar con el vector nulo
+              vale cero, as&iacute; que tambi&eacute;n cumple la condici&oacute;n.
+            </p>
+          </div>
+
+          <div class="exam-step" data-step-key="vectores-2-5">
+            <span class="exam-number">5</span>
+            <h4>Respuesta final</h4>
+            <div class="exam-answer">
+              <strong>A = 0</strong> &nbsp; o &nbsp; <strong>A = 4</strong>
+            </div>
+            <div class="exam-summary">
+              <h5>Resumen clave</h5>
+              <ol>
+                <li>Calculamos el producto vectorial.</li>
+                <li>Multiplicamos el resultado por 1 / 3.</li>
+                <li>Aplicamos perpendicularidad con producto escalar igual a cero.</li>
+                <li>Factorizamos para obtener los valores de A.</li>
+              </ol>
+            </div>
+          </div>
+        </section>
+      </div>
+    </article>
+  </template>
+
+  <template id="tpl-conjuntos-1">
+    <article class="exam-sheet">
+      <header class="exam-header">
+        <span class="exam-badge">Ejercicio 1</span>
+        <p class="exam-prompt">
+          Dado el conjunto <strong>A = {x &isin; N : x es par &and; 1 &lt; x &lt; 10}</strong>.
+          Determinar el valor de verdad de las siguientes proposiciones justificando en cada caso.
+        </p>
+      </header>
+
+      <div class="exam-body equal">
+        <section class="exam-col">
+          <h3 class="exam-title">Definimos El Conjunto A</h3>
+
+          <div class="exam-step" data-step-key="conjuntos-1-1">
+            <span class="exam-number">1</span>
+            <h4>Definimos el conjunto A</h4>
+            <p class="exam-math small">A = {x &isin; N : x es par &and; 1 &lt; x &lt; 10}</p>
+            <div class="conj-condition-stack">
+              <div class="conj-condition-box blue">
+                <strong>x &isin; N &rarr; x es un n&uacute;mero natural</strong>
+                <small>(tomamos N = {1, 2, 3, 4, 5, ...})</small>
+              </div>
+              <div class="conj-condition-box green">
+                <strong>x es par &rarr; x es divisible por 2</strong>
+                <small>(0, 2, 4, 6, 8, ...)</small>
+              </div>
+              <div class="conj-condition-box orange">
+                <strong>1 &lt; x &lt; 10 &rarr; x es mayor que 1 y menor que 10</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="exam-step" data-step-key="conjuntos-1-2">
+            <span class="exam-number">2</span>
+            <h4>Hallamos A por extensi&oacute;n</h4>
+            <p class="exam-text">
+              Buscamos los n&uacute;meros naturales que son pares y est&aacute;n estrictamente entre 1 y 10.
+            </p>
+            <div class="conj-numberline">
+              <div class="conj-scale ten">
+                <div class="conj-scale-item"><span class="conj-scale-badge">1</span></div>
+                <div class="conj-scale-item hit"><span class="conj-scale-badge">2</span></div>
+                <div class="conj-scale-item"><span class="conj-scale-badge">3</span></div>
+                <div class="conj-scale-item hit"><span class="conj-scale-badge">4</span></div>
+                <div class="conj-scale-item"><span class="conj-scale-badge">5</span></div>
+                <div class="conj-scale-item hit"><span class="conj-scale-badge">6</span></div>
+                <div class="conj-scale-item"><span class="conj-scale-badge">7</span></div>
+                <div class="conj-scale-item hit"><span class="conj-scale-badge">8</span></div>
+                <div class="conj-scale-item"><span class="conj-scale-badge">9</span></div>
+                <div class="conj-scale-item"><span class="conj-scale-badge">10</span></div>
+              </div>
+            </div>
+            <p class="exam-text">Entonces:</p>
+            <p class="exam-math"><span class="exam-mathbox green">A = {2, 4, 6, 8}</span></p>
+          </div>
+
+          <div class="exam-step" data-step-key="conjuntos-1-3">
+            <span class="exam-number">3</span>
+            <h4>a) 7 &isin; A</h4>
+            <div class="conj-prop-head">
+              <span class="conj-prop-chip">7 &isin; A</span>
+              <div class="truth-panel">
+                <span>Valor de verdad:</span>
+                <strong>FALSO</strong>
+                <em>(F)</em>
+              </div>
+            </div>
+            <p class="exam-text">Significa: &ldquo;7 pertenece al conjunto A&rdquo;.</p>
+            <p class="exam-text">Como A = {2, 4, 6, 8} y 7 no est&aacute; en A.</p>
+          </div>
+        </section>
+
+        <section class="exam-col">
+          <h3 class="exam-title">Analizamos Cada Proposici&oacute;n</h3>
+
+          <div class="exam-step" data-step-key="conjuntos-1-4">
+            <span class="exam-number">4</span>
+            <h4>b) 8 &sub; A</h4>
+            <div class="conj-prop-head">
+              <span class="conj-prop-chip green">8 &sub; A</span>
+              <div class="truth-panel green">
+                <span>Valor de verdad:</span>
+                <strong>FALSO</strong>
+                <em>(F)</em>
+              </div>
+            </div>
+            <p class="exam-text">Significa: &ldquo;8 es subconjunto de A&rdquo;.</p>
+            <div class="conj-meaning-box">
+              Para que un elemento sea subconjunto de A, debe ser un conjunto.
+              8 no es un conjunto, es un n&uacute;mero.
+            </div>
+          </div>
+
+          <div class="exam-step" data-step-key="conjuntos-1-5">
+            <span class="exam-number">5</span>
+            <h4>c) 2 &isin; A</h4>
+            <div class="conj-prop-head">
+              <span class="conj-prop-chip orange">2 &isin; A</span>
+              <div class="truth-panel orange">
+                <span>Valor de verdad:</span>
+                <strong>VERDADERO</strong>
+                <em>(V)</em>
+              </div>
+            </div>
+            <p class="exam-text">
+              Significa: &ldquo;2 pertenece al conjunto A&rdquo;.
+            </p>
+            <p class="exam-text">Como A = {2, 4, 6, 8} y 2 est&aacute; en A.</p>
+          </div>
+
+          <div class="exam-step" data-step-key="conjuntos-1-6">
+            <span class="exam-number">6</span>
+            <h4>d) {6} &sub; A</h4>
+            <div class="conj-prop-head">
+              <span class="conj-prop-chip purple">{6} &sub; A</span>
+              <div class="truth-panel purple">
+                <span>Valor de verdad:</span>
+                <strong>VERDADERO</strong>
+                <em>(V)</em>
+              </div>
+            </div>
+            <p class="exam-text">Significa: &ldquo;el conjunto {6} es subconjunto de A&rdquo;.</p>
+            <div class="conj-meaning-box">
+              Para que {6} &sub; A, debe cumplirse que 6 est&eacute; en A.<br>
+              Como A = {2, 4, 6, 8} y 6 est&aacute; en A, entonces {6} &sub; A.
+            </div>
+            <div class="conj-summary-strip">
+              <h5>Resumen de valores de verdad</h5>
+              <div class="conj-summary-grid">
+                <p>a) 7 &isin; A &nbsp; &rarr; &nbsp; <strong>FALSO</strong></p>
+                <p>c) 2 &isin; A &nbsp; &rarr; &nbsp; <strong>VERDADERO</strong></p>
+                <p>b) 8 &sub; A &nbsp; &rarr; &nbsp; <strong>FALSO</strong></p>
+                <p>d) {6} &sub; A &nbsp; &rarr; &nbsp; <strong>VERDADERO</strong></p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </article>
+  </template>
+
+  <template id="tpl-conjuntos-2">
+    <article class="exam-sheet">
+      <header class="exam-header">
+        <span class="exam-badge">Ejercicio 2</span>
+        <p class="exam-prompt">
+          Siendo los conjuntos
+          <strong>A = {x &isin; Z : x<sup>2</sup> - 9x + 8 &le; 0}</strong> y
+          <strong>B = {x &isin; Z : x es divisor de 6 &and; -2 &le; x &lt; 10}</strong>.
+          Definir por extensi&oacute;n <strong>A &cap; B</strong> y <strong>B / A</strong>.
+        </p>
+      </header>
+
+      <div class="exam-body equal">
+        <section class="exam-col">
+          <h3 class="exam-title">Parte 1: Hallamos el conjunto A</h3>
+
+          <div class="exam-step" data-step-key="conjuntos-2-1">
+            <span class="exam-number">1</span>
+            <h4>Interpretamos la condici&oacute;n</h4>
+            <p class="exam-math small">A = {x &isin; Z : x<sup>2</sup> - 9x + 8 &le; 0}</p>
+            <p class="exam-text">Son todos los enteros que verifican la desigualdad:</p>
+            <p class="exam-math"><span class="exam-mathbox">x<sup>2</sup> - 9x + 8 &le; 0</span></p>
+          </div>
+
+          <div class="exam-step" data-step-key="conjuntos-2-2">
+            <span class="exam-number">2</span>
+            <h4>Factorizamos el trinomio</h4>
+            <p class="exam-text">Buscamos dos n&uacute;meros que multipliquen 8 y sumen -9.</p>
+            <div class="conj-try-box">
+              <p><strong>Probamos:</strong></p>
+              <div class="conj-try-row"><span>1 y 8 &rarr; 1 . 8 = 8, pero 1 + 8 = 9</span><span class="conj-check-bad">&#10007;</span></div>
+              <div class="conj-try-row"><span>-1 y -8 &rarr; (-1)(-8) = 8, y -1 - 8 = -9</span><span class="conj-check-ok">&#10003;</span></div>
+              <div class="conj-try-row"><span>2 y 4 &rarr; 2 . 4 = 8, pero 2 + 4 = 6</span><span class="conj-check-bad">&#10007;</span></div>
+            </div>
+            <p class="exam-text">Por lo tanto:</p>
+            <p class="exam-math"><span class="exam-mathbox green">x<sup>2</sup> - 9x + 8 = (x - 1)(x - 8)</span></p>
+          </div>
+
+          <div class="exam-step" data-step-key="conjuntos-2-3">
+            <span class="exam-number">3</span>
+            <h4>Resolvemos la desigualdad</h4>
+            <p class="exam-math small">(x - 1)(x - 8) &le; 0</p>
+            <p class="exam-text">Los ceros de la expresi&oacute;n son x = 1 y x = 8.</p>
+            <div class="conj-signline">
+              <div class="conj-sign-track">
+                <span class="conj-sign-mark positive m1">+</span>
+                <span class="conj-sign-mark negative m2">-</span>
+                <span class="conj-sign-mark positive m3">+</span>
+                <span class="conj-sign-fill"></span>
+                <span class="conj-sign-point p1"></span>
+                <span class="conj-sign-point p2"></span>
+                <span class="conj-sign-label l1">1</span>
+                <span class="conj-sign-label l2">8</span>
+              </div>
+            </div>
+            <div class="exam-green-note">
+              La expresi&oacute;n es &le; 0 en el intervalo entre las ra&iacute;ces (incluy&eacute;ndolas):<br>
+              <strong>Soluci&oacute;n en R: 1 &le; x &le; 8</strong>
+            </div>
+          </div>
+
+          <div class="exam-step" data-step-key="conjuntos-2-4">
+            <span class="exam-number">4</span>
+            <h4>Tomamos solo enteros</h4>
+            <p class="exam-text">Como x &isin; Z, nos quedamos con los enteros del intervalo [1, 8].</p>
+            <p class="exam-math"><span class="exam-mathbox green">A = {1, 2, 3, 4, 5, 6, 7, 8}</span></p>
+          </div>
+        </section>
+
+        <section class="exam-col">
+          <h3 class="exam-title">Parte 2: Hallamos el conjunto B</h3>
+
+          <div class="exam-step" data-step-key="conjuntos-2-5">
+            <span class="exam-number">1</span>
+            <h4>Divisores de 6</h4>
+            <p class="exam-text">Los divisores enteros de 6 son los que lo dividen exactamente.</p>
+            <p class="exam-math"><span class="exam-mathbox yellow">Div(6) = {-6, -3, -2, -1, 1, 2, 3, 6}</span></p>
+          </div>
+
+          <div class="exam-step" data-step-key="conjuntos-2-6">
+            <span class="exam-number">2</span>
+            <h4>Aplicamos la condici&oacute;n -2 &le; x &lt; 10</h4>
+            <p class="exam-text">De la lista anterior, dejamos solo los que cumplen el intervalo.</p>
+            <div class="conj-numberline">
+              <div class="conj-scale fourteen">
+                <div class="conj-scale-item"><span class="conj-scale-badge">-3</span></div>
+                <div class="conj-scale-item green-dot"><span class="conj-scale-badge">-2</span></div>
+                <div class="conj-scale-item"><span class="conj-scale-badge">-1</span></div>
+                <div class="conj-scale-item"><span class="conj-scale-badge">0</span></div>
+                <div class="conj-scale-item"><span class="conj-scale-badge">1</span></div>
+                <div class="conj-scale-item"><span class="conj-scale-badge">2</span></div>
+                <div class="conj-scale-item"><span class="conj-scale-badge">3</span></div>
+                <div class="conj-scale-item"><span class="conj-scale-badge">4</span></div>
+                <div class="conj-scale-item"><span class="conj-scale-badge">5</span></div>
+                <div class="conj-scale-item"><span class="conj-scale-badge">6</span></div>
+                <div class="conj-scale-item"><span class="conj-scale-badge">7</span></div>
+                <div class="conj-scale-item"><span class="conj-scale-badge">8</span></div>
+                <div class="conj-scale-item"><span class="conj-scale-badge">9</span></div>
+                <div class="conj-scale-item endpoint-open"><span class="conj-scale-badge">10</span></div>
+              </div>
+            </div>
+            <p class="exam-text">De la lista:</p>
+            <div class="conj-chip-row">
+              <span class="conj-chip muted">-6</span>
+              <span class="conj-chip muted">-3</span>
+              <span class="conj-chip">-2</span>
+              <span class="conj-chip">-1</span>
+              <span class="conj-chip">1</span>
+              <span class="conj-chip">2</span>
+              <span class="conj-chip">3</span>
+              <span class="conj-chip">6</span>
+            </div>
+            <p class="exam-text">Por lo tanto:</p>
+            <p class="exam-math"><span class="exam-mathbox green">B = {-2, -1, 1, 2, 3, 6}</span></p>
+          </div>
+
+          <div class="exam-step" data-step-key="conjuntos-2-7">
+            <span class="exam-number">3</span>
+            <h4>Hallamos A &cap; B (intersecci&oacute;n)</h4>
+            <p class="exam-text">Tomamos los elementos que est&aacute;n en A y en B a la vez.</p>
+            <p class="exam-math small">
+              A = {1, <span class="conj-hit">2</span>, <span class="conj-hit">3</span>, 4, 5, <span class="conj-hit">6</span>, 7, 8}<br>
+              B = {-2, -1, 1, <span class="conj-hit">2</span>, <span class="conj-hit">3</span>, <span class="conj-hit">6</span>}
+            </p>
+            <p class="exam-text">Entonces:</p>
+            <p class="exam-math"><span class="exam-mathbox green">A &cap; B = {1, 2, 3, 6}</span></p>
+          </div>
+        </section>
+      </div>
+
+      <div class="exam-step conj-final-step" data-step-key="conjuntos-2-8">
+        <span class="exam-number">4</span>
+        <h4>Parte 4: Hallamos B / A (diferencia)</h4>
+        <div class="conj-final-layout">
+          <div>
+            <p class="exam-text">Son los elementos que est&aacute;n en B pero NO est&aacute;n en A.</p>
+            <p class="exam-math small">
+              B = {<span class="conj-cut">-2</span>, <span class="conj-cut">-1</span>, 1, 2, 3, 6}<br>
+              A = {1, 2, 3, 4, 5, 6, 7, 8}
+            </p>
+            <p class="exam-text">Entonces:</p>
+            <p class="exam-math"><span class="exam-mathbox red">B / A = {-2, -1}</span></p>
+          </div>
+          <aside class="conj-reminder">
+            <h5>Recordatorio</h5>
+            <p><strong>Intersecci&oacute;n (&cap;):</strong> elementos comunes a ambos conjuntos.</p>
+            <p><strong>Diferencia (/):</strong> elementos del primer conjunto que no est&aacute;n en el segundo.</p>
+          </aside>
+        </div>
+        <div class="conj-final-banner">
+          <span>Resumen final</span>
+          <strong>A &cap; B = {1, 2, 3, 6}</strong>
+          <strong>B / A = {-2, -1}</strong>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <template id="tpl-trigonometria-1">
+    <article class="exam-sheet">
+      <header class="exam-header">
+        <span class="exam-badge">Ejercicio 1</span>
+        <p class="exam-prompt">Hallar los valores de <strong>x &isin; [0, 2&pi;)</strong> tales que:</p>
+        <p class="exam-equation">-&radic;2 / 2 + cos(x - &pi; / 2) = 0</p>
+      </header>
+
+      <div class="exam-body">
+        <section class="exam-col">
+          <h3 class="exam-title">Resoluci&oacute;n paso a paso</h3>
+
+          <div class="exam-step" data-step-key="trigonometria-1-1">
+            <span class="exam-number">1</span>
+            <h4>&iquest;Qu&eacute; est&aacute; pidiendo?</h4>
+            <p class="exam-text">
+              Nos pide encontrar todos los valores de <strong>x</strong> en el intervalo <strong>[0, 2&pi;)</strong>
+              que hacen que la expresi&oacute;n
+            </p>
+            <p class="exam-math"><span class="exam-mathbox yellow">-&radic;2 / 2 + cos(x - &pi; / 2)</span></p>
+            <p class="exam-text">sea igual a 0.</p>
+          </div>
+
+          <div class="exam-step" data-step-key="trigonometria-1-2">
+            <span class="exam-number">2</span>
+            <h4>Paso 1: aislamos el coseno</h4>
+            <p class="exam-text">Sumamos <strong>&radic;2 / 2</strong> a ambos lados para dejar el coseno solo:</p>
+            <p class="exam-math">
+              -&radic;2 / 2 + cos(x - &pi; / 2) = 0 &nbsp;&nbsp; + &radic;2 / 2
+            </p>
+            <p class="exam-math"><span class="exam-mathbox">cos(x - &pi; / 2) = &radic;2 / 2</span></p>
+            <p class="exam-text">Hasta aqu&iacute; solo reacomodamos la ecuaci&oacute;n.</p>
+          </div>
+
+          <div class="exam-step" data-step-key="trigonometria-1-3">
+            <span class="exam-number">3</span>
+            <h4>Paso 2: usamos una identidad trigonom&eacute;trica</h4>
+            <p class="exam-text">La identidad fundamental que relaciona coseno y seno es:</p>
+            <p class="exam-math"><span class="exam-mathbox green">cos(x - &pi; / 2) = sin x</span></p>
+            <p class="exam-text">Sustituimos en la ecuaci&oacute;n:</p>
+            <p class="exam-math"><span class="exam-mathbox green">sin x = &radic;2 / 2</span></p>
+            <p class="exam-text">Ahora necesitamos encontrar los &aacute;ngulos cuyo seno vale <strong>&radic;2 / 2</strong>.</p>
+          </div>
+
+          <div class="exam-step" data-step-key="trigonometria-1-4">
+            <span class="exam-number">4</span>
+            <h4>&iquest;Cu&aacute;ntos &aacute;ngulos cumplen que sin x = &radic;2 / 2?</h4>
+            <p class="exam-text">
+              En la circunferencia trigonom&eacute;trica, el valor del seno representa la coordenada <strong>y</strong>
+              del punto. Buscamos los puntos donde la ordenada es <strong>&radic;2 / 2</strong>.
+            </p>
+            <div class="exam-green-note">
+              Como <strong>&radic;2 / 2 &gt; 0</strong>, los &aacute;ngulos buscados estar&aacute;n en el
+              <strong>primer</strong> y <strong>segundo</strong> cuadrante.
+            </div>
+          </div>
+
+          <div class="exam-step" data-step-key="trigonometria-1-6">
+            <span class="exam-number">6</span>
+            <h4>Respuesta final</h4>
+            <div class="exam-answer">
+              Las soluciones en el intervalo [0, 2&pi;) son:<br>
+              <strong>x = &pi; / 4</strong> &nbsp; y &nbsp; <strong>x = 3&pi; / 4</strong>
+            </div>
+            <div class="exam-summary">
+              <h5>Resumen clave</h5>
+              <ol>
+                <li>Aislamos el coseno.</li>
+                <li>Usamos la identidad <strong>cos(x - &pi; / 2) = sin x</strong>.</li>
+                <li>Hallamos los &aacute;ngulos donde <strong>sin x = &radic;2 / 2</strong>.</li>
+                <li>Elegimos solo los que est&aacute;n en <strong>[0, 2&pi;)</strong>.</li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        <section class="exam-col">
+          <h3 class="exam-side-title">Circunferencia trigonom&eacute;trica</h3>
+          <div class="trig-circle" aria-label="Circunferencia trigonom&eacute;trica">
+            <span class="trig-point left"></span>
+            <span class="trig-point right"></span>
+            <span class="trig-label threepi4">3&pi;<br>/4</span>
+            <span class="trig-label pi4">&pi;<br>/4</span>
+            <span class="trig-label pi2">&pi;<br>/2</span>
+            <span class="trig-label threepi2">3&pi;<br>/2</span>
+            <span class="trig-label pi">&pi;</span>
+            <span class="trig-label zero">0</span>
+            <span class="trig-label twopi">2&pi;</span>
+            <span class="trig-label yval">y = &radic;2<br>/2</span>
+            <span class="trig-label one">1</span>
+            <span class="trig-label minusone">-1</span>
+          </div>
+
+          <p class="exam-text">Los &aacute;ngulos notables donde el seno vale <strong>&radic;2 / 2</strong> son:</p>
+          <ul class="exam-list">
+            <li><strong>&pi; / 4</strong> (45&deg;) en el primer cuadrante.</li>
+            <li><strong>3&pi; / 4</strong> (135&deg;) en el segundo cuadrante.</li>
+          </ul>
+
+          <div class="exam-purple-note">
+            <strong>&iquest;Por qu&eacute; tambi&eacute;n 3&pi; / 4?</strong><br>
+            Porque el seno es positivo en el primer y segundo cuadrante, y la circunferencia es sim&eacute;trica respecto del eje y.
+            Adem&aacute;s, <strong>sin(&pi; - &theta;) = sin(&theta;)</strong>, entonces
+            <strong>sin(3&pi; / 4) = sin(&pi; / 4) = &radic;2 / 2</strong>.
+          </div>
+
+          <div class="exam-step" data-step-key="trigonometria-1-5">
+            <span class="exam-number">5</span>
+            <h4>Soluciones en el intervalo [0, 2&pi;)</h4>
+            <p class="exam-text">Las soluciones generales de <strong>sin x = &radic;2 / 2</strong> son:</p>
+            <p class="exam-math">
+              <span class="exam-mathbox blue">
+                x = &pi; / 4 + 2k&pi; &nbsp; o &nbsp; x = 3&pi; / 4 + 2k&pi;, con k &isin; Z
+              </span>
+            </p>
+            <p class="exam-text">Como nos piden solo <strong>[0, 2&pi;)</strong>, probamos con <strong>k = 0</strong>:</p>
+            <ul class="exam-list">
+              <li>x = &pi; / 4 <span class="exam-check">&#10003;</span> est&aacute; en el intervalo.</li>
+              <li>x = 3&pi; / 4 <span class="exam-check">&#10003;</span> est&aacute; en el intervalo.</li>
+            </ul>
+            <p class="exam-text">Si tomamos <strong>k = 1</strong>, ya obtenemos valores mayores o iguales a <strong>2&pi;</strong>.</p>
+          </div>
+
+          <div class="exam-panel red">
+            <h3 class="exam-side-title red">Comprobaci&oacute;n</h3>
+            <p class="exam-text">Probamos con <strong>x = &pi; / 4</strong>:</p>
+            <p class="exam-math small">
+              -&radic;2 / 2 + cos(&pi; / 4 - &pi; / 2)
+              = -&radic;2 / 2 + cos(-&pi; / 4)
+              = -&radic;2 / 2 + &radic;2 / 2 = 0 <span class="exam-check">&#10003;</span>
+            </p>
+            <p class="exam-text">Probamos con <strong>x = 3&pi; / 4</strong>:</p>
+            <p class="exam-math small">
+              -&radic;2 / 2 + cos(3&pi; / 4 - &pi; / 2)
+              = -&radic;2 / 2 + cos(&pi; / 4)
+              = -&radic;2 / 2 + &radic;2 / 2 = 0 <span class="exam-check">&#10003;</span>
+            </p>
+            <p class="exam-text" style="color:#d22b5b;font-size:1.25rem;">&iexcl;Ambas cumplen!</p>
+          </div>
+        </section>
+      </div>
+    </article>
+  </template>
+
+  <template id="tpl-trigonometria-2">
+    <article class="exam-sheet">
+      <header class="exam-header">
+        <span class="exam-badge">Ejercicio 2</span>
+        <p class="exam-prompt">Poste de 20 metros y cable con &aacute;ngulo de 30&deg; con el suelo.</p>
+        <p class="exam-equation">&iquest;Cu&aacute;nto mide el cable?</p>
+      </header>
+
+      <div class="exam-body equal">
+        <section class="exam-col">
+          <h3 class="exam-title">Verificaci&oacute;n de la resoluci&oacute;n</h3>
+
+          <div class="exam-step" data-step-key="trigonometria-2-1">
+            <span class="exam-number">1</span>
+            <h4 class="blue">Modelo</h4>
+            <p class="exam-text">Formamos un tri&aacute;ngulo rect&aacute;ngulo:</p>
+            <ul class="exam-list">
+              <li><strong style="color:#e66b00;">Poste</strong> (cateto opuesto al &aacute;ngulo de 30&deg;): 20 m.</li>
+              <li><strong style="color:#249b37;">Suelo</strong> (cateto adyacente): desconocido, no lo necesitamos.</li>
+              <li><strong style="color:#0b5cb7;">Cable</strong> (hipotenusa): L, lo que queremos hallar.</li>
+            </ul>
+          </div>
+
+          <div class="exam-step" data-step-key="trigonometria-2-2">
+            <span class="exam-number">2</span>
+            <h4 class="blue">Funci&oacute;n a usar</h4>
+            <p class="exam-text">
+              Nos dan el &aacute;ngulo de 30&deg; y el cateto opuesto (20), y queremos la hipotenusa (L).
+              Usamos la funci&oacute;n seno:
+            </p>
+            <p class="exam-math"><span class="exam-mathbox blue">sin(&theta;) = cateto opuesto / hipotenusa</span></p>
+          </div>
+
+          <div class="exam-step" data-step-key="trigonometria-2-3">
+            <span class="exam-number">3</span>
+            <h4 class="blue">Planteamos la ecuaci&oacute;n</h4>
+            <p class="exam-math">sin 30&deg; = 20 / L</p>
+          </div>
+
+          <div class="exam-step" data-step-key="trigonometria-2-4">
+            <span class="exam-number">4</span>
+            <h4 class="blue">Reemplazamos el valor del seno</h4>
+            <p class="exam-text">Sabemos que <strong>sin 30&deg; = 1 / 2</strong></p>
+            <p class="exam-math">1 / 2 = 20 / L</p>
+          </div>
+
+          <div class="exam-step" data-step-key="trigonometria-2-5">
+            <span class="exam-number">5</span>
+            <h4 class="blue">Despejamos L</h4>
+            <p class="exam-text">Multiplicamos cruzado:</p>
+            <p class="exam-math">1 . L = 2 . 20 &nbsp; &rArr; &nbsp; L = 40</p>
+            <div class="exam-answer green">
+              <strong>Respuesta final:</strong> El cable mide <strong style="font-size:1.55rem;">40</strong> metros.
+            </div>
+          </div>
+        </section>
+
+        <section class="exam-col">
+          <h3 class="exam-side-title blue">Diagrama</h3>
+          <div class="exam-diagram" aria-label="Diagrama de poste, suelo y cable">
+            <span class="exam-ground"></span>
+            <span class="exam-post"></span>
+            <span class="exam-cable"></span>
+            <span class="exam-angle">30&deg;</span>
+            <span class="exam-diagram-label cable">Cable (L)</span>
+            <span class="exam-diagram-label post">Poste<br>20 m</span>
+            <span class="exam-diagram-label ground">Suelo</span>
+          </div>
+
+          <div class="exam-panel red">
+            <h3 class="exam-side-title red">Comprobaci&oacute;n del resultado</h3>
+            <p class="exam-text">Si el cable mide 40 m, se cumple que el &aacute;ngulo con el suelo es de 30&deg;:</p>
+            <p class="exam-math small">sin 30&deg; = cateto opuesto / hipotenusa = 20 / 40 = 1 / 2</p>
+            <p class="exam-text">Y sabemos que <strong>sin 30&deg; = 1 / 2</strong>. <span class="exam-check">&#10003;</span> Se verifica.</p>
+          </div>
+
+          <div class="exam-panel calc-check">
+            <h3 class="exam-side-title">Comprobaci&oacute;n en calculadora</h3>
+            <p class="exam-text">Usamos la funci&oacute;n inversa para verificar:</p>
+            <p class="exam-math small">&theta; = sin<sup>-1</sup>(20 / 40) = sin<sup>-1</sup>(1 / 2) = 30&deg;</p>
+            <p class="exam-text"><span class="exam-check">&#10003;</span> El &aacute;ngulo es 30&deg;, por lo tanto el resultado es correcto.</p>
+            <div class="calculator-illo" aria-hidden="true">
+              <div class="calculator-screen">30.</div>
+              <div class="calculator-keys">
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </article>
+  </template>
+
+  <script>
+    const topics = {
+      logica: {
+        title: "L&oacute;gica proposicional",
+        description: "Tema activo con ejercicios sobre traducci&oacute;n simb&oacute;lica, negaci&oacute;n, rec&iacute;proca y contrarrec&iacute;proca.",
+        exercises: [
+          {
+            id: "logica-1",
+            label: "Ejercicio 1",
+            title: "Bicondicional con negaci&oacute;n y variantes",
+            description: "Traducir una proposici&oacute;n compuesta, negar el bicondicional y hallar rec&iacute;proca y contrarrec&iacute;proca de sus implicaciones.",
+            templateId: "tpl-logica-1"
+          }
+        ]
+      },
+      conjuntos: {
+        title: "Conjuntos",
+        description: "Tema activo con ejercicios sobre pertenencia, inclusi&oacute;n, intersecci&oacute;n y diferencia entre conjuntos.",
+        exercises: [
+          {
+            id: "conjuntos-1",
+            label: "Ejercicio 1",
+            title: "Valor de verdad de proposiciones",
+            description: "Construir un conjunto por extensi&oacute;n y evaluar pertenencia e inclusi&oacute;n.",
+            templateId: "tpl-conjuntos-1"
+          },
+          {
+            id: "conjuntos-2",
+            label: "Ejercicio 2",
+            title: "Inecuaci&oacute;n, divisores e intersecci&oacute;n",
+            description: "Resolver A con una inecuaci&oacute;n cuadr&aacute;tica, hallar B por divisores y calcular A &cap; B y B / A.",
+            templateId: "tpl-conjuntos-2"
+          }
+        ]
+      },
+      trigonometria: {
+        title: "Trigonometr&iacute;a",
+        description: "Tema activo con resoluciones sobre ecuaciones trigonom&eacute;tricas, identidades, tri&aacute;ngulos rect&aacute;ngulos y uso de calculadora.",
+        exercises: [
+          {
+            id: "trigonometria-1",
+            label: "Ejercicio 1",
+            title: "Ecuaci&oacute;n trigonom&eacute;trica en [0, 2&pi;)",
+            description: "Resolver una ecuaci&oacute;n con coseno desplazado usando identidad trigonom&eacute;trica y circunferencia.",
+            templateId: "tpl-trigonometria-1"
+          },
+          {
+            id: "trigonometria-2",
+            label: "Ejercicio 2",
+            title: "Poste, cable y &aacute;ngulo de 30&deg;",
+            description: "Calcular la longitud de un cable usando seno en un tri&aacute;ngulo rect&aacute;ngulo.",
+            templateId: "tpl-trigonometria-2"
+          }
+        ]
+      },
+      vectores: {
+        title: "Vectores",
+        description: "Tema activo con resoluciones interactivas sobre normas, perpendicularidad, producto escalar y producto vectorial.",
+        exercises: [
+          {
+            id: "vectores-1",
+            label: "Ejercicio 1",
+            title: "Igualdad de normas",
+            description: "Encontrar los valores de x para que dos vectores tengan la misma norma.",
+            templateId: "tpl-vectores-1"
+          },
+          {
+            id: "vectores-2",
+            label: "Ejercicio 2",
+            title: "Perpendicularidad con producto vectorial",
+            description: "Determinar A usando producto vectorial, multiplicaci&oacute;n escalar y condici&oacute;n de perpendicularidad.",
+            templateId: "tpl-vectores-2"
+          }
+        ]
+      }
+    };
+
+    const screens = {
+      home: document.getElementById("screen-home"),
+      topic: document.getElementById("screen-topic"),
+      exercise: document.getElementById("screen-exercise")
+    };
+
+    const crumbs = document.getElementById("crumbs");
+    const topicTitle = document.getElementById("topic-title");
+    const topicCopy = document.getElementById("topic-copy");
+    const topicEyebrow = document.getElementById("topic-eyebrow");
+    const exerciseList = document.getElementById("exercise-list");
+    const topicEmpty = document.getElementById("topic-empty");
+    const exerciseEyebrow = document.getElementById("exercise-eyebrow");
+    const exerciseTitle = document.getElementById("exercise-title");
+    const exerciseCopy = document.getElementById("exercise-copy");
+    const exerciseFrame = document.getElementById("exercise-frame");
+    const exercisePanel = document.querySelector("#screen-exercise .exercise-screen");
+    const backTopicButton = document.getElementById("back-topic");
+
+    let currentTopicId = null;
+
+    function activateScreen(name) {
+      Object.entries(screens).forEach(([key, screen]) => {
+        screen.classList.toggle("is-active", key === name);
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function updateCrumbs(text) {
+      crumbs.textContent = text;
+    }
+
+    function getExercise(topicId, exerciseId) {
+      const topic = topics[topicId];
+      if (!topic) {
+        return null;
+      }
+      return topic.exercises.find((exercise) => exercise.id === exerciseId) || null;
+    }
+
+    function renderTopic(topicId) {
+      const topic = topics[topicId];
+      if (!topic) {
+        return;
+      }
+
+      currentTopicId = topicId;
+      exercisePanel.classList.remove("exam-mode");
+      topicEyebrow.textContent = "Tema";
+      topicTitle.innerHTML = topic.title;
+      topicCopy.innerHTML = topic.description;
+      updateCrumbs("Inicio / " + topic.title);
+
+      exerciseList.replaceChildren();
+
+      if (topic.exercises.length === 0) {
+        topicEmpty.hidden = false;
+      } else {
+        topicEmpty.hidden = true;
+
+        topic.exercises.forEach((exercise) => {
+          const card = document.createElement("button");
+          card.type = "button";
+          card.className = "exercise-card";
+          card.innerHTML = `
+            <span class="exercise-pill">${exercise.label}</span>
+            <h3 class="exercise-name">${exercise.title}</h3>
+            <p class="exercise-desc">${exercise.description}</p>
+            <div class="exercise-meta">
+              <span class="mini-pill blue">Resoluci&oacute;n disponible</span>
+              <span class="mini-pill red">Abrir paso a paso</span>
+            </div>
+          `;
+
+          card.addEventListener("click", () => {
+            renderExercise(topicId, exercise.id);
+          });
+
+          exerciseList.appendChild(card);
+        });
+      }
+
+      activateScreen("topic");
+    }
+
+    function wireAccordions(scope) {
+      const cards = scope.querySelectorAll("[data-step-card]");
+
+      cards.forEach((card) => {
+        const trigger = card.querySelector("[data-step-trigger]");
+
+        if (!trigger) {
+          return;
+        }
+
+        const isOpen = card.classList.contains("is-open");
+        trigger.setAttribute("aria-expanded", String(isOpen));
+
+        trigger.addEventListener("click", () => {
+          const nowOpen = card.classList.toggle("is-open");
+          trigger.setAttribute("aria-expanded", String(nowOpen));
+        });
+      });
+    }
+
+    const examStepExplanations = {
+      "logica-1-1": {
+        plain: "Arrancar por las proposiciones simples evita leer la f&oacute;rmula como un bloque opaco. Cada letra ya tiene una frase concreta asociada, y eso ordena todo lo que sigue.",
+        formal: "En l&oacute;gica proposicional, una proposici&oacute;n compuesta se interpreta a partir de sus proposiciones simples y de los conectivos que las unen. Ac&aacute; p, q, r y s quedan fijadas desde el principio.",
+        focus: "Si una letra se interpreta mal al comienzo, todos los pasos siguientes quedan corridos."
+      },
+      "logica-1-2": {
+        plain: "Separar la expresi&oacute;n en A y B hace m&aacute;s manejable el bicondicional. En vez de operar con una cadena larga, trabajamos con dos bloques bien definidos.",
+        formal: "La proposici&oacute;n principal es &Phi; = A &hArr; B, donde A = (p &and; q) &rarr; &not;r y B = s &rarr; (p &or; r). Esa descomposici&oacute;n permite aplicar reglas de equivalencia con claridad.",
+        focus: "Identificar el conectivo principal es una costumbre clave en ejercicios de l&oacute;gica."
+      },
+      "logica-1-3": {
+        plain: "Traducimos cada mitad por separado porque una implicaci&oacute;n ya tiene su propia estructura completa: antecedente y consecuente.",
+        formal: "En A, el antecedente es p &and; q y el consecuente es &not;r. En B, el antecedente es s y el consecuente es p &or; r. Cada conectivo se traduce de manera literal: &and; como 'y', &or; como 'o' y &not; como negaci&oacute;n.",
+        focus: "Todav&iacute;a no leemos el 'si y solo si'; primero dejamos claras las dos implicaciones internas."
+      },
+      "logica-1-4": {
+        plain: "Reci&eacute;n cuando A y B est&aacute;n en palabras conviene unirlas con el bicondicional. Eso produce una lectura m&aacute;s natural y menos confusa.",
+        formal: "El conectivo &hArr; expresa equivalencia l&oacute;gica y se lee 'si y solo si'. Por eso la proposici&oacute;n completa enlaza la traducci&oacute;n coloquial de A con la de B.",
+        focus: "El 'si y solo si' no reemplaza a los 'si... entonces...' internos: los conecta."
+      },
+      "logica-1-5": {
+        plain: "La negaci&oacute;n de un bicondicional no se hace poniendo un 'no' adelante de todo. Hay que usar la regla que describe cu&aacute;ndo una equivalencia falla.",
+        formal: "Para cualquier A y B, se cumple &not;(A &hArr; B) &equiv; (A &and; &not;B) &or; (&not;A &and; B). La equivalencia es falsa exactamente cuando los valores de verdad de A y B no coinciden.",
+        focus: "La idea intuitiva es: una parte verdadera y la otra falsa."
+      },
+      "logica-1-6": {
+        plain: "Negar A obliga a recordar la regla de la implicaci&oacute;n: la &uacute;nica forma de que 'si X, entonces Y' sea falsa es que X ocurra y Y no.",
+        formal: "De &not;((p &and; q) &rarr; &not;r) se obtiene (p &and; q) &and; &not;(&not;r). Como la doble negaci&oacute;n sobre r se simplifica, queda (p &and; q) &and; r.",
+        focus: "La doble negaci&oacute;n es la que transforma '&not;(&not;r)' directamente en 'r'."
+      },
+      "logica-1-7": {
+        plain: "En B aparecen dos reglas encadenadas: primero la negaci&oacute;n de una implicaci&oacute;n y despu&eacute;s De Morgan para romper la disyunci&oacute;n.",
+        formal: "De &not;(s &rarr; (p &or; r)) resulta s &and; &not;(p &or; r). Luego, por De Morgan, &not;(p &or; r) &equiv; &not;p &and; &not;r. As&iacute; se llega a &not;B = s &and; &not;p &and; &not;r.",
+        focus: "Cuando se niega una disyunci&oacute;n, el 'o' pasa a 'y' y se niegan ambos t&eacute;rminos."
+      },
+      "logica-1-8": {
+        plain: "El cierre consiste en reemplazar lo que ya calculamos, sin inventar reglas nuevas. Es un paso de orden y de escritura prolija.",
+        formal: "Se sustituye &not;A = (p &and; q) &and; r y &not;B = s &and; &not;p &and; &not;r en la expresi&oacute;n &not;&Phi; = (A &and; &not;B) &or; (&not;A &and; B).",
+        focus: "Cuando ya ten&eacute;s los bloques resueltos, la negaci&oacute;n total sale casi mec&aacute;nicamente."
+      },
+      "logica-1-9": {
+        plain: "La rec&iacute;proca y la contrarrec&iacute;proca se construyen sobre la implicaci&oacute;n A sin tocar el bicondicional entero. Cada una transforma antecedente y consecuente de forma distinta.",
+        formal: "Si P &rarr; Q, su rec&iacute;proca es Q &rarr; P y su contrarrec&iacute;proca es &not;Q &rarr; &not;P. En A, P = p &and; q y Q = &not;r, de modo que la contrarrec&iacute;proca usa r y &not;(p &and; q).",
+        focus: "La negaci&oacute;n de p &and; q no es '&not;p &and; &not;q', sino '&not;p &or; &not;q'."
+      },
+      "logica-1-10": {
+        plain: "Con B hacemos exactamente la misma mec&aacute;nica, pero ahora el consecuente original es una disyunci&oacute;n, por eso vuelve a aparecer De Morgan en la contrarrec&iacute;proca.",
+        formal: "En B, P = s y Q = p &or; r. La rec&iacute;proca queda (p &or; r) &rarr; s, y la contrarrec&iacute;proca es &not;(p &or; r) &rarr; &not;s, equivalente a (&not;p &and; &not;r) &rarr; &not;s.",
+        focus: "La estructura cambia, pero la receta formal es la misma que en cualquier implicaci&oacute;n."
+      },
+      "logica-1-11": {
+        plain: "El resumen final sirve para dejar juntas las tres tareas del enunciado: leer, negar y transformar implicaciones. Es una buena forma de revisar si algo qued&oacute; inconsistente.",
+        formal: "La resoluci&oacute;n combina traducci&oacute;n coloquial, equivalencias l&oacute;gicas para la negaci&oacute;n y definiciones de rec&iacute;proca y contrarrec&iacute;proca aplicadas a cada condicional interno.",
+        focus: "Si los tres resultados se entienden de corrido, el ejercicio ya est&aacute; realmente dominado."
+      },
+      "vectores-1-1": {
+        plain: "Primero traducimos el enunciado a una forma m&aacute;s trabajable. Igualar normas directamente deja ra&iacute;ces cuadradas, y eso vuelve la cuenta m&aacute;s inc&oacute;moda de lo necesario.",
+        formal: "Como las normas siempre cumplen ||v|| &ge; 0, se conserva la equivalencia: ||u&#x20d7;|| = ||w&#x20d7;|| si y solo si ||u&#x20d7;||<sup>2</sup> = ||w&#x20d7;||<sup>2</sup>.",
+        focus: "La ventaja es que enseguida pasamos de una igualdad geom&eacute;trica a una ecuaci&oacute;n algebraica."
+      },
+      "vectores-1-2": {
+        plain: "Ac&aacute; usamos la receta de la norma eucl&iacute;dea: cuadrar cada componente y sumar. Dejamos (2 - x)<sup>2</sup> sin expandir por ahora porque m&aacute;s adelante conviene compararlo as&iacute; con la otra expresi&oacute;n.",
+        formal: "En R<sup>3</sup>, si v = (a, b, c), entonces ||v||<sup>2</sup> = a<sup>2</sup> + b<sup>2</sup> + c<sup>2</sup>. Aplicado a u&#x20d7; = (3, 2 - x, -1) resulta 9 + (2 - x)<sup>2</sup> + 1.",
+        focus: "Un detalle fino: (-1)<sup>2</sup> vale 1, as&iacute; que el signo negativo desaparece al cuadrar."
+      },
+      "vectores-1-3": {
+        plain: "Repetimos exactamente el mismo procedimiento con el segundo vector. Lo delicado es no perder el cuadrado sobre todo el t&eacute;rmino 2x.",
+        formal: "Para w&#x20d7; = (2x, 1, -3), se obtiene ||w&#x20d7;||<sup>2</sup> = (2x)<sup>2</sup> + 1<sup>2</sup> + (-3)<sup>2</sup> = 4x<sup>2</sup> + 10.",
+        focus: "(2x)<sup>2</sup> no es 2x<sup>2</sup>, sino 4x<sup>2</sup>. Ese error cambia toda la ecuaci&oacute;n."
+      },
+      "vectores-1-4": {
+        plain: "Una vez que ambas normas est&aacute;n escritas, las igualamos y simplificamos. El 10 aparece a ambos lados, as&iacute; que desaparece, y eso limpia mucho la cuenta.",
+        formal: "De (2 - x)<sup>2</sup> + 10 = 4x<sup>2</sup> + 10 se deduce (2 - x)<sup>2</sup> = 4x<sup>2</sup>. Luego, desarrollando: x<sup>2</sup> - 4x + 4 = 4x<sup>2</sup>, y ordenando: 0 = 3x<sup>2</sup> + 4x - 4.",
+        focus: "Ac&aacute; conviene ir despacio con el cuadrado notable: (2 - x)<sup>2</sup> = 4 - 4x + x<sup>2</sup>."
+      },
+      "vectores-1-5": {
+        plain: "Como nos qued&oacute; una cuadr&aacute;tica, usamos la f&oacute;rmula general. El discriminante da 64, que tiene ra&iacute;z exacta, por eso el cierre sale prolijo.",
+        formal: "Para 3x<sup>2</sup> + 4x - 4 = 0, con a = 3, b = 4 y c = -4, se obtiene x = (-4 &plusmn; &radic;(16 + 48)) / 6 = (-4 &plusmn; 8) / 6.",
+        focus: "El punto sensible es el signo de c: como c = -4, el producto -4ac termina sumando dentro de la ra&iacute;z."
+      },
+      "vectores-1-6": {
+        plain: "La respuesta final junta las dos soluciones que hacen que ambas longitudes coincidan. No hay que descartar ninguna porque ambas salen de una equivalencia v&aacute;lida.",
+        formal: "Sustituyendo x = 2/3 o x = -2 en las expresiones de ||u&#x20d7;||<sup>2</sup> y ||w&#x20d7;||<sup>2</sup>, los valores coinciden en los dos casos.",
+        focus: "No aparecen soluciones falsas porque la transformaci&oacute;n inicial fue elevar normas no negativas al cuadrado."
+      },
+      "vectores-2-1": {
+        plain: "Antes de hablar de perpendicularidad, necesitamos construir el vector (1 / 3)(u&#x20d7; &times; v&#x20d7;). Por eso arrancamos con el producto vectorial.",
+        formal: "El producto vectorial en R<sup>3</sup> se calcula por determinante simb&oacute;lico, con componentes i, j, k. En cada menor de orden dos se hace la resta entre el producto de la diagonal principal (↘) y el producto de la diagonal secundaria (↗). La componente j, adem&aacute;s, lleva un signo menos extra delante.",
+        focus: "Las flechas sirven para leer cada 2x2 como diagonal que baja menos diagonal que sube. Esa lectura visual evita perderse en las multiplicaciones."
+      },
+      "vectores-2-2": {
+        plain: "Ac&aacute; no aparece una idea nueva: simplemente distribuimos el escalar 1/3 en todas las componentes del vector que acabamos de obtener.",
+        formal: "Si k es un escalar y v = (a, b, c), entonces kv = (ka, kb, kc). Por eso (1 / 3)(-12, -12 + 6A, 3A) = (-4, 2A - 4, A).",
+        focus: "El error t&iacute;pico es multiplicar solo el primer t&eacute;rmino. El escalar act&uacute;a sobre todo el vector."
+      },
+      "vectores-2-3": {
+        plain: "El enunciado dice perpendicular, as&iacute; que la herramienta correcta es el producto escalar igual a cero. No hay que seguir con producto vectorial en esta parte.",
+        formal: "Dos vectores a&#x20d7; y b&#x20d7; son perpendiculares si y solo si a&#x20d7; . b&#x20d7; = 0. Por eso imponemos (-4, 2A - 4, A) . (A, A, 0) = 0.",
+        focus: "La condici&oacute;n geom&eacute;trica de perpendicularidad se convierte en una ecuaci&oacute;n algebraica directa."
+      },
+      "vectores-2-4": {
+        plain: "Expandimos el producto escalar, agrupamos t&eacute;rminos y factorizamos. Cuando aparece un producto igual a cero, cada factor puede anularse.",
+        formal: "Como (a, b, c) . (d, e, f) = ad + be + cf, queda -4A + (2A - 4)A + A . 0 = 0. Luego 2A<sup>2</sup> - 8A = 0 y finalmente 2A(A - 4) = 0.",
+        focus: "No conviene dividir por A demasiado pronto, porque eso har&iacute;a desaparecer la soluci&oacute;n A = 0."
+      },
+      "vectores-2-5": {
+        plain: "Las dos opciones finales son las que hacen que la condici&oacute;n de perpendicularidad se cumpla. En este ejercicio, A = 0 tambi&eacute;n cuenta.",
+        formal: "Si A = 0, entonces w&#x20d7; = (0, 0, 0), y su producto escalar con cualquier vector es 0. Si A = 4, la ecuaci&oacute;n tambi&eacute;n se satisface por factorizaci&oacute;n.",
+        focus: "La observaci&oacute;n sobre el vector nulo explica por qu&eacute; A = 0 no es una rareza, sino una soluci&oacute;n v&aacute;lida."
+      },
+      "conjuntos-1-1": {
+        plain: "En este primer paso no resolvemos nada todav&iacute;a: traducimos el significado de cada condici&oacute;n del conjunto para saber exactamente qu&eacute; estamos buscando.",
+        formal: "La expresi&oacute;n x &isin; N restringe a x a los naturales, x es par exige divisibilidad por 2 y 1 &lt; x &lt; 10 impone un intervalo abierto entre 1 y 10. La definici&oacute;n es por comprensi&oacute;n, as&iacute; que primero interpretamos las condiciones antes de listar elementos.",
+        focus: "Separar las tres condiciones evita mezclar pertenencia a N, paridad y rango num&eacute;rico."
+      },
+      "conjuntos-1-2": {
+        plain: "Ahora s&iacute; pasamos de la definici&oacute;n a la lista de elementos. Buscamos los naturales pares que queden estrictamente entre 1 y 10.",
+        formal: "Los naturales del tramo entre 1 y 10 son 2, 3, 4, 5, 6, 7, 8 y 9. Al filtrar solo los pares, queda A = {2, 4, 6, 8}. Eso es escribir el conjunto por extensi&oacute;n.",
+        focus: "La recta num&eacute;rica ayuda a ver de un golpe qu&eacute; n&uacute;meros quedan adentro y cu&aacute;les no."
+      },
+      "conjuntos-1-3": {
+        plain: "Ac&aacute; evaluamos una proposici&oacute;n de pertenencia. Solo hay que comparar el elemento 7 con la lista concreta que ya armamos para A.",
+        formal: "Como A = {2, 4, 6, 8}, se verifica que 7 &notin; A. Por lo tanto, la proposici&oacute;n 7 &isin; A tiene valor de verdad falso.",
+        focus: "En pertenencia, la pregunta correcta siempre es: &iquest;ese n&uacute;mero est&aacute; o no est&aacute; en el conjunto?"
+      },
+      "conjuntos-1-4": {
+        plain: "En esta parte aparece una trampa muy com&uacute;n: confundir un n&uacute;mero con un conjunto. El s&iacute;mbolo de subconjunto no se usa con elementos sueltos.",
+        formal: "La expresi&oacute;n 8 &sub; A pretende decir que 8 es subconjunto de A, pero 8 no es un conjunto. El s&iacute;mbolo &sub; se usa solo entre conjuntos, por lo que la afirmaci&oacute;n se considera falsa en este contexto.",
+        focus: "Cuando veas &sub; o &sube;, primero revis&aacute; si ambos lados son conjuntos y no simples n&uacute;meros."
+      },
+      "conjuntos-1-5": {
+        plain: "Volvemos a una proposici&oacute;n de pertenencia bien formulada. Basta ver si 2 aparece o no dentro del conjunto A.",
+        formal: "Como A = {2, 4, 6, 8}, se cumple que 2 &isin; A. Adem&aacute;s, por definici&oacute;n, 2 es par y satisface 1 &lt; 2 &lt; 10, as&iacute; que la afirmaci&oacute;n es verdadera.",
+        focus: "Ac&aacute; la versi&oacute;n por extensi&oacute;n y la definici&oacute;n por comprensi&oacute;n dicen lo mismo."
+      },
+      "conjuntos-1-6": {
+        plain: "Ahora s&iacute; trabajamos con un conjunto de verdad: {6}. Como su &uacute;nico elemento es 6, alcanza con comprobar si 6 est&aacute; dentro de A.",
+        formal: "Si 6 &isin; A, entonces todo elemento de {6} pertenece a A. Por eso {6} &sub; A. El resumen final deja ordenados los cuatro valores de verdad: falso, falso, verdadero y verdadero.",
+        focus: "La clave es distinguir entre 6 y {6}: uno es un elemento y el otro es un conjunto con un solo elemento."
+      },
+      "conjuntos-2-1": {
+        plain: "Primero traducimos el enunciado del conjunto A: no pide pares ni divisores, pide enteros que cumplan una desigualdad cuadr&aacute;tica.",
+        formal: "A = {x &isin; Z : x<sup>2</sup> - 9x + 8 &le; 0}. El problema se reduce a resolver esa desigualdad y luego filtrar por x entero.",
+        focus: "Este paso ordena el objetivo: resolver una inecuaci&oacute;n y reci&eacute;n despu&eacute;s listar A."
+      },
+      "conjuntos-2-2": {
+        plain: "Para factorizar, buscamos dos n&uacute;meros que multipliquen 8 y sumen -9. Esa combinaci&oacute;n es -1 y -8.",
+        formal: "x<sup>2</sup> - 9x + 8 = (x - 1)(x - 8), porque el producto de las constantes es 8 y la suma de coeficientes lineales es -9.",
+        focus: "La factorizaci&oacute;n correcta evita errores en los signos al resolver la desigualdad."
+      },
+      "conjuntos-2-3": {
+        plain: "Con la forma factorizada miramos signos por intervalos. Entre 1 y 8 el producto es negativo, y en los extremos vale cero, por eso cumple &le; 0.",
+        formal: "De (x - 1)(x - 8) &le; 0 se deduce la soluci&oacute;n real 1 &le; x &le; 8.",
+        focus: "El signo pedido es menor o igual a cero, por eso se toma el tramo negativo y las ra&iacute;ces."
+      },
+      "conjuntos-2-4": {
+        plain: "Como A est&aacute; definido sobre enteros, del intervalo real [1, 8] nos quedamos solo con los enteros dentro de ese tramo.",
+        formal: "A = {1, 2, 3, 4, 5, 6, 7, 8}.",
+        focus: "Siempre hay que aplicar al final el dominio indicado por el conjunto base, ac&aacute; Z."
+      },
+      "conjuntos-2-5": {
+        plain: "Ahora armamos B: primero listamos todos los divisores enteros de 6 y despu&eacute;s aplicamos la restricci&oacute;n del intervalo.",
+        formal: "Div(6) = {-6, -3, -2, -1, 1, 2, 3, 6}.",
+        focus: "Este paso es de inventario: todav&iacute;a no filtramos por -2 &le; x &lt; 10."
+      },
+      "conjuntos-2-6": {
+        plain: "Filtramos la lista de divisores con la condici&oacute;n del intervalo y descartamos los que quedan fuera.",
+        formal: "Con -2 &le; x &lt; 10, de Div(6) sobreviven -2, -1, 1, 2, 3 y 6. Entonces B = {-2, -1, 1, 2, 3, 6}.",
+        focus: "El extremo izquierdo incluye -2 y el derecho excluye 10."
+      },
+      "conjuntos-2-7": {
+        plain: "Para la intersecci&oacute;n, buscamos solo los elementos repetidos en ambas listas.",
+        formal: "A &cap; B = {x : x &isin; A y x &isin; B} = {1, 2, 3, 6}.",
+        focus: "Intersecci&oacute;n significa coincidencia, no suma de conjuntos."
+      },
+      "conjuntos-2-8": {
+        plain: "En B / A dejamos los elementos de B que no aparecen en A; por eso sobreviven solo los negativos.",
+        formal: "B / A = {x : x &isin; B y x &notin; A} = {-2, -1}. El resumen final queda A &cap; B = {1, 2, 3, 6} y B / A = {-2, -1}.",
+        focus: "El orden importa: B / A no es lo mismo que A / B."
+      },
+      "trigonometria-1-1": {
+        plain: "Antes de operar, conviene leer bien la consigna: no busca una soluci&oacute;n general, sino solo las que caen dentro del intervalo [0, 2&pi;).",
+        formal: "Resolver la ecuaci&oacute;n significa hallar todos los x tales que la expresi&oacute;n valga 0, con la restricci&oacute;n adicional x &isin; [0, 2&pi;).",
+        focus: "Ese intervalo va a ser importante al final, cuando aparezcan varias soluciones posibles."
+      },
+      "trigonometria-1-2": {
+        plain: "Dejamos sola la funci&oacute;n trigonom&eacute;trica para reconocer mejor qu&eacute; valor debe tomar. Ese despeje es la puerta de entrada al resto del ejercicio.",
+        formal: "Se suma &radic;2 / 2 en ambos miembros y se obtiene cos(x - &pi; / 2) = &radic;2 / 2.",
+        focus: "El detalle delicado es el signo: al pasar un t&eacute;rmino restando, queda sumando del otro lado."
+      },
+      "trigonometria-1-3": {
+        plain: "La identidad nos permite transformar un coseno corrido en un seno simple. Eso vuelve el ejercicio mucho m&aacute;s reconocible.",
+        formal: "Usando cos(x - &pi; / 2) = sin x, la ecuaci&oacute;n se reescribe como sin x = &radic;2 / 2.",
+        focus: "No hay que tratar esta igualdad como si fuera cos x = &radic;2 / 2, porque el desplazamiento importa."
+      },
+      "trigonometria-1-4": {
+        plain: "En la circunferencia trigonom&eacute;trica, el seno es la altura del punto. Por eso buscamos los puntos cuya coordenada y sea &radic;2 / 2.",
+        formal: "Como &radic;2 / 2 es positivo, las soluciones de sin x = &radic;2 / 2 dentro de una vuelta aparecen en los cuadrantes I y II.",
+        focus: "Por eso salen dos &aacute;ngulos notables: &pi; / 4 y 3&pi; / 4."
+      },
+      "trigonometria-1-5": {
+        plain: "Ac&aacute; pasamos de las soluciones notables a la forma general y despu&eacute;s filtramos por intervalo. Es la parte donde la consigna vuelve a importar mucho.",
+        formal: "Las soluciones generales son x = &pi; / 4 + 2k&pi; y x = 3&pi; / 4 + 2k&pi;. Al restringir a [0, 2&pi;), con k = 0 ya aparecen las &uacute;nicas dos v&aacute;lidas.",
+        focus: "Si tom&aacute;ramos k = 1, caer&iacute;amos fuera del intervalo pedido."
+      },
+      "trigonometria-1-6": {
+        plain: "La comprobaci&oacute;n nos deja tranquilos: las dos soluciones realmente hacen que la expresi&oacute;n original valga cero.",
+        formal: "Al reemplazar x = &pi; / 4 o x = 3&pi; / 4, el coseno vale &radic;2 / 2 y se cancela con el t&eacute;rmino -&radic;2 / 2.",
+        focus: "Es una buena manera de detectar si en alg&uacute;n paso anterior se nos hab&iacute;a escapado un signo."
+      },
+      "trigonometria-2-1": {
+        plain: "Lo primero es modelar el problema con un tri&aacute;ngulo rect&aacute;ngulo y decidir qu&eacute; representa cada lado. Sin eso, elegir la funci&oacute;n trigonom&eacute;trica es a ciegas.",
+        formal: "El poste es el cateto opuesto al &aacute;ngulo de 30&deg;, el cable es la hipotenusa y el suelo es el cateto adyacente.",
+        focus: "Aunque el cateto adyacente no aparezca, igual conviene identificarlo para no mezclar lados."
+      },
+      "trigonometria-2-2": {
+        plain: "Elegimos seno porque conocemos el &aacute;ngulo y el lado opuesto, y lo que queremos hallar es la hipotenusa.",
+        formal: "En un tri&aacute;ngulo rect&aacute;ngulo, sin(&theta;) = opuesto / hipotenusa. Como esos son justamente los datos relevantes, esa es la raz&oacute;n correcta.",
+        focus: "Usar coseno ac&aacute; ser&iacute;a forzar una relaci&oacute;n que no coincide con la informaci&oacute;n del problema."
+      },
+      "trigonometria-2-3": {
+        plain: "Una vez elegida la funci&oacute;n, solo queda reemplazar las letras por los datos concretos del ejercicio.",
+        formal: "Con &theta; = 30&deg;, cateto opuesto = 20 e hipotenusa = L, se obtiene sin 30&deg; = 20 / L.",
+        focus: "El orden de la fracci&oacute;n importa: el opuesto va arriba y la hipotenusa abajo."
+      },
+      "trigonometria-2-4": {
+        plain: "Ahora usamos un valor notable conocido. Eso evita depender de la calculadora para la parte principal del ejercicio.",
+        formal: "Como sin 30&deg; = 1 / 2, la ecuaci&oacute;n queda 1 / 2 = 20 / L.",
+        focus: "Si la calculadora est&aacute; en radianes, puede confundirte; por eso este reemplazo te&oacute;rico es m&aacute;s seguro."
+      },
+      "trigonometria-2-5": {
+        plain: "Despejamos con producto cruzado y obtenemos la longitud del cable. Despu&eacute;s verificamos que el resultado mantiene el &aacute;ngulo de 30&deg;.",
+        formal: "De 1 / 2 = 20 / L se deduce 1 . L = 2 . 20, luego L = 40. Adem&aacute;s, 20 / 40 = 1 / 2 y sin<sup>-1</sup>(1 / 2) = 30&deg;.",
+        focus: "Eso muestra que la cuenta y el dibujo son consistentes entre s&iacute;."
+      }
+    };
+
+    function wireExamStepExplanations(scope) {
+      const steps = scope.querySelectorAll("[data-step-key]");
+
+      steps.forEach((step) => {
+        const key = step.dataset.stepKey;
+        const data = examStepExplanations[key];
+
+        if (!data) {
+          return;
+        }
+
+        step.classList.remove("is-open");
+        step.setAttribute("tabindex", "0");
+        step.setAttribute("role", "button");
+        step.setAttribute("aria-expanded", "false");
+
+        if (!step.querySelector(".exam-step-hint")) {
+          const hint = document.createElement("div");
+          hint.className = "exam-step-hint";
+          hint.textContent = "Click para ver explicacion";
+          step.appendChild(hint);
+        }
+
+        if (!step.querySelector(".exam-step-explain")) {
+          const explain = document.createElement("div");
+          explain.className = "exam-step-explain";
+          explain.innerHTML = `
+            <div class="exam-explain-grid">
+              <div class="exam-explain-card">
+                <strong>En palabras</strong>
+                <p>${data.plain}</p>
+              </div>
+              <div class="exam-explain-card">
+                <strong>Formal</strong>
+                <p>${data.formal}</p>
+              </div>
+              <div class="exam-explain-card">
+                <strong>Clave</strong>
+                <p>${data.focus}</p>
+              </div>
+            </div>
+          `;
+          step.appendChild(explain);
+        }
+
+        function toggleStep() {
+          const isOpen = step.classList.toggle("is-open");
+          step.setAttribute("aria-expanded", String(isOpen));
+        }
+
+        step.addEventListener("click", (event) => {
+          if (window.getSelection && window.getSelection().toString()) {
+            return;
+          }
+          toggleStep();
+        });
+
+        step.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            toggleStep();
+          }
+        });
+      });
+    }
+
+    function renderExercise(topicId, exerciseId) {
+      const topic = topics[topicId];
+      const exercise = getExercise(topicId, exerciseId);
+
+      if (!topic || !exercise) {
+        return;
+      }
+
+      currentTopicId = topicId;
+      exerciseEyebrow.innerHTML = topic.title + " / " + exercise.label;
+      exerciseTitle.innerHTML = exercise.title;
+      exerciseCopy.innerHTML = exercise.description;
+      updateCrumbs("Inicio / " + topic.title + " / " + exercise.label);
+      exercisePanel.classList.toggle("exam-mode", topicId === "trigonometria" || topicId === "vectores" || topicId === "conjuntos" || topicId === "logica");
+
+      const template = document.getElementById(exercise.templateId);
+      const fragment = template.content.cloneNode(true);
+      exerciseFrame.replaceChildren(fragment);
+      wireAccordions(exerciseFrame);
+      wireExamStepExplanations(exerciseFrame);
+
+      activateScreen("exercise");
+    }
+
+    document.querySelectorAll("[data-topic]").forEach((button) => {
+      button.addEventListener("click", () => {
+        renderTopic(button.dataset.topic);
+      });
+    });
+
+    document.querySelectorAll("[data-go-home]").forEach((button) => {
+      button.addEventListener("click", () => {
+        currentTopicId = null;
+        updateCrumbs("Inicio / Eleg&iacute; un tema");
+        activateScreen("home");
+      });
+    });
+
+    backTopicButton.addEventListener("click", () => {
+      if (currentTopicId) {
+        renderTopic(currentTopicId);
+      } else {
+        activateScreen("home");
+      }
+    });
+  </script>
+</body>
+</html>

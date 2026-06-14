@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Selector de Niveles - Matemática</title>
+  <style>
+    :root {
+      --bg: #12151f;
+      --panel: #1c2230;
+      --panel-strong: #242d3f;
+      --text: #f6f7fb;
+      --muted: #b9c0d4;
+      --accent: #2fd27f;
+      --accent-2: #58a6ff;
+      --danger: #ffcc66;
+      --border: rgba(255, 255, 255, 0.12);
+      --shadow: rgba(0, 0, 0, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(47, 210, 127, 0.18), transparent 28rem),
+        radial-gradient(circle at bottom right, rgba(88, 166, 255, 0.16), transparent 26rem),
+        var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 18px;
+    }
+
+    main {
+      width: min(1050px, 100%);
+    }
+
+    .title {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .title p {
+      margin: 0 0 10px;
+      color: var(--accent);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 6vw, 4.25rem);
+      line-height: 1;
+    }
+
+    .subtitle {
+      max-width: 680px;
+      margin: 16px auto 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.5;
+    }
+
+    .level-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 34px;
+    }
+
+    .level {
+      min-height: 260px;
+      color: inherit;
+      text-decoration: none;
+      background: linear-gradient(180deg, var(--panel-strong), var(--panel));
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 18px 32px var(--shadow);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .level::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-top: 4px solid var(--level-color);
+      pointer-events: none;
+    }
+
+    .level:hover,
+    .level:focus-visible {
+      transform: translateY(-6px);
+      border-color: var(--level-color);
+      box-shadow: 0 24px 42px var(--shadow), 0 0 0 3px color-mix(in srgb, var(--level-color) 25%, transparent);
+      outline: none;
+    }
+
+    .level-number {
+      width: 52px;
+      height: 52px;
+      border: 2px solid var(--level-color);
+      border-radius: 50%;
+      color: var(--level-color);
+      display: grid;
+      place-items: center;
+      font-size: 1.5rem;
+      font-weight: 800;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .level h2 {
+      margin: 22px 0 10px;
+      font-size: 1.25rem;
+      line-height: 1.2;
+    }
+
+    .level p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 0.96rem;
+    }
+
+    .tag {
+      width: fit-content;
+      margin-top: 18px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      color: #10131b;
+      background: var(--level-color);
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .footer {
+      margin-top: 28px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 950px) {
+      .level-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .level:last-child {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 560px) {
+      body {
+        align-items: flex-start;
+      }
+
+      .level-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .level,
+      .level:last-child {
+        min-height: 220px;
+        grid-column: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="title" aria-labelledby="page-title">
+      <p>Matemática - Selector de partida</p>
+      <h1 id="page-title">Elegí tu nivel</h1>
+      <div class="subtitle">
+        Cada nivel abre una de tus páginas de estudio. Los archivos originales quedan separados y siguen funcionando como hasta ahora.
+      </div>
+    </section>
+
+    <section class="level-grid" aria-label="Niveles disponibles">
+      <a class="level" href="index.html" style="--level-color: #2fd27f;">
+        <div>
+          <div class="level-number">1</div>
+          <h2>Primer parcial: teoría</h2>
+          <p>Conceptos y explicaciones para preparar la parte teórica del primer parcial.</p>
+        </div>
+        <span class="tag">Entrar</span>
+      </a>
+
+      <a class="level" href="index2.html" style="--level-color: #58a6ff;">
+        <div>
+          <div class="level-number">2</div>
+          <h2>Primer parcial: práctica</h2>
+          <p>Ejercicios y entrenamiento práctico para resolver problemas del primer parcial.</p>
+        </div>
+        <span class="tag">Entrar</span>
+      </a>
+
+      <a class="level" href="index3.html" style="--level-color: #ffcc66;">
+        <div>
+          <div class="level-number">3</div>
+          <h2>Segundo parcial: teoría Claude</h2>
+          <p>Material teórico del segundo parcial armado desde la versión de Claude.</p>
+        </div>
+        <span class="tag">Entrar</span>
+      </a>
+
+      <a class="level" href="index4.html" style="--level-color: #ff7a90;">
+        <div>
+          <div class="level-number">4</div>
+          <h2>Segundo parcial: teoría Xiaomi Mimo</h2>
+          <p>Otra ruta teórica para repasar los contenidos centrales del segundo parcial.</p>
+        </div>
+        <span class="tag">Entrar</span>
+      </a>
+
+      <a class="level" href="index5.html" style="--level-color: #b78cff;">
+        <div>
+          <div class="level-number">5</div>
+          <h2>Derivadas: teoría y práctica</h2>
+          <p>Explicación y ejercicios de derivadas para reforzar el segundo parcial.</p>
+        </div>
+        <span class="tag">Entrar</span>
+      </a>
+    </section>
+
+    <div class="footer">Abrí este archivo como punto de inicio: menu.html</div>
+  </main>
+</body>
+</html>

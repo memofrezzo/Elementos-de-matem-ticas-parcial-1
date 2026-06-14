@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Derivadas — Paso a Paso con Explicaciones</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['\\(','\\)'],['$','$']], displayMath: [['\\[','\\]'],['$$','$$']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+    <style>
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        :root{
+            --bg:#0b0e17;
+            --bg-surface:#111827;
+            --bg-card:#1a1f35;
+            --accent:#e2a63d;
+            --accent-soft:#f5dea8;
+            --accent-bg:rgba(226,166,61,.08);
+            --green:#22c55e;
+            --green-bg:rgba(34,197,94,.08);
+            --blue:#3b82f6;
+            --blue-bg:rgba(59,130,246,.08);
+            --red:#ef4444;
+            --red-bg:rgba(239,68,68,.08);
+            --purple:#a78bfa;
+            --purple-bg:rgba(167,139,250,.08);
+            --cyan:#22d3ee;
+            --cyan-bg:rgba(34,211,238,.08);
+            --text:#e8e4dd;
+            --text-dim:#8b8a88;
+            --text-muted:#5c5b59;
+            --font-display:'Playfair Display',Georgia,serif;
+            --font-body:'Source Serif 4',Georgia,serif;
+            --font-mono:'JetBrains Mono','Courier New',monospace;
+            --radius:16px;
+            --radius-sm:10px;
+            --sidebar-w:280px;
+        }
+        html{scroll-behavior:smooth;scroll-padding-top:24px;font-size:16px}
+        body{
+            font-family:var(--font-body);color:var(--text);
+            background:var(--bg);line-height:1.78;
+            -webkit-font-smoothing:antialiased;
+        }
+        h1,h2,h3,h4{font-family:var(--font-display);font-weight:700;line-height:1.25;color:#fff}
+
+        /* SIDEBAR */
+        .sidebar{
+            position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;
+            background:var(--bg-surface);z-index:100;display:flex;flex-direction:column;
+            border-right:1px solid rgba(255,255,255,.04);
+            transition:transform .35s cubic-bezier(.4,0,.2,1);
+        }
+        .sidebar-head{padding:28px 22px 18px;border-bottom:1px solid rgba(255,255,255,.06)}
+        .sidebar-head h1{font-size:1.3rem;letter-spacing:-.01em}
+        .sidebar-head p{font-size:.76rem;color:var(--text-dim);margin-top:3px;font-family:var(--font-body)}
+        .sidebar-nav{flex:1;overflow-y:auto;padding:12px 0}
+        .sidebar-nav::-webkit-scrollbar{width:3px}
+        .sidebar-nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:3px}
+        .nav-group-title{
+            padding:14px 22px 6px;font-size:.7rem;font-family:var(--font-mono);
+            text-transform:uppercase;letter-spacing:.12em;color:var(--text-muted);
+        }
+        .nav-link{
+            display:block;padding:8px 22px;font-size:.86rem;
+            color:var(--text-dim);text-decoration:none;font-family:var(--font-body);
+            transition:all .15s;border-left:3px solid transparent;cursor:pointer;
+        }
+        .nav-link:hover{color:var(--text);background:rgba(255,255,255,.02)}
+        .nav-link.active{color:var(--accent);border-left-color:var(--accent);background:rgba(226,166,61,.04)}
+
+        /* MOBILE */
+        .menu-btn{
+            display:none;position:fixed;top:14px;left:14px;z-index:200;
+            width:44px;height:44px;border-radius:10px;border:none;
+            background:var(--bg-surface);color:#fff;font-size:1.3rem;cursor:pointer;
+            box-shadow:0 4px 16px rgba(0,0,0,.3);align-items:center;justify-content:center;
+        }
+        .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:90}
+
+        .main{margin-left:var(--sidebar-w);min-height:100vh}
+
+        /* HERO */
+        .hero{
+            position:relative;padding:72px 56px 56px;
+            background:linear-gradient(145deg,#0f1424 0%,#1a1040 50%,#0f1424 100%);
+            overflow:hidden;
+        }
+        .hero::before{
+            content:'';position:absolute;inset:0;
+            background:
+                radial-gradient(ellipse at 15% 85%,rgba(226,166,61,.12) 0%,transparent 50%),
+                radial-gradient(ellipse at 85% 15%,rgba(59,130,246,.08) 0%,transparent 50%);
+        }
+        .hero>*{position:relative;z-index:1}
+        .hero h2{
+            font-size:2.6rem;
+            background:linear-gradient(135deg,#fff 20%,var(--accent-soft));
+            -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+            margin-bottom:10px;
+        }
+        .hero p{max-width:640px;color:rgba(255,255,255,.6);font-size:1.05rem}
+        .hero .pills{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap}
+        .hero .pill{
+            padding:5px 14px;border-radius:20px;font-size:.8rem;font-family:var(--font-mono);
+            border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5);
+        }
+
+        /* SECTIONS */
+        .section{padding:48px 52px 56px;max-width:1060px}
+        .section-header{
+            display:flex;align-items:center;gap:16px;
+            margin-bottom:36px;padding-bottom:20px;
+            border-bottom:1px solid rgba(255,255,255,.06);
+        }
+        .section-icon{
+            width:50px;height:50px;border-radius:14px;
+            display:flex;align-items:center;justify-content:center;font-size:1.4rem;
+        }
+        .section-header h2{font-size:1.85rem}
+        .section-header .sub{font-size:.85rem;color:var(--text-dim);font-weight:400;font-family:var(--font-body);margin-top:3px}
+
+        /* CARDS */
+        .card{
+            background:var(--bg-card);border-radius:var(--radius);
+            padding:30px 34px;margin-bottom:24px;
+            border:1px solid rgba(255,255,255,.04);
+            opacity:0;transform:translateY(16px);
+            animation:fadeUp .45s ease forwards;
+        }
+        .card h3{font-size:1.3rem;margin-bottom:6px;display:flex;align-items:center;gap:10px;color:var(--accent)}
+        .card p{margin-bottom:12px}
+        .card ul,.card ol{margin:8px 0 12px 20px}
+        .card li{margin-bottom:6px}
+
+        /* FORMULA BLOCK */
+        .formula-block{
+            background:rgba(226,166,61,.04);border-left:3px solid var(--accent);
+            border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+            padding:18px 22px;margin:14px 0;overflow-x:auto;
+        }
+        .formula-block .fl{
+            font-family:var(--font-mono);font-size:.68rem;
+            text-transform:uppercase;letter-spacing:.1em;
+            color:var(--accent);margin-bottom:6px;font-weight:500;
+        }
+
+        /* EN PALABRAS — THE NEW KEY ELEMENT */
+        .en-palabras{
+            background:rgba(34,197,94,.05);
+            border-left:3px solid var(--green);
+            border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+            padding:14px 18px;margin:10px 0;
+            font-size:.92rem;color:rgba(255,255,255,.82);
+            line-height:1.7;
+        }
+        .en-palabras .ep-tag{
+            font-family:var(--font-mono);font-size:.65rem;
+            text-transform:uppercase;letter-spacing:.08em;
+            color:var(--green);margin-bottom:4px;font-weight:500;
+            display:block;
+        }
+
+        /* FORMULA TABLE */
+        .formula-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.9rem}
+        .formula-table th{
+            padding:10px 14px;text-align:left;
+            font-family:var(--font-mono);font-size:.72rem;
+            text-transform:uppercase;letter-spacing:.08em;
+            color:var(--text-dim);border-bottom:1px solid rgba(255,255,255,.08);
+            background:rgba(255,255,255,.02);
+        }
+        .formula-table td{
+            padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.03);
+            vertical-align:top;
+        }
+        .formula-table tr:hover td{background:rgba(255,255,255,.015)}
+
+        /* EXERCISE BOX */
+        .exercise-box{
+            background:var(--bg-card);border-radius:var(--radius);
+            border:1px solid rgba(255,255,255,.06);
+            margin-bottom:32px;overflow:hidden;
+            opacity:0;transform:translateY(16px);
+            animation:fadeUp .45s ease forwards;
+        }
+        .ex-header{
+            padding:22px 28px;display:flex;align-items:center;justify-content:space-between;
+            cursor:pointer;user-select:none;transition:background .2s;
+            border-bottom:1px solid rgba(255,255,255,.04);
+        }
+        .ex-header:hover{background:rgba(255,255,255,.02)}
+        .ex-header .ex-title{
+            font-family:var(--font-display);font-size:1.15rem;font-weight:600;color:#fff;
+            display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+        }
+        .ex-header .ex-title .ex-badge{
+            font-family:var(--font-mono);font-size:.65rem;padding:3px 8px;
+            border-radius:6px;font-weight:500;
+        }
+        .ex-header .arrow{transition:transform .3s;color:var(--text-dim);font-size:.85rem;flex-shrink:0}
+        .ex-header.open .arrow{transform:rotate(180deg)}
+        .ex-body{max-height:0;overflow:hidden;transition:max-height .6s ease}
+        .ex-body.open{max-height:12000px}
+        .ex-body-inner{padding:24px 28px 28px}
+
+        /* STEP */
+        .step{
+            display:flex;gap:14px;margin-bottom:16px;
+            padding:16px 18px;border-radius:var(--radius-sm);
+            background:rgba(255,255,255,.015);
+            border-left:3px solid transparent;
+        }
+        .step:hover{background:rgba(255,255,255,.025)}
+        .step-num{
+            flex-shrink:0;width:32px;height:32px;line-height:32px;
+            text-align:center;border-radius:50%;
+            font-family:var(--font-mono);font-size:.75rem;font-weight:500;color:#fff;
+        }
+        .step-content{flex:1;min-width:0}
+        .step-content .step-label{
+            font-family:var(--font-mono);font-size:.7rem;
+            text-transform:uppercase;letter-spacing:.08em;
+            margin-bottom:6px;font-weight:500;
+        }
+        .step-content p{margin-bottom:6px}
+        .step-content .explanation{
+            font-size:.88rem;color:var(--text-dim);
+            font-style:italic;margin-top:4px;
+        }
+
+        /* TIP BOX */
+        .tip{border-radius:var(--radius-sm);padding:14px 18px;margin:14px 0;font-size:.9rem;display:flex;gap:10px}
+        .tip.warn{background:var(--red-bg);border:1px solid rgba(239,68,68,.15)}
+        .tip.info{background:var(--blue-bg);border:1px solid rgba(59,130,246,.15)}
+        .tip.success{background:var(--green-bg);border:1px solid rgba(34,197,94,.15)}
+        .tip.gold{background:var(--accent-bg);border:1px solid rgba(226,166,61,.15)}
+        .tip .tip-i{flex-shrink:0;font-size:1rem}
+
+        /* THEME COLORS */
+        .theme-definitions .step-num{background:var(--accent)}
+        .theme-definitions .step .step-label{color:var(--accent)}
+        .theme-definitions .step{border-left-color:rgba(226,166,61,.2)}
+        .theme-exercises .step-num{background:var(--green)}
+        .theme-exercises .step .step-label{color:var(--green)}
+        .theme-exercises .step{border-left-color:rgba(34,197,94,.2)}
+
+        .to-top{
+            position:fixed;bottom:24px;right:24px;width:44px;height:44px;
+            border-radius:50%;border:none;background:var(--accent);
+            color:#000;font-size:1.1rem;cursor:pointer;
+            box-shadow:0 4px 16px rgba(226,166,61,.3);
+            opacity:0;pointer-events:none;transition:all .3s;z-index:50;
+        }
+        .to-top.show{opacity:1;pointer-events:all}
+        .to-top:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(226,166,61,.4)}
+
+        @keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+
+        @media(max-width:1024px){
+            .sidebar{transform:translateX(-100%)}
+            .sidebar.open{transform:translateX(0)}
+            .menu-btn{display:flex}
+            .overlay.show{display:block}
+            .main{margin-left:0}
+            .hero{padding:60px 24px 40px}
+            .hero h2{font-size:1.9rem}
+            .section{padding:32px 18px 48px}
+            .card,.exercise-box{padding:20px 18px}
+            .ex-body-inner{padding:18px}
+            .step{flex-direction:column;gap:8px;padding:12px}
+        }
+        @media(max-width:600px){html{font-size:15px}.hero h2{font-size:1.5rem}}
+    </style>
+</head>
+<body>
+
+<button class="menu-btn" id="menuBtn" aria-label="Menú">☰</button>
+<div class="overlay" id="overlay"></div>
+
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-head">
+        <h1>Derivadas</h1>
+        <p>Cada fórmula explicada en palabras</p>
+    </div>
+    <nav class="sidebar-nav">
+        <div class="nav-group-title">Parte I — Resumen</div>
+        <a class="nav-link" href="#definicion">Definición de derivada</a>
+        <a class="nav-link" href="#geometrica">Interpretación geométrica</a>
+        <a class="nav-link" href="#reglas-basicas">Reglas básicas</a>
+        <a class="nav-link" href="#producto-cociente">Producto y cociente</a>
+        <a class="nav-link" href="#cadena">Regla de la cadena</a>
+        <a class="nav-link" href="#potencia-log">Potencia y logaritmos</a>
+        <a class="nav-link" href="#exponenciales">Exponenciales</a>
+        <a class="nav-link" href="#trigonometricas">Trigonométricas</a>
+        <a class="nav-link" href="#trig-inversas">Trigonométricas inversas</a>
+        <a class="nav-link" href="#sucesivas">Derivadas sucesivas</a>
+        <div class="nav-group-title" style="margin-top:12px">Parte II — Ejercicios</div>
+        <a class="nav-link" href="#ej1">Ej 1: Potencia y suma</a>
+        <a class="nav-link" href="#ej2">Ej 2: Producto</a>
+        <a class="nav-link" href="#ej3">Ej 3: Cociente</a>
+        <a class="nav-link" href="#ej4">Ej 4: Cadena simple</a>
+        <a class="nav-link" href="#ej5">Ej 5: Cadena doble</a>
+        <a class="nav-link" href="#ej6">Ej 6: Logaritmo</a>
+        <a class="nav-link" href="#ej7">Ej 7: Exponencial</a>
+        <a class="nav-link" href="#ej8">Ej 8: Trigonométrica</a>
+        <a class="nav-link" href="#ej9">Ej 9: Tangente a curva</a>
+        <a class="nav-link" href="#ej10">Ej 10: Cociente + cadena</a>
+        <a class="nav-link" href="#ej11">Ej 11: Log base arbitraria</a>
+        <a class="nav-link" href="#ej12">Ej 12: Potencia variable</a>
+    </nav>
+</aside>
+
+<div class="main">
+
+    <!-- HERO -->
+    <header class="hero">
+        <h2>Derivadas Explicadas en Palabras</h2>
+        <p>Cada fórmula tiene su explicación en lenguaje simple. Cada paso de cada ejercicio te dice qué significa la expresión que estás viendo. Para que las matemáticas dejen de ser símbolos y pasen a ser ideas.</p>
+        <div class="pills">
+            <span class="pill">Cada fórmula = una explicación</span>
+            <span class="pill">12 ejercicios completos</span>
+            <span class="pill">Sin misterios</span>
+        </div>
+    </header>
+
+    <!-- ======================== PARTE I ======================== -->
+    <section class="section theme-definitions" id="definicion">
+        <div class="section-header">
+            <div class="section-icon" style="background:var(--accent-bg);color:var(--accent)">📖</div>
+            <div>
+                <h2>Parte I — Resumen Explicado</h2>
+                <div class="sub">Cada regla de derivación con su fórmula Y su explicación en palabras</div>
+            </div>
+        </div>
+
+        <!-- DEFINICIÓN -->
+        <article class="card">
+            <h3>Definición de derivada</h3>
+            <p>Antes de ver la fórmula, pensemos en qué significa <em>derivar</em>: queremos saber <strong>qué tan rápido cambia</strong> una función en un punto específico.</p>
+
+            <div class="formula-block">
+                <div class="fl">Primera forma (usando un incremento h)</div>
+                \[ f'(x_0) = \lim_{h \to 0} \frac{f(x_0 + h) - f(x_0)}{h} \]
+            </div>
+            <div class="en-palabras">
+                <span class="ep-tag">En palabras</span>
+                "Tomá un punto \(x_0\). Ahora movete un poquitito (\(h\)) hacia la derecha hasta llegar a \(x_0 + h\). Medí cuánto cambió la función: eso es \(f(x_0 + h) - f(x_0)\). Dividilo por el poquitito \(h\) que te moviste: eso te da el <strong>promedio</strong> de cambio. Ahora hacé ese poquitito \(h\) cada vez más chiquito, hasta que sea prácticamente cero. Ese valor límite es la <strong>derivada</strong>: te dice exactamente qué tan rápido está cambiando la función en ese punto."
+            </div>
+
+            <div class="formula-block">
+                <div class="fl">Segunda forma (usando x directamente)</div>
+                \[ f'(x_0) = \lim_{x \to x_0} \frac{f(x) - f(x_0)}{x - x_0} \]
+            </div>
+            <div class="en-palabras">
+                <span class="ep-tag">En palabras</span>
+                "Es exactamente la misma idea, pero en vez de usar un incremento \(h\), usás directamente otro punto \(x\) que se va acercando a \(x_0\). Calculás cuánto cambió la función entre esos dos puntos (\(f(x) - f(x_0)\)), lo dividís por la distancia entre ellos (\(x - x_0\)), y hacés que \(x\) se acerque cada vez más a \(x_0\). El resultado es el mismo."
+            </div>
+        </article>
+
+        <!-- INTERPRETACIÓN GEOMÉTRICA -->
+        <article class="card" id="geometrica">
+            <h3>Interpretación geométrica</h3>
+            <p>La derivada tiene un significado visual muy claro en una gráfica.</p>
+
+            <div class="formula-block">
+                <div class="fl">Recta tangente</div>
+                \[ y - f(x_0) = f'(x_0) \cdot (x - x_0) \]
+            </div>
+            <div class="en-palabras">
+                <span class="ep-tag">En palabras</span>
+                "Si dibujás la curva de una función y en un punto trazás la recta que apenas la toca (sin atravesarla), esa es la <strong>recta tangente</strong>. La derivada \(f'(x_0)\) te dice la <strong>pendiente</strong> de esa recta: qué tan inclinada está. Si la derivada es grande y positiva, la recta sube empinada. Si es negativa, baja. Si es cero, la recta es horizontal (el punto es una cima o un valle)."
+            </div>
+
+            <div class="formula-block">
+                <div class="fl">Recta normal (perpendicular a la tangente)</div>
+                \[ y - f(x_0) = -\frac{1}{f'(x_0)} \cdot (x - x_0) \]
+            </div>
+            <div class="en-palabras">
+                <span class="ep-tag">En palabras</span>
+                "La <strong>recta normal</strong> es la que es perpendicular (forma un ángulo de 90 grados) con la tangente en el mismo punto. Su pendiente es la pendiente de la tangente 'invertida y con signo cambiado'. Es decir: si la tangente tiene pendiente \(2\), la normal tiene pendiente \(-\frac{1}{2}\). Si la tangente tiene pendiente \(-3\), la normal tiene pendiente \(\frac{1}{3}\)."
+            </div>
+
+            <div class="tip warn">
+                <span class="tip-i">⚠️</span>
+                <span>En el resumen original la recta normal aparece sin el signo menos. La fórmula correcta incluye el signo negativo: \(-\frac{1}{f'(x_0)}\). Esto se debe a que dos rectas perpendiculares tienen pendientes que son la una la opuesta de la inversa de la otra.</span>
+            </div>
+        </article>
+
+        <!-- REGLAS BÁSICAS -->
+        <article class="card" id="reglas-basicas">
+            <h3>Reglas básicas de derivación</h3>
+
+            <h4 style="color:var(--accent);font-size:1.05rem;margin:16px 0 8px">Regla 1: La constante</h4>
+            <div class="formula-block">
+                <div class="fl">Fórmula</div>
+                \[ D(k) = 0 \]
+            </div>
+            <div class="en-palabras">
+                <span class="ep-tag">En palabras</span>
+                "La derivada de cualquier número fijo (una constante) es <strong>cero</strong>. ¿Por qué? Porque un número como \(5\) o \(-3\) no cambia. Si no cambia, su velocidad de cambio es cero. Pensalo así: si tu temperatura es siempre 20 grados sin variar, la velocidad con que cambia tu temperatura es cero."
+            </div>
+
+            <h4 style="color:var(--accent);font-size:1.05rem;margin:20px 0 8px">Regla 2: La función identidad</h4>
+            <div class="formula-block">
+                <div class="fl">Fórmula</div>
+                \[ D(x) = 1 \]
+            </div>
+            <div class="en-palabras">
+                <span class="ep-tag">En palabras</span>
+                "La derivada de \(x\) (es decir, de la función \(f(x) = x\)) es <strong>1</strong>. Esto tiene sentido: si \(x\) avanza una unidad, \(f(x)\) también avanza exactamente una unidad. Siempre cambia al mismo ritmo que \(x\), es decir, con razón 1."
+            </div>
+
+            <h4 style="color:var(--accent);font-size:1.05rem;margin:20px 0 8px">Regla 3: Suma o resta de funciones</h4>
+            <div class="formula-block">
+                <div class="fl">Fórmula</div>
+                \[ [f(x) \pm g(x)]' = f'(x) \pm g'(x) \]
+            </div>
+            <div class="en-palabras">
+                <span class="ep-tag">En palabras</span>
+                "Si tenés una función que es la suma (o resta) de dos partes, derivás <strong>cada parte por separado</strong> y después sumás (o restás) los resultados. Es como si calcularas el cambio de cada parte independientemente."
+            </div>
+
+            <h4 style="color:var(--accent);font-size:1.05rem;margin:20px 0 8px">Regla 4: Constante multiplicando una función</h4>
+            <div class="formula-block">
+                <div class="fl">Fórmula</div>
+                \[ [k \cdot f(x)]' = k \cdot f'(x) \]
+            </div>
+            <div class="en-palabras">
+                <span class="ep-tag">En palabras</span>
+                "Si tenés un número fijo multiplicando a una función, ese número <strong>se mantiene</strong> y simplemente se multiplica por la derivada de la función. No se deriva el número, solo 'sale' y queda multiplicando. Ejemplo: si tenés \(7x^2\), el \(7\) se queda, y derivás solo el \(x^2\): queda \(7 \cdot 2x = 14x\)."
+            </div>
+        </article>
+
+        <!-- PRODUCTO Y COCIENTE -->
+        <article class="card" id="producto-cociente">
+            <h3>Producto y cociente de funciones</h3>
+
+            <h4 style="color:var(--accent);font-size:1.05rem;margin:16px 0 8px">Regla del producto</h4>
+            <div class="formula-block">
+                <div class="fl">Fórmula</div>
+                \[ [f(x) \cdot g(x)]' = f'(x) \cdot g(x) + f(x) \cdot g'(x) \]
+            </div>
+            <div class="en-palabras">
+                <span class="ep-tag">En palabras</span>
+                "Cuando tenés dos funciones multiplicadas entre sí, la derivada se hace en <strong>dos pedazos</strong> que se suman:<br>
+                <strong>Pedazo 1:</strong> Derivás la primera función y la multiplicás por la segunda (sin derivar).<br>
+                <strong>Pedazo 2:</strong> Dejás la primera función como está (sin derivar) y la multiplicás por la derivada de la segunda.<br>
+                Después sumás ambos pedazos."
+            </div>
+            <div class="tip gold">
+                <span class="tip-i">🧠</span>
+                <span><strong>Truco para recordarlo:</strong> "Derivá al primero, dejá al segundo; dejá al primero, derivá al segundo. Sumá los dos resultados."</span>
+            </div>
+
+            <h4 style="color:var(--accent);font-size:1.05rem;margin:20px 0 8px">Regla del cociente</h4>
+            <div class="formula-block">
+                <div class="fl">Fórmula</div>
+                \[ \left[\frac{f(x)}{g(x)}\right]' = \frac{f'(x) \cdot g(x) - f(x) \cdot g'(x)}{[g(x)]^2} \]
+            </div>
+            <div class="en-palabras">
+                <span class="ep-tag">En palabras</span>
+                "Cuando tenés una división de dos funciones (numerador arriba, denominador abajo), la derivada se construye así:<br><br>
+                <strong>Arriba (numerador de la derivada):</strong> derivás el numerador original y lo multiplicás por el denominador original. A eso le restás: el numerador original multiplicado por la derivada del denominador.<br><br>
+                <strong>Abajo (denominador de la derivada):</strong> el denominador original elevado al cuadrado."
+            </div>
+            <div class="tip warn">
+                <span class="tip-i">⚠️</span>
+                <span>¡Cuidado con el orden! Es <strong>primero la derivada del numerador por el denominador</strong>, y después se <strong>resta</strong> (no se suma) el numerador por la derivada del denominador. Si invertís el orden, te equivocás.</span>
+            </div>
+        </article>
+
+        <!-- CADENA -->
+        <article class="card" id="cadena">
+            <h3>Regla de la cadena</h3>
+            <p>Esta regla se usa cuando tenés <strong>"una función dentro de otra"</strong>. Por ejemplo: \(\sqrt{x^3 + 1}\) tiene una raíz cuadrada "por fuera" y un polinomio "por dentro".</p>
+
+            <div class="formula-block">
+                <div class="fl">Fórmula</div>
+                \[ [f(g(x))]' = f'(g(x)) \cdot g'(x) \]
+            </div>
+            <div class="en-palabras">
+                <span class="ep-tag">En palabras</span>
+                "Cuando tenés una función compuesta (una dentro de otra), hacés dos cosas:<br><br>
+                <strong>Paso 1:</strong> Derivás la función de <strong>afuera</strong>, pero dejás la de adentro tal cual está.<br>
+                <strong>Paso 2:</strong> Multiplicás el resultado por la <strong>derivada de la de adentro</strong>.<br><br>
+                Es como desarmar una muñeca rusa: primero tratás la capa de afuera, y después la de adentro. Y los resultados se multiplican entre sí."
+            </div>
+            <div class="tip success">
+                <span class="tip-i">✅</span>
+                <span><strong>Pregunta clave para saber si necesitás la cadena:</strong> "¿Hay algo dentro de otra función?" Si la respuesta es sí (por ejemplo: seno de algo, raíz de algo, elevar algo a una potencia), necesitás la cadena.</span>
+            </div>
+        </article>
+
+        <!-- POTENCIA Y LOG -->
+        <article class="card" id="potencia-log">
+            <h3>Funciones potenciales y logarítmicas</h3>
+
+            <h4 style="color:var(--accent);font-size:1.05rem;margin:16px 0 8px">Función potencial</h4>
+            <div class="formula-block">
+                <div class="fl">Fórmula básica</div>
+                \[ D(x^\alpha) = \alpha \cdot x^{\alpha-1} \]
+            </div>
+            <div class="en-palabras">
+                <span class="ep-tag">En palabras</span>
+                "Para derivar una potencia de \(x\), hacés dos cosas:<br>
+                <strong>1)</strong> Bajás el exponente y lo ponés como multiplicador adelante.<br>
+                <strong>2)</strong> Al exponente nuevo le restás 1.<br><br>
+                Ejemplo: \(x^5\) → bajás el 5 adelante → \(5 \cdot x\) → al exponente le restás 1 → \(5 \cdot x^{5-1} = 5x^4\)."
+            </div>
+
+            <div class="formula-block">
+                <div class="fl">Con regla de la cadena (cuando la base es una función)</div>
+                \[ D(u^\alpha) = \alpha \cdot u^{\alpha-1} \cdot u' \]
+            </div>
+            <div class="en-palabras">
+                <span class="ep-tag">En palabras</span>
+                "Cuando la base no es simplemente \(x\) sino una función \(u(x)\) (por ejemplo \((x^2 + 1)^3\)), aplicás la misma regla de la potencia pero al final <strong>multiplicás por la derivada de la base</strong>. Ese '\(\cdot u'\)' es la regla de la cadena actuando."
+            </div>
+
+            <h4 style="color:var(--accent);font-size:1.05rem;margin:20px 0 8px">Funciones logarítmicas</h4>
+
+            <div class="formula-block">
+                <div class="fl">Logaritmo natural</div>
+                \[ D(\ln x) = \frac{1}{x} \qquad D(\ln u) = \frac{u'}{u} \]
+            </div>
+            <div class="en-palabras">
+                <span class="ep-tag">En palabras</span>
+                "La derivada del logaritmo natural de \(x\) es <strong>uno dividido \(x\)</strong>. Es una de las fórmulas más simples y útiles que existen. Si la base del logaritmo es una función \(u(x)\), entonces derivás esa función y la dividís por ella misma."
+            </div>
+
+            <div class="formula-block">
+                <div class="fl">Logaritmo en base a</div>
+                \[ D(\log_a x) = \frac{1}{\ln a} \cdot \frac{1}{x} \qquad D(\log_a u) = \frac{1}{\ln a} \cdot \frac{u'}{u} \]
+            </div>
+            <div class="en-palabras">
+                <span class="ep-tag">En palabras</span>
+                "Para un logaritmo en cualquier base \(a\), es lo mismo que el logaritmo natural pero <strong>dividido por \(\ln a\)</strong>. Es como un factor de corrección. Por ejemplo, \(\log_3(x)\) se deriva como \(\frac{1}{\ln 3} \cdot \frac{1}{x}\). El \(\ln 3\) es simplemente un número que queda fijo."
+            </div>
+        </article>
+
+        <!-- EXPONENCIALES -->
+        <article class="card" id="exponenciales">
+            <h3>Funciones exponenciales</h3>
+
+            <div class="formula-block">
+                <div class="fl">Exponencial base e</div>
+                \[ D(e^x) = e^x \qquad D(e^u) = e^u \cdot u' \]
+            </div>
+            <div class="en-palabras">
+                <span class="ep-tag">En palabras</span>
+                "La función \(e^x\) es la <strong>única función del mundo que es igual a su propia derivada</strong>. Si la derivás, queda exactamente igual. Es una propiedad única y extraordinaria. Si el exponente es una función \(u(x)\), se multiplica por la derivada de esa función (cadena)."
+            </div>
+
+            <div class="formula-block">
+                <div class="fl">Exponencial base a</div>
+                \[ D(a^x) = a^x \cdot \ln a \qquad D(a^u) = a^u \cdot u' \cdot \ln a \]
+            </div>
+            <div class="en-palabras">
+                <span class="ep-tag">En palabras</span>
+                "Para cualquier base \(a\) (como \(2^x\) o \(10^x\)), la derivada es la función original <strong>multiplicada por \(\ln a\)</strong>. Por ejemplo, la derivada de \(2^x\) es \(2^x \cdot \ln 2\). El \(\ln 2\) es un número aproximadamente igual a \(0{,}693\) que queda como factor constante."
+            </div>
+
+            <h4 style="color:var(--accent);font-size:1.05rem;margin:20px 0 8px">Derivación logarítmica (para \(u^v\))</h4>
+            <p>Cuando tanto la base como el exponente son funciones (por ejemplo \(x^{\operatorname{sen} x}\)), no podés usar ninguna regla directa. Usás este método:</p>
+            <div class="formula-block">
+                <div class="fl">Pasos del método</div>
+                <ol style="margin:0;padding-left:18px;font-size:.92rem">
+                    <li>Igualá la función a \(y\): \(y = u^v\).</li>
+                    <li>Aplicá logaritmo natural (\(\ln\)) en ambos lados: \(\ln y = v \cdot \ln u\).</li>
+                    <li>Derivás ambos lados respecto de \(x\): \(\frac{y'}{y} = v' \cdot \ln u + v \cdot \frac{u'}{u}\).</li>
+                    <li>Despejás \(y'\) multiplicando por \(y\): \(y' = y \cdot \left(v' \cdot \ln u + v \cdot \frac{u'}{u}\right)\).</li>
+                </ol>
+            </div>
+            <div class="en-palabras">
+                <span class="ep-tag">En palabras</span>
+                "El truco es: como no sabés cómo derivar \(u^v\) directamente, tomás logaritmo en ambos lados. Eso convierte la potencia en un producto (\(\ln(u^v) = v \cdot \ln u\)), y un producto sí sabés derivar. Después despejás la derivada original. Es como 'hacer una vueltita' para transformar un problema difícil en uno fácil."
+            </div>
+        </article>
+
+        <!-- TRIG -->
+        <article class="card" id="trigonometricas">
+            <h3>Funciones trigonométricas</h3>
+            <table class="formula-table">
+                <thead><tr><th style="width:30%">Función</th><th style="width:28%">Derivada</th><th>Con cadena</th></tr></thead>
+                <tbody>
+                    <tr><td>\(\operatorname{sen} x\)</td><td>\(\cos x\)</td><td>\([\operatorname{sen} u]' = u' \cos u\)</td></tr>
+                    <tr><td>\(\cos x\)</td><td>\(-\operatorname{sen} x\)</td><td>\([\cos u]' = -u' \operatorname{sen} u\)</td></tr>
+                    <tr><td>\(\operatorname{tg} x\)</td><td>\(\frac{1}{\cos^2 x}\)</td><td>\([\operatorname{tg} u]' = \frac{u'}{\cos^2 u}\)</td></tr>
+                </tbody>
+            </table>
+            <div class="en-palabras">
+                <span class="ep-tag">En palabras</span>
+                "<strong>Seno → coseno:</strong> La derivada del seno es el coseno. Es positiva: el signo no cambia.<br>
+                <strong>Coseno → menos seno:</strong> La derivada del coseno es menos seno. ¡Ojo con el signo negativo! Es el error más común.<br>
+                <strong>Tangente → 1/cos²:</strong> La derivada de la tangente es uno dividido el coseno al cuadrado. Esto también se puede escribir como \(1 + \operatorname{tg}^2 x\) (usando una identidad trigonométrica).<br><br>
+                <strong>La columna 'Con cadena'</strong> te dice qué pasa cuando en vez de \(\operatorname{sen} x\) tenés algo como \(\operatorname{sen}(x^2)\): derivás igual pero al final multiplicás por la derivada de lo que está adentro."
+            </div>
+        </article>
+
+        <!-- TRIG INVERSAS -->
+        <article class="card" id="trig-inversas">
+            <h3>Funciones trigonométricas inversas</h3>
+            <table class="formula-table">
+                <thead><tr><th style="width:28%">Función</th><th style="width:32%">Derivada</th><th>Con cadena</th></tr></thead>
+                <tbody>
+                    <tr><td>\(\arcsen x\)</td><td>\(\frac{1}{\sqrt{1-x^2}}\)</td><td>\(\frac{u'}{\sqrt{1-u^2}}\)</td></tr>
+                    <tr><td>\(\arccos x\)</td><td>\(\frac{-1}{\sqrt{1-x^2}}\)</td><td>\(\frac{-u'}{\sqrt{1-u^2}}\)</td></tr>
+                    <tr><td>\(\arctg x\)</td><td>\(\frac{1}{1+x^2}\)</td><td>\(\frac{u'}{1+u^2}\)</td></tr>
+                </tbody>
+            </table>
+            <div class="en-palabras">
+                <span class="ep-tag">En palabras</span>
+                "<strong>Arcoseno:</strong> Su derivada es uno dividido la raíz cuadrada de (uno menos \(x\) al cuadrado). Piensalo como: uno sobre una raíz que se hace cada vez más chica a medida que \(x\) se acerca a 1 o -1.<br><br>
+                <strong>Arcocoseno:</strong> Igual que el arcoseno pero con un <strong>signo menos</strong> adelante.<br><br>
+                <strong>Arcotangente:</strong> Su derivada es uno dividido (\(1 + x^2\)). Es una función bonita: el denominador nunca se anula, así que la derivada existe para todo valor de \(x\)."
+            </div>
+            <div class="tip warn">
+                <span class="tip-i">⚠️</span>
+                <span>En el resumen original la derivada de \(\arctg x\) aparece con signo negativo (\(\frac{-1}{1+x^2}\)). La derivada correcta es positiva: \(\frac{1}{1+x^2}\).</span>
+            </div>
+        </article>
+
+        <!-- SUCESIVAS -->
+        <article class="card" id="sucesivas">
+            <h3>Derivadas sucesivas</h3>
+            <div class="formula-block">
+                <div class="fl">Notación</div>
+                \(f(x), \quad f'(x), \quad f''(x), \quad f'''(x), \quad f^{(4)}(x), \quad \dots\)
+            </div>
+            <div class="en-palabras">
+                <span class="ep-tag">En palabras</span>
+                "Podés derivar una función, y después derivar el resultado, y después derivar eso otra vez, y así sucesivamente.<br>
+                \(f'(x)\) es la <strong>primera</strong> derivada (la velocidad de cambio).<br>
+                \(f''(x)\) es la <strong>segunda</strong> derivada (la aceleración, el cambio del cambio).<br>
+                \(f'''(x)\) es la <strong>tercera</strong>, y así...<br><br>
+                Si la función es un polinomio de grado \(n\), eventualmente vas a llegar a cero. Por ejemplo, un polinomio de grado 3 (\(x^3\)) se anula en la cuarta derivada. Pero las funciones como \(\operatorname{sen}(x)\), \(e^x\) o \(\ln(x)\) <strong>nunca</strong> se anulan: podés derivarlas infinitas veces."
+            </div>
+        </article>
+    </section>
+
+    <!-- ======================== PARTE II ======================== -->
+    <section class="section theme-exercises" id="ej1">
+        <div class="section-header">
+            <div class="section-icon" style="background:var(--green-bg);color:var(--green)">✏️</div>
+            <div>
+                <h2>Parte II — Ejercicios Resueltos Paso a Paso</h2>
+                <div class="sub">Cada expresión algebraica leída en voz alta y explicada</div>
+            </div>
+        </div>
+
+        <!-- EJERCICIO 1 -->
+        <div class="exercise-box">
+            <div class="ex-header" onclick="toggleEx(this)">
+                <div class="ex-title">
+                    <span class="ex-badge" style="background:rgba(34,197,94,.12);color:var(--green)">BÁSICO</span>
+                    Ejercicio 1: Potencia y suma
+                </div>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="ex-body">
+                <div class="ex-body-inner">
+                    <p style="margin-bottom:16px;font-size:1.05rem"><strong>Encontrar la derivada de:</strong></p>
+                    <div class="formula-block" style="text-align:center">\[ f(x) = x^5 + 4x^3 - 5x \]</div>
+                    <div class="en-palabras">
+                        <span class="ep-tag">Qué dice la función</span>
+                        "Esta función tiene tres pedazos sumados: \(x\) elevado a la quinta potencia, más 4 veces \(x\) al cubo, menos 5 veces \(x\)."
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">1</div>
+                        <div class="step-content">
+                            <div class="step-label">Identifico qué reglas necesito</div>
+                            <p>Es una <strong>suma de potencias</strong> de \(x\). Reglas a usar: la de <strong>suma</strong> (derivo cada término por separado) y la de la <strong>potencia</strong> (\(D(x^n) = n \cdot x^{n-1}\)).</p>
+                            <div class="en-palabras" style="margin-top:8px">
+                                "Voy a derivar cada pedazo de la función por separado y después juntar los resultados."
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">2</div>
+                        <div class="step-content">
+                            <div class="step-label">Derivo el primer término: \(x^5\)</div>
+                            <p>\[D(x^5) = 5 \cdot x^{5-1} = 5x^4\]</p>
+                            <div class="en-palabras">
+                                "Agarro el exponente 5, lo bajo adelante como multiplicador (queda \(5 \cdot\)) y al exponente le resto 1 (de 5 pasa a 4). Resultado: 5 por \(x\) a la cuarta."
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">3</div>
+                        <div class="step-content">
+                            <div class="step-label">Derivo el segundo término: \(4x^3\)</div>
+                            <p>\[D(4x^3) = 4 \cdot D(x^3) = 4 \cdot 3x^{3-1} = 4 \cdot 3x^2 = 12x^2\]</p>
+                            <div class="en-palabras" style="margin-top:8px">
+                                "El 4 es una constante multiplicando, así que <strong>se queda donde está</strong> y no se deriva. Solo derivo el \(x^3\): el exponente 3 baja adelante y le resto 1 al exponente, dando \(3x^2\). Después multiplico: \(4 \times 3 = 12\). Resultado: 12 por \(x\) al cuadrado."
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">4</div>
+                        <div class="step-content">
+                            <div class="step-label">Derivo el tercer término: \(-5x\)</div>
+                            <p>\[D(-5x) = -5 \cdot D(x) = -5 \cdot 1 = -5\]</p>
+                            <div class="en-palabras">
+                                "El \(-5\) es constante y se queda. Derivo la \(x\) (que es \(x^1\)): el exponente 1 baja adelante y le resto 1 al exponente, quedando \(1 \cdot x^0 = 1\). Entonces \(-5 \times 1 = -5\)."
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">5</div>
+                        <div class="step-content">
+                            <div class="step-label">Junto todo</div>
+                            <p>\[\boxed{f'(x) = 5x^4 + 12x^2 - 5}\]</p>
+                            <div class="en-palabras">
+                                "Sumo los tres resultados: 5 por \(x\) a la cuarta, más 12 por \(x\) al cuadrado, menos 5. Esa es la derivada completa."
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EJERCICIO 2 -->
+        <div class="exercise-box" id="ej2">
+            <div class="ex-header" onclick="toggleEx(this)">
+                <div class="ex-title">
+                    <span class="ex-badge" style="background:rgba(59,130,246,.12);color:var(--blue)">PRODUCTO</span>
+                    Ejercicio 2: Regla del producto
+                </div>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="ex-body">
+                <div class="ex-body-inner">
+                    <p style="margin-bottom:16px;font-size:1.05rem"><strong>Encontrar la derivada de:</strong></p>
+                    <div class="formula-block" style="text-align:center">\[ f(x) = (x^2 - 4x) \cdot (x + 1) \]</div>
+                    <div class="en-palabras">
+                        <span class="ep-tag">Qué dice la función</span>
+                        "Esta función es un <strong>producto</strong>: dos expresiones multiplicadas entre sí. La primera es '\(x\) al cuadrado menos 4 veces \(x\)' y la segunda es '\(x\) más 1'."
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">1</div>
+                        <div class="step-content">
+                            <div class="step-label">Nombro las dos funciones</div>
+                            <p>\[g(x) = x^2 - 4x \qquad h(x) = x + 1\]</p>
+                            <div class="en-palabras">
+                                "Le pongo nombre a cada parte: llamo \(g\) a '\(x^2 - 4x\)' y llamo \(h\) a '\(x + 1\)'. Así me resulta más fácil seguir el paso a paso."
+                            </div>
+                            <p style="margin-top:8px">Regla del producto: \([g \cdot h]' = g' \cdot h + g \cdot h'\)</p>
+                            <div class="en-palabras">
+                                "La fórmula me dice: derivá a \(g\) y multiplicá por \(h\), más \(g\) multiplicado por la derivada de \(h\)."
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">2</div>
+                        <div class="step-content">
+                            <div class="step-label">Derivo cada función</div>
+                            <p>\[g'(x) = 2x - 4 \qquad h'(x) = 1\]</p>
+                            <div class="en-palabras">
+                                "Derivo \(g\): \(x^2\) da \(2x\), y \(-4x\) da \(-4\). Queda \(2x - 4\).<br>
+                                Derivo \(h\): \(x\) da \(1\), y la constante \(1\) da \(0\). Queda \(1\)."
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">3</div>
+                        <div class="step-content">
+                            <div class="step-label">Sustituyo en la fórmula del producto</div>
+                            <p>\[f'(x) = g'(x) \cdot h(x) + g(x) \cdot h'(x)\]</p>
+                            <p>\[= (2x - 4) \cdot (x + 1) + (x^2 - 4x) \cdot (1)\]</p>
+                            <div class="en-palabras">
+                                "Reemplazo: la derivada de \(g\) (que es \(2x-4\)) por \(h\) (que es \(x+1\)), más \(g\) (que es \(x^2-4x\)) por la derivada de \(h\) (que es 1)."
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">4</div>
+                        <div class="step-content">
+                            <div class="step-label">Multiplico el primer pedazo</div>
+                            <p>\[(2x - 4)(x + 1) = 2x \cdot x + 2x \cdot 1 + (-4) \cdot x + (-4) \cdot 1\]</p>
+                            <p>\[= 2x^2 + 2x - 4x - 4 = 2x^2 - 2x - 4\]</p>
+                            <div class="en-palabras">
+                                "Multiplico cada término del primer paréntesis por cada término del segundo: \(2x\) por \(x\) da \(2x^2\); \(2x\) por \(1\) da \(2x\); \(-4\) por \(x\) da \(-4x\); \(-4\) por \(1\) da \(-4\). Sumo todo y simplifico: \(2x - 4x = -2x\)."
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">5</div>
+                        <div class="step-content">
+                            <div class="step-label">Sumo ambos pedazos y simplifico</div>
+                            <p>\[f'(x) = (2x^2 - 2x - 4) + (x^2 - 4x)\]</p>
+                            <p>\[= 2x^2 + x^2 - 2x - 4x - 4\]</p>
+                            <p>\[\boxed{f'(x) = 3x^2 - 6x - 4}\]</p>
+                            <div class="en-palabras">
+                                "Junto los dos pedazos: \(2x^2\) más \(x^2\) da \(3x^2\); \(-2x\) menos \(4x\) da \(-6x\); y queda el \(-4\). Resultado final: \(3x^2 - 6x - 4\)."
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EJERCICIO 3 -->
+        <div class="exercise-box" id="ej3">
+            <div class="ex-header" onclick="toggleEx(this)">
+                <div class="ex-title">
+                    <span class="ex-badge" style="background:rgba(167,139,250,.12);color:var(--purple)">COCIENTE</span>
+                    Ejercicio 3: Regla del cociente
+                </div>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="ex-body">
+                <div class="ex-body-inner">
+                    <p style="margin-bottom:16px;font-size:1.05rem"><strong>Encontrar la derivada de:</strong></p>
+                    <div class="formula-block" style="text-align:center">\[ f(x) = \frac{x^2 - 6x}{x + 5} \]</div>
+                    <div class="en-palabras">
+                        <span class="ep-tag">Qué dice la función</span>
+                        "Esta función es una <strong>división</strong>: '\(x\) al cuadrado menos 6 por \(x\)' dividido por '\(x\) más 5'."
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">1</div>
+                        <div class="step-content">
+                            <div class="step-label">Nombro numerador y denominador</div>
+                            <p>\[g(x) = x^2 - 6x \quad (\text{lo de arriba}) \qquad h(x) = x + 5 \quad (\text{lo de abajo})\]</p>
+                            <div class="en-palabras">
+                                "Llamo \(g\) al numerador (lo que está arriba de la fracción) y \(h\) al denominador (lo que está abajo)."
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">2</div>
+                        <div class="step-content">
+                            <div class="step-label">Derivo cada parte</div>
+                            <p>\[g'(x) = 2x - 6 \qquad h'(x) = 1\]</p>
+                            <div class="en-palabras">
+                                "Derivo el numerador: \(x^2\) da \(2x\), \(-6x\) da \(-6\). Queda \(2x - 6\).<br>
+                                Derivo el denominador: \(x\) da \(1\), \(5\) da \(0\). Queda \(1\)."
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">3</div>
+                        <div class="step-content">
+                            <div class="step-label">Armo la fórmula del cociente</div>
+                            <p>\[f'(x) = \frac{g'(x) \cdot h(x) - g(x) \cdot h'(x)}{[h(x)]^2}\]</p>
+                            <p>\[= \frac{(2x - 6)(x + 5) - (x^2 - 6x)(1)}{(x + 5)^2}\]</p>
+                            <div class="en-palabras">
+                                "Según la fórmula: arriba va <strong>la derivada del numerador por el denominador</strong> (\((2x-6)(x+5)\)), <strong>menos el numerador por la derivada del denominador</strong> (\((x^2-6x) \cdot 1\)). Abajo va <strong>el denominador al cuadrado</strong>: \((x+5)^2\)."
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">4</div>
+                        <div class="step-content">
+                            <div class="step-label">Desarrollo el numerador</div>
+                            <p><strong>Primer pedazo:</strong> \((2x-6)(x+5)\)</p>
+                            <p>\[= 2x^2 + 10x - 6x - 30 = 2x^2 + 4x - 30\]</p>
+                            <div class="en-palabras">"Multiplico: \(2x\) por \(x\) da \(2x^2\); \(2x\) por \(5\) da \(10x\); \(-6\) por \(x\) da \(-6x\); \(-6\) por \(5\) da \(-30\). Simplifico: \(10x - 6x = 4x\)."</div>
+
+                            <p style="margin-top:12px"><strong>Segundo pedazo:</strong> \(-(x^2 - 6x) = -x^2 + 6x\)</p>
+                            <div class="en-palabras">"El signo menos se reparte: \(x^2\) se vuelve \(-x^2\), y \(-6x\) se vuelve \(+6x\)."</div>
+
+                            <p style="margin-top:12px"><strong>Sumo:</strong></p>
+                            <p>\[2x^2 + 4x - 30 - x^2 + 6x = x^2 + 10x - 30\]</p>
+                            <div class="en-palabras">"\(2x^2 - x^2 = x^2\). \(4x + 6x = 10x\). El \(-30\) queda. Resultado del numerador: \(x^2 + 10x - 30\)."</div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">5</div>
+                        <div class="step-content">
+                            <div class="step-label">Resultado final</div>
+                            <p>\[\boxed{f'(x) = \frac{x^2 + 10x - 30}{(x+5)^2}}\]</p>
+                            <div class="en-palabras">"El numerador simplificado queda arriba, y abajo queda \((x+5)^2\) que es '\(x\) más 5, todo al cuadrado'."</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EJERCICIO 4 -->
+        <div class="exercise-box" id="ej4">
+            <div class="ex-header" onclick="toggleEx(this)">
+                <div class="ex-title">
+                    <span class="ex-badge" style="background:rgba(34,211,238,.12);color:var(--cyan)">CADENA</span>
+                    Ejercicio 4: Regla de la cadena
+                </div>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="ex-body">
+                <div class="ex-body-inner">
+                    <p style="margin-bottom:16px;font-size:1.05rem"><strong>Encontrar la derivada de:</strong></p>
+                    <div class="formula-block" style="text-align:center">\[ f(x) = (x^3 - 2)^{1/2} \]</div>
+                    <div class="en-palabras">
+                        <span class="ep-tag">Qué dice la función</span>
+                        "Esta función es la raíz cuadrada de '\(x\) al cubo menos 2'. Está escrita como '\((x^3 - 2)\) elevado a la potencia \(\frac{1}{2}\)', que es lo mismo que la raíz cuadrada. Hay algo <strong>dentro</strong> de una potencia: eso me dice que necesito la cadena."
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">1</div>
+                        <div class="step-content">
+                            <div class="step-label">Identifico exterior e interior</div>
+                            <p><strong>Exterior:</strong> algo elevado a \(\frac{1}{2}\), es decir \((\quad)^{1/2}\).</p>
+                            <p><strong>Interior:</strong> \(u(x) = x^3 - 2\).</p>
+                            <div class="en-palabras">
+                                "Pienso: '¿Qué hay de afuera?' → una potencia de \(\frac{1}{2}\) (la raíz). '¿Qué hay de adentro?' → \(x^3 - 2\)."
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">2</div>
+                        <div class="step-content">
+                            <div class="step-label">Derivo la función de afuera (dejando la de adentro)</div>
+                            <p>\[D[(\quad)^{1/2}] = \tfrac{1}{2} \cdot (\quad)^{1/2-1} = \tfrac{1}{2} \cdot (\quad)^{-1/2}\]</p>
+                            <div class="en-palabras">
+                                "Derivo 'algo a la potencia \(\frac{1}{2}\)': bajo el exponente \(\frac{1}{2}\) adelante, le resto 1 al exponente (\(\frac{1}{2} - 1 = -\frac{1}{2}\)). Queda \(\frac{1}{2}\) por algo a la potencia \(-\frac{1}{2}\). <strong>Dejo la parte de adentro (\(x^3-2\)) sin tocar todavía.</strong>"
+                            </div>
+                            <p style="margin-top:8px">Evaluada en la interior:</p>
+                            <p>\[\frac{1}{2} (x^3 - 2)^{-1/2}\]</p>
+                            <div class="en-palabras">"Ahora reemplazo 'algo' por \(x^3 - 2\): queda \(\frac{1}{2}(x^3-2)^{-1/2}\)."</div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">3</div>
+                        <div class="step-content">
+                            <div class="step-label">Derivo la función de adentro</div>
+                            <p>\[u'(x) = D(x^3 - 2) = 3x^2\]</p>
+                            <div class="en-palabras">"Ahora derivo lo que está adentro: \(x^3\) da \(3x^2\), y \(-2\) da \(0\). Queda \(3x^2\)."</div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">4</div>
+                        <div class="step-content">
+                            <div class="step-label">Multiplico exterior por interior</div>
+                            <p>\[f'(x) = \frac{1}{2}(x^3-2)^{-1/2} \cdot 3x^2\]</p>
+                            <div class="en-palabras">"Ahora multiplico: lo de afuera (\(\frac{1}{2}(x^3-2)^{-1/2}\)) por la derivada de lo de adentro (\(3x^2\))."</div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">5</div>
+                        <div class="step-content">
+                            <div class="step-label">Simplifico y escribo bonito</div>
+                            <p>\[\frac{1}{2} \cdot 3x^2 \cdot (x^3-2)^{-1/2} = \frac{3x^2}{2} \cdot \frac{1}{(x^3-2)^{1/2}}\]</p>
+                            <p>\[\boxed{f'(x) = \frac{3x^2}{2\sqrt{x^3-2}}}\]</p>
+                            <div class="en-palabras">
+                                "Los números: \(\frac{1}{2} \times 3 = \frac{3}{2}\). Y \((x^3-2)^{-1/2}\) es lo mismo que \(\frac{1}{\sqrt{x^3-2}}\) (un exponente negativo significa 'uno sobre'). Así que el resultado final es \(3x^2\) dividido por \(2\sqrt{x^3-2}\)."
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EJERCICIO 5 -->
+        <div class="exercise-box" id="ej5">
+            <div class="ex-header" onclick="toggleEx(this)">
+                <div class="ex-title">
+                    <span class="ex-badge" style="background:rgba(239,68,68,.12);color:var(--red)">CADENA ×2</span>
+                    Ejercicio 5: Doble cadena
+                </div>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="ex-body">
+                <div class="ex-body-inner">
+                    <p style="margin-bottom:16px;font-size:1.05rem"><strong>Encontrar la derivada de:</strong></p>
+                    <div class="formula-block" style="text-align:center">\[ f(x) = 4\cos(\operatorname{sen}(3x)) \]</div>
+                    <div class="en-palabras">
+                        <span class="ep-tag">Qué dice la función</span>
+                        "4 veces el coseno del seno de \(3x\). Hay <strong>tres capas</strong>: afuera está el \(4\) (constante), después el \(\cos\), después el \(\operatorname{sen}\), y más adentro está el \(3x\)."
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">1</div>
+                        <div class="step-content">
+                            <div class="step-label">Saco la constante 4</div>
+                            <p>\[f'(x) = 4 \cdot [\cos(\operatorname{sen}(3x))]'\]</p>
+                            <div class="en-palabras">"El 4 es una constante multiplicando todo, así que lo saco afuera y solo derivo el coseno del seno de \(3x\)."</div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">2</div>
+                        <div class="step-content">
+                            <div class="step-label">Primera cadena: derivo el coseno</div>
+                            <p>Regla: \([\cos u]' = -\operatorname{sen}(u) \cdot u'\). Acá \(u = \operatorname{sen}(3x)\).</p>
+                            <p>\[[\cos(\operatorname{sen}(3x))]' = -\operatorname{sen}(\operatorname{sen}(3x)) \cdot [\operatorname{sen}(3x)]'\]</p>
+                            <div class="en-palabras">
+                                "Derivo el <strong>cos</strong>: la derivada del coseno es <strong>menos seno</strong>. Pero como lo que está dentro es \(\operatorname{sen}(3x)\) (no simplemente \(x\)), escribo '\(-\operatorname{sen}(\operatorname{sen}(3x))\)' y multiplico por la derivada de lo que está adentro (\([\operatorname{sen}(3x)]'\))."
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">3</div>
+                        <div class="step-content">
+                            <div class="step-label">Segunda cadena: derivo el seno</div>
+                            <p>Regla: \([\operatorname{sen} u]' = \cos(u) \cdot u'\). Acá \(u = 3x\).</p>
+                            <p>\[[\operatorname{sen}(3x)]' = \cos(3x) \cdot (3x)' = \cos(3x) \cdot 3\]</p>
+                            <div class="en-palabras">
+                                "Derivo el <strong>sen</strong>: la derivada del seno es <strong>coseno</strong>. Pero lo que está dentro es \(3x\), así que escribo '\(\cos(3x)\)' y multiplico por la derivada de \(3x\) que es \(3\)."
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">4</div>
+                        <div class="step-content">
+                            <div class="step-label">Junto todo y multiplico los números</div>
+                            <p>\[f'(x) = 4 \cdot [-\operatorname{sen}(\operatorname{sen}(3x))] \cdot [\cos(3x) \cdot 3]\]</p>
+                            <p>Números: \(4 \times (-1) \times 3 = -12\)</p>
+                            <p>\[\boxed{f'(x) = -12 \cdot \operatorname{sen}(\operatorname{sen}(3x)) \cdot \cos(3x)}\]</p>
+                            <div class="en-palabras">
+                                "Junto las tres capas: el 4 de afuera, menos el seno del seno de \(3x\) (de la primera cadena), y el coseno de \(3x\) por 3 (de la segunda cadena). Los números se multiplican: \(4 \times (-1) \times 3 = -12\). Ese \(-12\) va adelante de todo."
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EJERCICIO 6 -->
+        <div class="exercise-box" id="ej6">
+            <div class="ex-header" onclick="toggleEx(this)">
+                <div class="ex-title">
+                    <span class="ex-badge" style="background:rgba(226,166,61,.12);color:var(--accent)">LOG</span>
+                    Ejercicio 6: Logaritmo natural con cadena
+                </div>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="ex-body">
+                <div class="ex-body-inner">
+                    <p style="margin-bottom:16px;font-size:1.05rem"><strong>Encontrar la derivada de:</strong></p>
+                    <div class="formula-block" style="text-align:center">\[ f(x) = \ln(x^3 + 1) \]</div>
+                    <div class="en-palabras">
+                        <span class="ep-tag">Qué dice la función</span>
+                        "El logaritmo natural de '\(x\) al cubo más 1'. Hay un logaritmo por fuera y un polinomio por dentro."
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">1</div>
+                        <div class="step-content">
+                            <div class="step-label">Recordar la fórmula</div>
+                            <p>\[[\ln u]' = \frac{u'}{u}\]</p>
+                            <div class="en-palabras">"La derivada del logaritmo natural de algo es: <strong>la derivada de ese algo dividida por ese algo</strong>."</div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">2</div>
+                        <div class="step-content">
+                            <div class="step-label">Derivo lo que está adentro</div>
+                            <p>\[u(x) = x^3 + 1 \qquad u'(x) = 3x^2\]</p>
+                            <div class="en-palabras">"Lo que está adentro es \(x^3 + 1\). Su derivada es \(3x^2\)."</div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">3</div>
+                        <div class="step-content">
+                            <div class="step-label">Aplico la fórmula</div>
+                            <p>\[f'(x) = \frac{u'}{u} = \frac{3x^2}{x^3 + 1}\]</p>
+                            <p>\[\boxed{f'(x) = \frac{3x^2}{x^3+1}}\]</p>
+                            <div class="en-palabras">"Derivada de lo de adentro (\(3x^2\)) dividida por lo de adentro (\(x^3+1\)). Así de simple."</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EJERCICIO 7 -->
+        <div class="exercise-box" id="ej7">
+            <div class="ex-header" onclick="toggleEx(this)">
+                <div class="ex-title">
+                    <span class="ex-badge" style="background:rgba(59,130,246,.12);color:var(--blue)">EXP</span>
+                    Ejercicio 7: Exponencial con cadena
+                </div>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="ex-body">
+                <div class="ex-body-inner">
+                    <p style="margin-bottom:16px;font-size:1.05rem"><strong>Encontrar la derivada de:</strong></p>
+                    <div class="formula-block" style="text-align:center">\[ f(x) = e^{x^2 + 3x} \]</div>
+                    <div class="en-palabras">
+                        <span class="ep-tag">Qué dice la función</span>
+                        "El número \(e\) (aproximadamente 2,718) elevado a '\(x\) al cuadrado más 3 por \(x\)'. El exponente no es simplemente \(x\), así que necesito la cadena."
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">1</div>
+                        <div class="step-content">
+                            <div class="step-label">Fórmula</div>
+                            <p>\[[e^u]' = e^u \cdot u'\]</p>
+                            <div class="en-palabras">"La derivada de \(e\) elevado a algo es: <strong>\(e\) elevado a ese mismo algo</strong>, multiplicado por <strong>la derivada de ese algo</strong>."</div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">2</div>
+                        <div class="step-content">
+                            <div class="step-label">Derivo el exponente</div>
+                            <p>\[u(x) = x^2 + 3x \qquad u'(x) = 2x + 3\]</p>
+                            <div class="en-palabras">"El exponente es \(x^2 + 3x\). Su derivada es \(2x + 3\)."</div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">3</div>
+                        <div class="step-content">
+                            <div class="step-label">Resultado</div>
+                            <p>\[f'(x) = e^{x^2+3x} \cdot (2x + 3)\]</p>
+                            <p>\[\boxed{f'(x) = (2x+3) \cdot e^{x^2+3x}}\]</p>
+                            <div class="en-palabras">"La función original \(e^{x^2+3x}\) queda como está, y se multiplica por la derivada del exponente (\(2x + 3\)). Es la misma \(e\) elevada a la misma potencia, pero con '\((2x+3)\)' multiplicando adelante."</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EJERCICIO 8 -->
+        <div class="exercise-box" id="ej8">
+            <div class="ex-header" onclick="toggleEx(this)">
+                <div class="ex-title">
+                    <span class="ex-badge" style="background:rgba(167,139,250,.12);color:var(--purple)">TRIG</span>
+                    Ejercicio 8: Tangente compuesta
+                </div>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="ex-body">
+                <div class="ex-body-inner">
+                    <p style="margin-bottom:16px;font-size:1.05rem"><strong>Encontrar la derivada de:</strong></p>
+                    <div class="formula-block" style="text-align:center">\[ f(x) = \operatorname{tg}(x^2) \]</div>
+                    <div class="en-palabras">
+                        <span class="ep-tag">Qué dice la función</span>
+                        "La tangente de '\(x\) al cuadrado'. La tangente es la función de afuera, y \(x^2\) es la de adentro."
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">1</div>
+                        <div class="step-content">
+                            <div class="step-label">Fórmula</div>
+                            <p>\[[\operatorname{tg} u]' = \frac{u'}{\cos^2 u}\]</p>
+                            <div class="en-palabras">"La derivada de la tangente de algo es: <strong>la derivada de ese algo</strong> dividida por <strong>el coseno de ese algo, todo al cuadrado</strong>."</div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">2</div>
+                        <div class="step-content">
+                            <div class="step-label">Derivo lo de adentro</div>
+                            <p>\[u = x^2 \qquad u' = 2x\]</p>
+                            <div class="en-palabras">"Lo de adentro es \(x^2\). Su derivada es \(2x\)."</div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">3</div>
+                        <div class="step-content">
+                            <div class="step-label">Sustituyo</div>
+                            <p>\[f'(x) = \frac{2x}{\cos^2(x^2)}\]</p>
+                            <div class="en-palabras">"La derivada de lo de adentro (\(2x\)) dividida por el coseno de lo de adentro (\(x^2\)), todo eso al cuadrado."</div>
+                            <p style="margin-top:10px">También se puede escribir usando la identidad \(\frac{1}{\cos^2 \theta} = 1 + \operatorname{tg}^2 \theta\):</p>
+                            <p>\[\boxed{f'(x) = 2x \cdot (1 + \operatorname{tg}^2(x^2))}\]</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EJERCICIO 9 -->
+        <div class="exercise-box" id="ej9">
+            <div class="ex-header" onclick="toggleEx(this)">
+                <div class="ex-title">
+                    <span class="ex-badge" style="background:rgba(34,197,94,.12);color:var(--green)">APLICACIÓN</span>
+                    Ejercicio 9: Recta tangente y normal
+                </div>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="ex-body">
+                <div class="ex-body-inner">
+                    <p style="margin-bottom:16px;font-size:1.05rem"><strong>Encontrar las ecuaciones de la tangente y la normal a</strong> \(f(x) = x^2 + 2\) <strong>en</strong> \(P(1, 3)\).</p>
+                    <div class="en-palabras">
+                        <span class="ep-tag">Qué se pide</span>
+                        "Quiero dos rectas en el punto \((1, 3)\) de la curva: una que toque la curva sin atravesarla (la <strong>tangente</strong>) y otra que sea perpendicular a ella (la <strong>normal</strong>)."
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">1</div>
+                        <div class="step-content">
+                            <div class="step-label">Verifico que el punto está en la curva</div>
+                            <p>\[f(1) = 1^2 + 2 = 3\]</p>
+                            <div class="en-palabras">"Reemplazo \(x = 1\) en la función: \(1\) al cuadrado más \(2\) da \(3\). El punto \((1, 3)\) sí pertenece a la curva."</div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">2</div>
+                        <div class="step-content">
+                            <div class="step-label">Derivo la función</div>
+                            <p>\[f'(x) = 2x\]</p>
+                            <div class="en-palabras">"La derivada de \(x^2 + 2\) es \(2x\) (el \(x^2\) da \(2x\), y el \(2\) da \(0\))."</div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">3</div>
+                        <div class="step-content">
+                            <div class="step-label">Evalúo la derivada en el punto \(x = 1\)</div>
+                            <p>\[f'(1) = 2 \cdot 1 = 2\]</p>
+                            <div class="en-palabras">"La pendiente de la tangente en \(x = 1\) es \(2\). Esto significa que en ese punto, la curva sube con inclinación de 2: por cada unidad que avanzás hacia la derecha, subís 2 unidades."</div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">4</div>
+                        <div class="step-content">
+                            <div class="step-label">Ecuación de la recta tangente</div>
+                            <p>\[y - y_0 = m(x - x_0)\]</p>
+                            <p>\[y - 3 = 2(x - 1) = 2x - 2\]</p>
+                            <p>\[y = 2x - 2 + 3\]</p>
+                            <p>\[\boxed{y = 2x + 1}\]</p>
+                            <div class="en-palabras">"Uso la fórmula de la recta que pasa por el punto \((1, 3)\) con pendiente \(2\). 'Y menos 3 igual a 2 por (equis menos 1)'. Desarrollo y simplifico: queda \(y = 2x + 1\)."</div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">5</div>
+                        <div class="step-content">
+                            <div class="step-label">Ecuación de la recta normal</div>
+                            <p>\[m_{\text{normal}} = -\frac{1}{f'(1)} = -\frac{1}{2}\]</p>
+                            <p>\[y - 3 = -\frac{1}{2}(x - 1) = -\frac{x}{2} + \frac{1}{2}\]</p>
+                            <p>\[y = -\frac{x}{2} + \frac{1}{2} + 3 = -\frac{x}{2} + \frac{7}{2}\]</p>
+                            <p>\[\boxed{y = -\frac{1}{2}x + \frac{7}{2}}\]</p>
+                            <div class="en-palabras">"La normal es perpendicular a la tangente. Su pendiente es la inversa con signo cambiado: si la tangente tiene pendiente \(2\), la normal tiene pendiente \(-\frac{1}{2}\). Uso la misma fórmula de la recta pero con esta nueva pendiente: 'Y menos 3 igual a menos un medio por (equis menos 1)'. Desarrollo y simplifico."</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EJERCICIO 10 -->
+        <div class="exercise-box" id="ej10">
+            <div class="ex-header" onclick="toggleEx(this)">
+                <div class="ex-title">
+                    <span class="ex-badge" style="background:rgba(239,68,68,.12);color:var(--red)">COMPLEJO</span>
+                    Ejercicio 10: Cociente + cadena
+                </div>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="ex-body">
+                <div class="ex-body-inner">
+                    <p style="margin-bottom:16px;font-size:1.05rem"><strong>Encontrar la derivada de:</strong></p>
+                    <div class="formula-block" style="text-align:center">\[ f(x) = \frac{\operatorname{sen}(x)}{x^2 + 1} \]</div>
+                    <div class="en-palabras">
+                        <span class="ep-tag">Qué dice la función</span>
+                        "El seno de \(x\) dividido por '\(x\) al cuadrado más 1'. Es una fracción, así que uso la regla del cociente."
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">1</div>
+                        <div class="step-content">
+                            <div class="step-label">Nombro arriba y abajo</div>
+                            <p>\[g(x) = \operatorname{sen}(x) \quad (\text{numerador}) \qquad h(x) = x^2 + 1 \quad (\text{denominador})\]</p>
+                            <div class="en-palabras">"Arriba de la fracción: el seno. Abajo: \(x^2 + 1\)."</div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">2</div>
+                        <div class="step-content">
+                            <div class="step-label">Derivo cada parte</div>
+                            <p>\[g'(x) = \cos(x) \qquad h'(x) = 2x\]</p>
+                            <div class="en-palabras">"La derivada del seno es coseno. La derivada de \(x^2 + 1\) es \(2x\)."</div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">3</div>
+                        <div class="step-content">
+                            <div class="step-label">Aplico la fórmula del cociente</div>
+                            <p>\[f'(x) = \frac{g' \cdot h - g \cdot h'}{h^2} = \frac{\cos(x)(x^2+1) - \operatorname{sen}(x)(2x)}{(x^2+1)^2}\]</p>
+                            <div class="en-palabras">
+                                "Arriba: la derivada del numerador (\(\cos x\)) por el denominador (\(x^2+1\)), <strong>menos</strong> el numerador (\(\operatorname{sen} x\)) por la derivada del denominador (\(2x\)). Abajo: el denominador al cuadrado."
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">4</div>
+                        <div class="step-content">
+                            <div class="step-label">Resultado</div>
+                            <p>\[\boxed{f'(x) = \frac{(x^2+1)\cos x - 2x\operatorname{sen} x}{(x^2+1)^2}}\]</p>
+                            <div class="en-palabras">"No hay nada que simplificar entre las partes, así que el resultado queda así: arriba '\((x^2+1)\) por \(\cos x\), menos \(2x\) por \(\operatorname{sen} x\)', y abajo '\((x^2+1)\) al cuadrado'."</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EJERCICIO 11 -->
+        <div class="exercise-box" id="ej11">
+            <div class="ex-header" onclick="toggleEx(this)">
+                <div class="ex-title">
+                    <span class="ex-badge" style="background:rgba(226,166,61,.12);color:var(--accent)">LOG-BASE</span>
+                    Ejercicio 11: Logaritmo base 3
+                </div>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="ex-body">
+                <div class="ex-body-inner">
+                    <p style="margin-bottom:16px;font-size:1.05rem"><strong>Encontrar la derivada de:</strong></p>
+                    <div class="formula-block" style="text-align:center">\[ f(x) = \log_3(5x + 2) \]</div>
+                    <div class="en-palabras">
+                        <span class="ep-tag">Qué dice la función</span>
+                        "El logaritmo en base 3 de '\(5x\) más 2'. No es logaritmo natural (base \(e\)), sino base 3, así que uso la fórmula con el factor de corrección."
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">1</div>
+                        <div class="step-content">
+                            <div class="step-label">Fórmula</div>
+                            <p>\[[\log_a u]' = \frac{1}{\ln a} \cdot \frac{u'}{u}\]</p>
+                            <div class="en-palabras">"La derivada del logaritmo base \(a\) de algo es: <strong>1 sobre \(\ln a\)</strong> (el factor de corrección por el cambio de base), multiplicado por <strong>la derivada de ese algo dividida por ese algo</strong>."</div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">2</div>
+                        <div class="step-content">
+                            <div class="step-label">Identifico los datos</div>
+                            <p>\[a = 3 \qquad u(x) = 5x + 2 \qquad u'(x) = 5\]</p>
+                            <div class="en-palabras">"La base es 3. Lo de adentro es \(5x + 2\). La derivada de \(5x + 2\) es 5 (el \(5x\) da 5, el 2 da 0)."</div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">3</div>
+                        <div class="step-content">
+                            <div class="step-label">Sustituyo en la fórmula</div>
+                            <p>\[f'(x) = \frac{1}{\ln 3} \cdot \frac{5}{5x + 2}\]</p>
+                            <p>\[\boxed{f'(x) = \frac{5}{(5x+2) \cdot \ln 3}}\]</p>
+                            <div class="en-palabras">"El factor de corrección es \(\frac{1}{\ln 3}\) (1 dividido por el logaritmo natural de 3). La derivada de lo de adentro es 5, y lo de adentro es \(5x + 2\). Juntando todo: 5 dividido por '\((5x+2)\) multiplicado por \(\ln 3\)'."</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EJERCICIO 12 -->
+        <div class="exercise-box" id="ej12">
+            <div class="ex-header" onclick="toggleEx(this)">
+                <div class="ex-title">
+                    <span class="ex-badge" style="background:rgba(34,211,238,.12);color:var(--cyan)">LOG-DERIV</span>
+                    Ejercicio 12: Potencia variable (\(u^v\))
+                </div>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="ex-body">
+                <div class="ex-body-inner">
+                    <p style="margin-bottom:16px;font-size:1.05rem"><strong>Encontrar la derivada de:</strong></p>
+                    <div class="formula-block" style="text-align:center">\[ f(x) = x^{\operatorname{sen} x} \]</div>
+                    <div class="en-palabras">
+                        <span class="ep-tag">Qué dice la función</span>
+                        "\(x\) elevado al seno de \(x\). La base es \(x\) (una función) y el exponente también es \(\operatorname{sen} x\) (otra función). <strong>No puedo</strong> usar la regla de la potencia (porque el exponente no es constante) ni la regla de la exponencial (porque la base no es constante). Necesito el método especial de derivación logarítmica."
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">1</div>
+                        <div class="step-content">
+                            <div class="step-label">Igualo a y, y aplico ln en ambos lados</div>
+                            <p>\[y = x^{\operatorname{sen} x}\]</p>
+                            <p>\[\ln y = \ln(x^{\operatorname{sen} x})\]</p>
+                            <p>Propiedad: \(\ln(a^b) = b \cdot \ln a\):</p>
+                            <p>\[\ln y = \operatorname{sen}(x) \cdot \ln x\]</p>
+                            <div class="en-palabras">
+                                "Llamo \(y\) a la función. Tomo logaritmo natural en ambos lados. El lado izquierdo queda como \(\ln y\). El lado derecho: uso la propiedad que dice que el logaritmo de una potencia es igual al exponente por el logaritmo de la base. Entonces \(\ln(x^{\operatorname{sen} x})\) se convierte en \(\operatorname{sen}(x)\) multiplicado por \(\ln x\). Ahora tengo un <strong>producto</strong> de dos funciones (en vez de una potencia), y eso sí sé derivar."
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">2</div>
+                        <div class="step-content">
+                            <div class="step-label">Derivo ambos lados respecto de x</div>
+                            <p><strong>Lado izquierdo</strong> (regla de la cadena con \(\ln y\)):</p>
+                            <p>\[\frac{d}{dx}[\ln y] = \frac{1}{y} \cdot y'\]</p>
+                            <div class="en-palabras">"La derivada de \(\ln y\) (donde \(y\) depende de \(x\)) es \(\frac{1}{y}\) por \(y'\). Es la regla del logaritmo natural aplicada con la cadena."</div>
+
+                            <p style="margin-top:12px"><strong>Lado derecho</strong> (regla del producto \(\operatorname{sen}(x) \cdot \ln x\)):</p>
+                            <p>\[\frac{d}{dx}[\operatorname{sen}(x) \cdot \ln x] = \cos(x) \cdot \ln x + \operatorname{sen}(x) \cdot \frac{1}{x}\]</p>
+                            <div class="en-palabras">"Derivo el producto '\(\operatorname{sen}(x)\) por \(\ln x\)': la derivada del seno (\(\cos x\)) por \(\ln x\), más el seno por la derivada de \(\ln x\) (\(\frac{1}{x}\))."</div>
+
+                            <p style="margin-top:12px"><strong>Igualando ambos lados:</strong></p>
+                            <p>\[\frac{y'}{y} = \cos(x) \cdot \ln x + \frac{\operatorname{sen}(x)}{x}\]</p>
+                            <div class="en-palabras">"Pongo ambos lados iguales: \(\frac{y'}{y}\) es igual a '\(\cos x\) por \(\ln x\), más \(\operatorname{sen} x\) dividido por \(x\)'."</div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">3</div>
+                        <div class="step-content">
+                            <div class="step-label">Despejo y' multiplicando por y</div>
+                            <p>\[y' = y \cdot \left(\cos(x) \cdot \ln x + \frac{\operatorname{sen}(x)}{x}\right)\]</p>
+                            <div class="en-palabras">"Para despejar \(y'\), multiplico ambos lados por \(y\). Ahora \(y'\) queda sola de un lado."</div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">4</div>
+                        <div class="step-content">
+                            <div class="step-label">Reemplazo y por su valor original</div>
+                            <p>\[y' = x^{\operatorname{sen} x} \cdot \left(\cos(x) \cdot \ln x + \frac{\operatorname{sen}(x)}{x}\right)\]</p>
+                            <p>\[\boxed{y' = x^{\operatorname{sen} x} \cdot \left(\cos x \cdot \ln x + \frac{\operatorname{sen} x}{x}\right)}\]</p>
+                            <div class="en-palabras">
+                                "Vuelvo a poner la función original en lugar de \(y\): \(x^{\operatorname{sen} x}\). El resultado final es: la función original multiplicada por '\(\cos x\) por \(\ln x\), más \(\operatorname{sen} x\) dividido \(x\)'."
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tip success" style="margin-top:16px">
+                        <span class="tip-i">✅</span>
+                        <span><strong>Resumen del método:</strong> Siempre son 3 pasos: (1) Tomar \(\ln\) en ambos lados → convierte la potencia en producto. (2) Derivar ambos lados. (3) Despejar \(y'\) y reemplazar \(y\). Funciona para cualquier función de la forma "algo" elevado a "algo".</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TABLA RESUMEN -->
+        <div class="card" style="animation-delay:.3s">
+            <h3 style="color:var(--accent)">📋 Tabla resumen rápida</h3>
+            <p>Cuando necesitás recordar una fórmula rápido, consultá esta tabla. Y si te olvidás qué significa, volvé a la explicación de arriba.</p>
+            <table class="formula-table">
+                <thead><tr><th>Función</th><th>Derivada</th><th>Con cadena</th></tr></thead>
+                <tbody>
+                    <tr><td>\(k\) (constante)</td><td>\(0\)</td><td>—</td></tr>
+                    <tr><td>\(x\)</td><td>\(1\)</td><td>—</td></tr>
+                    <tr><td>\(x^\alpha\)</td><td>\(\alpha x^{\alpha-1}\)</td><td>\(\alpha u^{\alpha-1} u'\)</td></tr>
+                    <tr><td>\(\ln x\)</td><td>\(\frac{1}{x}\)</td><td>\(\frac{u'}{u}\)</td></tr>
+                    <tr><td>\(\log_a x\)</td><td>\(\frac{1}{x \ln a}\)</td><td>\(\frac{u'}{u \ln a}\)</td></tr>
+                    <tr><td>\(e^x\)</td><td>\(e^x\)</td><td>\(e^u \cdot u'\)</td></tr>
+                    <tr><td>\(a^x\)</td><td>\(a^x \ln a\)</td><td>\(a^u \cdot u' \cdot \ln a\)</td></tr>
+                    <tr><td>\(\operatorname{sen} x\)</td><td>\(\cos x\)</td><td>\(u' \cos u\)</td></tr>
+                    <tr><td>\(\cos x\)</td><td>\(-\operatorname{sen} x\)</td><td>\(-u' \operatorname{sen} u\)</td></tr>
+                    <tr><td>\(\operatorname{tg} x\)</td><td>\(\frac{1}{\cos^2 x}\)</td><td>\(\frac{u'}{\cos^2 u}\)</td></tr>
+                    <tr><td>\(\arcsen x\)</td><td>\(\frac{1}{\sqrt{1-x^2}}\)</td><td>\(\frac{u'}{\sqrt{1-u^2}}\)</td></tr>
+                    <tr><td>\(\arccos x\)</td><td>\(\frac{-1}{\sqrt{1-x^2}}\)</td><td>\(\frac{-u'}{\sqrt{1-u^2}}\)</td></tr>
+                    <tr><td>\(\arctg x\)</td><td>\(\frac{1}{1+x^2}\)</td><td>\(\frac{u'}{1+u^2}\)</td></tr>
+                </tbody>
+            </table>
+            <div class="en-palabras" style="margin-top:12px">
+                <span class="ep-tag">Cómo leer esta tabla</span>
+                "La columna 'Con cadena' te dice qué pasa cuando en vez de tener \(\operatorname{sen} x\) tenés \(\operatorname{sen}(x^3)\) (o cualquier otra función adentro). Simplemente tomás la misma derivada pero al final multiplicás por \(u'\), que es la derivada de lo que está adentro. La columna 'Derivada' es el caso particular donde lo de adentro es simplemente \(x\)."
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer style="padding:40px 52px 32px;color:var(--text-muted);font-size:.82rem;border-top:1px solid rgba(255,255,255,.04)">
+        <p style="font-family:var(--font-display);font-size:1rem;color:var(--text-dim);margin-bottom:4px">Derivadas — Explicadas en Palabras</p>
+        <p>Cada fórmula tiene su traducción al lenguaje cotidiano. Las matemáticas se entienden mejor cuando dejás de verlas solo como símbolos.</p>
+    </footer>
+</div>
+
+<button class="to-top" id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+    function toggleEx(header){
+        const body = header.nextElementSibling;
+        header.classList.toggle('open');
+        body.classList.toggle('open');
+    }
+    document.getElementById('menuBtn').addEventListener('click',()=>{
+        document.getElementById('sidebar').classList.toggle('open');
+        document.getElementById('overlay').classList.toggle('show');
+    });
+    document.getElementById('overlay').addEventListener('click',()=>{
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('overlay').classList.remove('show');
+    });
+    document.querySelectorAll('.nav-link').forEach(a=>{
+        a.addEventListener('click',()=>{
+            if(window.innerWidth<=1024){
+                document.getElementById('sidebar').classList.remove('open');
+                document.getElementById('overlay').classList.remove('show');
+            }
+        });
+    });
+    const toTopBtn=document.getElementById('toTop');
+    function updateScroll(){
+        if(window.scrollY>400)toTopBtn.classList.add('show');
+        else toTopBtn.classList.remove('show');
+        const ids=['definicion','geometrica','reglas-basicas','producto-cociente','cadena',
+            'potencia-log','exponenciales','trigonometricas','trig-inversas','sucesivas',
+            'ej1','ej2','ej3','ej4','ej5','ej6','ej7','ej8','ej9','ej10','ej11','ej12'];
+        let current='';
+        ids.forEach(id=>{
+            const el=document.getElementById(id);
+            if(el){const r=el.getBoundingClientRect();if(r.top<=100)current=id;}
+        });
+        document.querySelectorAll('.nav-link').forEach(a=>{
+            a.classList.remove('active');
+            if(a.getAttribute('href')==='#'+current)a.classList.add('active');
+        });
+    }
+    window.addEventListener('scroll',updateScroll);
+    updateScroll();
+    const obs=new IntersectionObserver(entries=>{
+        entries.forEach(e=>{if(e.isIntersecting)e.target.style.animationPlayState='running';});
+    },{threshold:.05});
+    document.querySelectorAll('.card,.exercise-box').forEach(el=>{
+        el.style.animationPlayState='paused';
+        obs.observe(el);
+    });
+</script>
+
+</body>
+</html>

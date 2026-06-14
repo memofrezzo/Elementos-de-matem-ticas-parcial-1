@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matemática I — Segundo Parcial</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep:      #0F172A;
+    --bg-card:      #1E293B;
+    --bg-light:     #F1F5F9;
+    --text-main:    #E2E8F0;
+    --text-muted:   #94A3B8;
+    --text-dark:    #1E293B;
+
+    --blue:         #3B82F6;
+    --blue-light:   #93C5FD;
+    --blue-glow:    rgba(59,130,246,0.18);
+
+    --green:        #10B981;
+    --green-light:  #6EE7B7;
+    --green-glow:   rgba(16,185,129,0.18);
+
+    --violet:       #8B5CF6;
+    --violet-light: #C4B5FD;
+    --violet-glow:  rgba(139,92,246,0.18);
+
+    --amber:        #F59E0B;
+    --amber-light:  #FCD34D;
+    --amber-glow:   rgba(245,158,11,0.15);
+
+    --red:          #EF4444;
+
+    --radius:       12px;
+    --radius-lg:    20px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-deep);
+    color: var(--text-main);
+    line-height: 1.7;
+  }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(15,23,42,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex; align-items: center; gap: 0;
+    padding: 0 24px;
+    height: 60px;
+  }
+  .nav-logo {
+    font-weight: 800; font-size: 1rem; letter-spacing: -0.02em;
+    color: #fff; margin-right: auto;
+  }
+  .nav-logo span { color: var(--blue); }
+  .nav-links { display: flex; gap: 4px; }
+  .nav-link {
+    padding: 6px 14px; border-radius: 8px;
+    font-size: 0.82rem; font-weight: 600; letter-spacing: 0.01em;
+    text-decoration: none; color: var(--text-muted);
+    transition: all .2s;
+    cursor: pointer; border: none; background: none;
+  }
+  .nav-link:hover, .nav-link.active { background: rgba(255,255,255,0.08); color: #fff; }
+  .nav-link.fn { color: var(--blue-light); }
+  .nav-link.li { color: var(--green-light); }
+  .nav-link.de { color: var(--violet-light); }
+
+  /* ===== HERO ===== */
+  .hero {
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center;
+    padding: 100px 24px 60px;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(59,130,246,0.12) 0%, transparent 70%);
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.3);
+    padding: 6px 16px; border-radius: 999px;
+    font-size: 0.78rem; font-weight: 600; color: var(--blue-light);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+  .hero h1 {
+    font-size: clamp(2.2rem, 6vw, 4rem);
+    font-weight: 800; line-height: 1.1; letter-spacing: -0.03em;
+    color: #fff; margin-bottom: 20px;
+  }
+  .hero h1 em { font-style: normal; color: var(--blue-light); }
+  .hero p {
+    font-size: 1.1rem; color: var(--text-muted); max-width: 560px;
+    margin: 0 auto 48px;
+  }
+  .hero-topics {
+    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+  }
+  .hero-topic {
+    padding: 14px 24px; border-radius: var(--radius);
+    font-weight: 700; font-size: 0.9rem; cursor: pointer;
+    border: none; transition: all .25s; text-decoration: none;
+    display: inline-block;
+  }
+  .ht-fn { background: var(--blue-glow); border: 1px solid rgba(59,130,246,0.4); color: var(--blue-light); }
+  .ht-li { background: var(--green-glow); border: 1px solid rgba(16,185,129,0.4); color: var(--green-light); }
+  .ht-de { background: var(--violet-glow); border: 1px solid rgba(139,92,246,0.4); color: var(--violet-light); }
+  .hero-topic:hover { transform: translateY(-2px); filter: brightness(1.2); }
+
+  /* ===== SECTION ===== */
+  section { padding: 80px 0; }
+  .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+
+  .section-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 4px 12px; border-radius: 999px; margin-bottom: 16px;
+  }
+  .tag-fn { background: var(--blue-glow); color: var(--blue-light); border: 1px solid rgba(59,130,246,0.35); }
+  .tag-li { background: var(--green-glow); color: var(--green-light); border: 1px solid rgba(16,185,129,0.35); }
+  .tag-de { background: var(--violet-glow); color: var(--violet-light); border: 1px solid rgba(139,92,246,0.35); }
+
+  .section-title {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 800; line-height: 1.2; letter-spacing: -0.02em;
+    color: #fff; margin-bottom: 12px;
+  }
+  .section-desc { color: var(--text-muted); font-size: 1rem; margin-bottom: 40px; max-width: 620px; }
+
+  /* ===== THEORY CARDS ===== */
+  .theory-grid { display: grid; gap: 16px; margin-bottom: 48px; }
+  .theory-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: var(--radius);
+    padding: 24px;
+    transition: border-color .2s;
+  }
+  .theory-card:hover { border-color: rgba(255,255,255,0.15); }
+  .theory-card h3 {
+    font-size: 0.9rem; font-weight: 700; margin-bottom: 10px;
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .theory-card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.65; }
+  .theory-card .formula {
+    display: inline-block; margin: 10px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem; font-weight: 500;
+    padding: 8px 16px; border-radius: 8px;
+  }
+  .fn .formula { background: var(--blue-glow); color: var(--blue-light); }
+  .li .formula { background: var(--green-glow); color: var(--green-light); }
+  .de .formula { background: var(--violet-glow); color: var(--violet-light); }
+
+  /* ===== EXERCISE BOX ===== */
+  .exercise-box {
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255,255,255,0.1);
+    overflow: hidden; margin-bottom: 24px;
+  }
+  .exercise-header {
+    display: flex; align-items: center; gap: 14px;
+    padding: 22px 28px;
+  }
+  .ex-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; flex-shrink: 0;
+  }
+  .ex-fn .ex-icon { background: var(--blue-glow); }
+  .ex-li .ex-icon { background: var(--green-glow); }
+  .ex-de .ex-icon { background: var(--violet-glow); }
+
+  .ex-fn .exercise-header { background: linear-gradient(135deg, rgba(59,130,246,0.08), transparent); border-bottom: 1px solid rgba(59,130,246,0.2); }
+  .ex-li .exercise-header { background: linear-gradient(135deg, rgba(16,185,129,0.08), transparent); border-bottom: 1px solid rgba(16,185,129,0.2); }
+  .ex-de .exercise-header { background: linear-gradient(135deg, rgba(139,92,246,0.08), transparent); border-bottom: 1px solid rgba(139,92,246,0.2); }
+
+  .ex-meta { flex: 1; }
+  .ex-label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
+  .ex-title { font-size: 1.05rem; font-weight: 700; color: #fff; line-height: 1.3; }
+
+  .problem-statement {
+    padding: 24px 28px;
+    background: rgba(255,255,255,0.02);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .problem-statement p { color: var(--text-main); font-size: 0.97rem; }
+  .problem-func {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.25rem; font-weight: 700;
+    display: block; text-align: center;
+    margin: 16px 0; padding: 16px;
+    border-radius: 10px;
+  }
+  .ex-fn .problem-func { color: var(--blue-light); background: var(--blue-glow); }
+  .ex-li .problem-func { color: var(--green-light); background: var(--green-glow); }
+  .ex-de .problem-func { color: var(--violet-light); background: var(--violet-glow); }
+
+  /* ===== STEPS ===== */
+  .steps-container { padding: 0 28px 28px; }
+  .steps-intro {
+    display: flex; align-items: center; gap: 10px;
+    margin: 20px 0 16px; color: var(--text-muted); font-size: 0.88rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .steps-intro::after {
+    content: ''; flex: 1; height: 1px;
+    background: rgba(255,255,255,0.08);
+  }
+
+  .step {
+    display: flex; gap: 18px; margin-bottom: 20px;
+    cursor: pointer;
+  }
+  .step-num {
+    width: 34px; height: 34px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; font-weight: 800; flex-shrink: 0; margin-top: 2px;
+    transition: transform .2s;
+  }
+  .ex-fn .step-num { background: var(--blue-glow); border: 2px solid rgba(59,130,246,0.5); color: var(--blue-light); }
+  .ex-li .step-num { background: var(--green-glow); border: 2px solid rgba(16,185,129,0.5); color: var(--green-light); }
+  .ex-de .step-num { background: var(--violet-glow); border: 2px solid rgba(139,92,246,0.5); color: var(--violet-light); }
+
+  .step-body { flex: 1; }
+  .step-title {
+    font-weight: 700; font-size: 0.97rem; color: #fff;
+    margin-bottom: 6px; display: flex; align-items: center; gap: 8px;
+  }
+  .step-title .toggle {
+    margin-left: auto; font-size: 0.75rem; color: var(--text-muted);
+    font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;
+    transition: color .2s;
+  }
+  .step:hover .toggle { color: #fff; }
+
+  .step-detail {
+    color: var(--text-muted); font-size: 0.93rem;
+    line-height: 1.7; overflow: hidden;
+    max-height: 0; transition: max-height .45s ease, opacity .3s;
+    opacity: 0;
+  }
+  .step.open .step-detail { max-height: 800px; opacity: 1; }
+  .step.open .step-num { transform: scale(1.1); }
+
+  .step-formula {
+    font-family: 'JetBrains Mono', monospace;
+    display: block; margin: 10px 0 6px;
+    padding: 12px 16px; border-radius: 8px;
+    font-size: 0.97rem; font-weight: 500; line-height: 1.5;
+  }
+  .ex-fn .step-formula { background: var(--blue-glow); color: var(--blue-light); border-left: 3px solid var(--blue); }
+  .ex-li .step-formula { background: var(--green-glow); color: var(--green-light); border-left: 3px solid var(--green); }
+  .ex-de .step-formula { background: var(--violet-glow); color: var(--violet-light); border-left: 3px solid var(--violet); }
+
+  .note {
+    background: var(--amber-glow); border: 1px solid rgba(245,158,11,0.3);
+    border-radius: 8px; padding: 10px 14px; margin: 10px 0;
+    font-size: 0.88rem; color: var(--amber-light);
+    display: flex; gap: 8px; align-items: flex-start;
+  }
+  .note::before { content: '💡'; flex-shrink: 0; }
+
+  .tip {
+    background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2);
+    border-radius: 8px; padding: 10px 14px; margin: 10px 0;
+    font-size: 0.88rem; color: var(--green-light);
+  }
+
+  /* ===== RESULT BOX ===== */
+  .result-box {
+    border-radius: 12px; padding: 20px 24px; margin-top: 20px;
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .ex-fn .result-box { background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.35); }
+  .ex-li .result-box { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.35); }
+  .ex-de .result-box { background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.35); }
+  .result-icon { font-size: 1.4rem; flex-shrink: 0; }
+  .result-text h4 { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+  .ex-fn .result-text h4 { color: var(--blue-light); }
+  .ex-li .result-text h4 { color: var(--green-light); }
+  .ex-de .result-text h4 { color: var(--violet-light); }
+  .result-text p { font-size: 0.95rem; color: var(--text-main); }
+  .result-text .res-formula {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.05rem; font-weight: 700; display: block; margin-top: 6px;
+  }
+  .ex-fn .res-formula { color: var(--blue-light); }
+  .ex-li .res-formula { color: var(--green-light); }
+  .ex-de .res-formula { color: var(--violet-light); }
+
+  /* ===== GRAPH AREA ===== */
+  .graph-wrap {
+    margin: 20px 0; border-radius: 12px; overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: #0D1526;
+  }
+  .graph-title {
+    padding: 10px 16px; font-size: 0.78rem; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  canvas { display: block; }
+
+  /* ===== TABLE ===== */
+  .data-table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.9rem; }
+  .data-table th {
+    padding: 8px 14px; text-align: left;
+    font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.06em; border-bottom: 1px solid rgba(255,255,255,0.08);
+    color: var(--text-muted);
+  }
+  .data-table td {
+    padding: 8px 14px; border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-family: 'JetBrains Mono', monospace; font-size: 0.88rem;
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+  .td-x { color: var(--blue-light); }
+  .td-fx { color: var(--green-light); }
+  .td-trend { color: var(--amber-light); font-family: 'Inter', sans-serif; font-size: 0.8rem; }
+
+  /* ===== EXPAND ALL BTN ===== */
+  .expand-btn {
+    display: flex; align-items: center; gap: 8px;
+    background: none; border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px; padding: 8px 16px; cursor: pointer;
+    color: var(--text-muted); font-size: 0.82rem; font-weight: 600;
+    margin: 0 28px 20px; transition: all .2s;
+  }
+  .expand-btn:hover { border-color: rgba(255,255,255,0.25); color: #fff; }
+
+  /* ===== DIVIDER ===== */
+  .divider {
+    height: 1px; background: rgba(255,255,255,0.05);
+    margin: 0 24px;
+  }
+
+  /* ===== SUMMARY CARDS ===== */
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(250px,1fr)); gap: 14px; margin-bottom: 48px; }
+  .summ-card {
+    background: var(--bg-card); border: 1px solid rgba(255,255,255,0.07);
+    border-radius: var(--radius); padding: 18px;
+  }
+  .summ-card h4 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+  .summ-card ul { list-style: none; }
+  .summ-card ul li {
+    font-size: 0.88rem; color: var(--text-muted);
+    padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .summ-card ul li:last-child { border-bottom: none; }
+  .summ-card ul li::before { content: '→'; font-size: 0.75rem; flex-shrink: 0; }
+
+  /* ===== FOOTER ===== */
+  footer {
+    text-align: center; padding: 48px 24px;
+    color: var(--text-muted); font-size: 0.85rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  footer strong { color: var(--text-main); }
+
+  /* ===== SCROLL REVEAL ===== */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ===== SECTION COLORS ===== */
+  #funciones { background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(59,130,246,0.06) 0%, transparent 70%); }
+  #limites   { background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(16,185,129,0.06) 0%, transparent 70%); }
+  #derivadas { background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(139,92,246,0.06) 0%, transparent 70%); }
+
+  .fn-accent { color: var(--blue-light); }
+  .li-accent { color: var(--green-light); }
+  .de-accent { color: var(--violet-light); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Mate I <span>/ Parcial 2</span></div>
+  <div class="nav-links">
+    <a class="nav-link fn" href="#funciones" onclick="setActive(this)">📐 Funciones</a>
+    <a class="nav-link li" href="#limites" onclick="setActive(this)">∞ Límites</a>
+    <a class="nav-link de" href="#derivadas" onclick="setActive(this)">f′ Derivadas</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">📚 UNNOBA · Elementos de Matemática · 1er año</div>
+  <h1>Segundo Parcial:<br><em>sin misterios</em></h1>
+  <p>Funciones, Límites y Derivadas explicados desde cero, con ejemplos resueltos paso a paso. Ideal si las matemáticas te cuestan.</p>
+  <div class="hero-topics">
+    <a class="hero-topic ht-fn" href="#funciones">📐 Funciones Reales</a>
+    <a class="hero-topic ht-li" href="#limites">∞ Límite y Continuidad</a>
+    <a class="hero-topic ht-de" href="#derivadas">f′ Derivadas</a>
+  </div>
+</div>
+
+<!-- ============================== FUNCIONES ============================== -->
+<section id="funciones">
+<div class="container">
+
+  <div class="section-tag tag-fn reveal">📐 Unidad 5</div>
+  <h2 class="section-title reveal">Funciones Reales</h2>
+  <p class="section-desc reveal">Una función es una "máquina" que toma un número y devuelve otro número. Por cada valor que meto (x), sale un único valor (y = f(x)).</p>
+
+  <!-- TEORÍA RÁPIDA -->
+  <div class="theory-grid reveal">
+    <div class="theory-card fn">
+      <h3 class="fn-accent">¿Qué es una función?</h3>
+      <p>Una función <strong>f: A → B</strong> asigna a <em>cada</em> x ∈ A un <em>único</em> y ∈ B.<br>
+      Se escribe y = f(x). La x es la <strong>variable independiente</strong>, la y es la <strong>variable dependiente</strong>.</p>
+      <span class="formula">f(x) = x² − 3x + 2</span>
+    </div>
+    <div class="theory-card fn">
+      <h3 class="fn-accent">Dominio e Imagen</h3>
+      <p><strong>Dominio:</strong> todos los valores de x para los que f(x) está definida.<br>
+      <strong>Imagen:</strong> todos los valores que realmente toma f(x).<br>
+      Cuidado: las raíces piden ≥ 0 adentro, y las fracciones piden denominador ≠ 0.</p>
+    </div>
+    <div class="theory-card fn">
+      <h3 class="fn-accent">Ceros, C⁺ y C⁻</h3>
+      <p><strong>C⁰ (ceros):</strong> f(x) = 0 → la curva corta el eje x.<br>
+      <strong>C⁺ (positividad):</strong> donde f(x) > 0 → la curva está <em>arriba</em> del eje x.<br>
+      <strong>C⁻ (negatividad):</strong> donde f(x) &lt; 0 → la curva está <em>abajo</em> del eje x.</p>
+    </div>
+    <div class="theory-card fn">
+      <h3 class="fn-accent">Función Par e Impar</h3>
+      <p><strong>Par:</strong> f(−x) = f(x) → simétrica respecto al eje y. Ej: f(x) = x²<br>
+      <strong>Impar:</strong> f(−x) = −f(x) → simétrica respecto al origen. Ej: f(x) = x³</p>
+    </div>
+    <div class="theory-card fn">
+      <h3 class="fn-accent">Función Cuadrática</h3>
+      <p>f(x) = ax² + bx + c.<br>
+      El <strong>vértice</strong> está en xᵥ = −b/(2a).<br>
+      Si a &gt; 0 la parábola abre hacia <em>arriba</em>; si a &lt; 0, hacia <em>abajo</em>.<br>
+      Las raíces se calculan con la fórmula resolvente.</p>
+    </div>
+    <div class="theory-card fn">
+      <h3 class="fn-accent">Asíntotas</h3>
+      <p><strong>Horizontal (AH):</strong> y = L cuando x→±∞. La curva se "aplana" en una recta horizontal.<br>
+      <strong>Vertical (AV):</strong> x = a cuando f(x) → ±∞. La curva "explota" en una recta vertical.<br>
+      <strong>Oblicua (AO):</strong> y = mx + b cuando x→∞.</p>
+    </div>
+  </div>
+
+  <!-- EJERCICIO FUNCIONES -->
+  <h3 class="section-title reveal" style="font-size:1.4rem; margin-bottom:8px;">Ejercicio Completo — Análisis de Función</h3>
+  <p class="section-desc reveal" style="margin-bottom:24px;">Vamos a analizar <em>todo</em> sobre una función cuadrática y una racional. ¡Expandí cada paso!</p>
+
+  <!-- Parte A: Cuadrática -->
+  <div class="exercise-box ex-fn reveal">
+    <div class="exercise-header">
+      <div class="ex-icon">📈</div>
+      <div class="ex-meta">
+        <div class="ex-label">Parte A — Función Cuadrática</div>
+        <div class="ex-title">Analizá completamente f(x) = x² − 4x − 5</div>
+      </div>
+    </div>
+    <div class="problem-statement">
+      <p>Encontrá: dominio, imagen, vértice, raíces, C⁰, C⁺, C⁻, intervalos de crecimiento/decrecimiento e intersecciones con los ejes.</p>
+      <span class="problem-func">f(x) = x² − 4x − 5</span>
+    </div>
+
+    <button class="expand-btn" onclick="expandAll('fn-a')">⊞ Expandir todos los pasos</button>
+
+    <div class="steps-container">
+      <div class="steps-intro">Resolución paso a paso</div>
+
+      <div class="step" id="fn-a-1" onclick="toggleStep(this)">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Dominio <span class="toggle">+ ver</span></div>
+          <div class="step-detail">
+            <p>f(x) = x² − 4x − 5 es una función <strong>polinómica</strong>. Los polinomios están definidos para <em>todos</em> los números reales, no tienen denominadores ni raíces que puedan "romperse".</p>
+            <span class="step-formula">Dom(f) = ℝ = (−∞ , +∞)</span>
+            <div class="note">Para funciones polinómicas el dominio SIEMPRE es ℝ. Problema con dominio solo ocurre con fracciones (denominador = 0) o raíces cuadradas de número negativo.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step" id="fn-a-2" onclick="toggleStep(this)">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Vértice de la parábola <span class="toggle">+ ver</span></div>
+          <div class="step-detail">
+            <p>Identificamos los coeficientes: a = 1, b = −4, c = −5.</p>
+            <p>La abscisa del vértice es:</p>
+            <span class="step-formula">xᵥ = −b / (2a) = −(−4) / (2·1) = 4/2 = 2</span>
+            <p>Para la ordenada, reemplazamos x = 2 en f(x):</p>
+            <span class="step-formula">yᵥ = f(2) = 2² − 4·2 − 5 = 4 − 8 − 5 = −9</span>
+            <p>El vértice es el punto <strong>V(2 ; −9)</strong>. Como a = 1 &gt; 0, la parábola abre hacia <em>arriba</em> → el vértice es un <strong>mínimo</strong>.</p>
+            <div class="note">El vértice es el punto más alto o más bajo de la parábola. Si a &gt; 0 es el punto más bajo (mínimo). Si a &lt; 0 es el punto más alto (máximo).</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step" id="fn-a-3" onclick="toggleStep(this)">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Imagen (rango) <span class="toggle">+ ver</span></div>
+          <div class="step-detail">
+            <p>Como la parábola abre hacia arriba (a &gt; 0), el valor mínimo es el vértice yᵥ = −9. La función crece hacia +∞.</p>
+            <span class="step-formula">Im(f) = [−9 , +∞)</span>
+            <div class="note">Si a &lt; 0 (parábola hacia abajo), la imagen sería (−∞ , yᵥ]. El corchete "[" significa que el valor se incluye.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step" id="fn-a-4" onclick="toggleStep(this)">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Raíces (ceros) — C⁰ <span class="toggle">+ ver</span></div>
+          <div class="step-detail">
+            <p>Igualamos f(x) = 0 y aplicamos la fórmula resolvente:</p>
+            <span class="step-formula">x² − 4x − 5 = 0</span>
+            <span class="step-formula">x = [−(−4) ± √((−4)² − 4·1·(−5))] / (2·1)</span>
+            <span class="step-formula">x = [4 ± √(16 + 20)] / 2 = [4 ± √36] / 2 = [4 ± 6] / 2</span>
+            <p>Dos soluciones:</p>
+            <span class="step-formula">x₁ = (4 + 6)/2 = 10/2 = 5</span>
+            <span class="step-formula">x₂ = (4 − 6)/2 = −2/2 = −1</span>
+            <p>La parábola corta el eje x en los puntos <strong>(−1 , 0)</strong> y <strong>(5 , 0)</strong>.</p>
+            <p style="margin-top:10px;"><strong>C⁰ = {−1 , 5}</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="step" id="fn-a-5" onclick="toggleStep(this)">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <div class="step-title">Positividad C⁺ y Negatividad C⁻ <span class="toggle">+ ver</span></div>
+          <div class="step-detail">
+            <p>La parábola abre hacia arriba. Las raíces son x = −1 y x = 5. Analizamos el signo de f(x) en cada intervalo:</p>
+            <table class="data-table">
+              <tr><th>Intervalo</th><th>Ejemplo x</th><th>f(x)</th><th>Signo</th></tr>
+              <tr><td class="td-x">(−∞, −1)</td><td class="td-x">x = −2</td><td class="td-fx">4 + 8 − 5 = 7</td><td class="td-trend">✅ C⁺</td></tr>
+              <tr><td class="td-x">(−1, 5)</td><td class="td-x">x = 0</td><td class="td-fx">0 − 0 − 5 = −5</td><td class="td-trend">❌ C⁻</td></tr>
+              <tr><td class="td-x">(5, +∞)</td><td class="td-x">x = 6</td><td class="td-fx">36 − 24 − 5 = 7</td><td class="td-trend">✅ C⁺</td></tr>
+            </table>
+            <span class="step-formula">C⁺ = (−∞, −1) ∪ (5, +∞)</span>
+            <span class="step-formula">C⁻ = (−1, 5)</span>
+            <div class="note">La curva está por encima del eje x en los intervalos C⁺, y por debajo en C⁻. Entre las raíces, la parábola "baja" debajo del eje.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step" id="fn-a-6" onclick="toggleStep(this)">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <div class="step-title">Crecimiento y decrecimiento <span class="toggle">+ ver</span></div>
+          <div class="step-detail">
+            <p>Como la parábola tiene vértice en xᵥ = 2 y abre hacia arriba:</p>
+            <span class="step-formula">I_dec = (−∞, 2)   ← va bajando hasta el vértice</span>
+            <span class="step-formula">I_crec = (2, +∞)   ← sube desde el vértice</span>
+            <p>El eje de simetría es la recta vertical <strong>x = 2</strong>. La parábola es simétrica respecto a esa recta.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="step" id="fn-a-7" onclick="toggleStep(this)">
+        <div class="step-num">7</div>
+        <div class="step-body">
+          <div class="step-title">Intersección con el eje y <span class="toggle">+ ver</span></div>
+          <div class="step-detail">
+            <p>Para encontrar dónde la curva corta el eje y, reemplazamos x = 0:</p>
+            <span class="step-formula">f(0) = 0² − 4·0 − 5 = −5</span>
+            <p>La curva corta el eje y en el punto <strong>(0 , −5)</strong>.</p>
+            <div class="note">La intersección con el eje y es siempre f(0), el coeficiente independiente "c" del trinomio.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GRÁFICO -->
+      <div class="step-detail" style="max-height:none; opacity:1; margin-top:10px;">
+        <div class="graph-wrap">
+          <div class="graph-title">📊 Gráfico de f(x) = x² − 4x − 5</div>
+          <canvas id="graph-fn-a" width="840" height="340"></canvas>
+        </div>
+      </div>
+
+      <div class="result-box ex-fn">
+        <div class="result-icon">✅</div>
+        <div class="result-text">
+          <h4>Resumen completo</h4>
+          <p>Dom = ℝ &nbsp;|&nbsp; Im = [−9, +∞) &nbsp;|&nbsp; Vértice = (2, −9) &nbsp;|&nbsp; C⁰ = {−1, 5}</p>
+          <p>C⁺ = (−∞,−1)∪(5,+∞) &nbsp;|&nbsp; C⁻ = (−1, 5) &nbsp;|&nbsp; Eje sim: x = 2</p>
+          <span class="res-formula">Forma factorizada: f(x) = (x+1)(x−5)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Parte B: Racional -->
+  <div class="exercise-box ex-fn reveal">
+    <div class="exercise-header">
+      <div class="ex-icon">📉</div>
+      <div class="ex-meta">
+        <div class="ex-label">Parte B — Función Homográfica (Racional)</div>
+        <div class="ex-title">Analizá g(x) = (2x + 1) / (x − 3)</div>
+      </div>
+    </div>
+    <div class="problem-statement">
+      <p>Encontrá: dominio, imagen, asíntotas, ceros, C⁺, C⁻ y graficá.</p>
+      <span class="problem-func">g(x) = (2x + 1) / (x − 3)</span>
+    </div>
+
+    <button class="expand-btn" onclick="expandAll('fn-b')">⊞ Expandir todos los pasos</button>
+
+    <div class="steps-container">
+      <div class="steps-intro">Resolución paso a paso</div>
+
+      <div class="step" id="fn-b-1" onclick="toggleStep(this)">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Dominio <span class="toggle">+ ver</span></div>
+          <div class="step-detail">
+            <p>El único problema es el denominador. El denominador no puede ser cero:</p>
+            <span class="step-formula">x − 3 ≠ 0  →  x ≠ 3</span>
+            <span class="step-formula">Dom(g) = ℝ − {3} = (−∞, 3) ∪ (3, +∞)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step" id="fn-b-2" onclick="toggleStep(this)">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Asíntota Vertical (AV) <span class="toggle">+ ver</span></div>
+          <div class="step-detail">
+            <p>La asíntota vertical ocurre donde el denominador se anula:</p>
+            <span class="step-formula">x − 3 = 0  →  x = 3</span>
+            <p>La recta vertical <strong>x = 3</strong> es la Asíntota Vertical. Si nos acercamos a x = 3, g(x) tiende a ±∞.</p>
+            <div class="note">La asíntota vertical es como una "pared invisible" que la curva nunca puede cruzar.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step" id="fn-b-3" onclick="toggleStep(this)">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Asíntota Horizontal (AH) <span class="toggle">+ ver</span></div>
+          <div class="step-detail">
+            <p>Para funciones homográficas (ambos polinomios de igual grado), la AH es el cociente de los coeficientes principales:</p>
+            <span class="step-formula">AH: y = 2/1 = 2</span>
+            <p>Verificación: lim(x→∞) (2x+1)/(x−3) = lim(x→∞) 2x/x = 2</p>
+            <p>La recta horizontal <strong>y = 2</strong> es la Asíntota Horizontal.</p>
+            <div class="note">La imagen de la función homográfica es Im(g) = ℝ − {a/c} = ℝ − {2}. La función nunca toma el valor 2.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step" id="fn-b-4" onclick="toggleStep(this)">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Ceros y positividad/negatividad <span class="toggle">+ ver</span></div>
+          <div class="step-detail">
+            <p>g(x) = 0 cuando el numerador = 0:</p>
+            <span class="step-formula">2x + 1 = 0  →  x = −1/2</span>
+            <p><strong>C⁰ = {−1/2}</strong>. Eso significa que g corta el eje x en (−1/2, 0).</p>
+            <p>Intersección con eje y: g(0) = (2·0+1)/(0−3) = 1/(−3) = −1/3. Punto: (0, −1/3).</p>
+            <table class="data-table" style="margin-top:12px;">
+              <tr><th>Intervalo</th><th>g(x)</th></tr>
+              <tr><td class="td-x">(−∞, −1/2)</td><td class="td-trend">C⁻ (negativa)</td></tr>
+              <tr><td class="td-x">(−1/2, 3)</td><td class="td-trend">C⁺ (positiva)</td></tr>
+              <tr><td class="td-x">(3, +∞)</td><td class="td-trend">C⁺ (positiva)</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-detail" style="max-height:none; opacity:1; margin-top:10px; padding: 0 0 10px;">
+        <div class="graph-wrap">
+          <div class="graph-title">📊 Gráfico de g(x) = (2x+1)/(x−3)</div>
+          <canvas id="graph-fn-b" width="840" height="340"></canvas>
+        </div>
+      </div>
+
+      <div class="result-box ex-fn" style="margin: 0 0 0 0;">
+        <div class="result-icon">✅</div>
+        <div class="result-text">
+          <h4>Resumen</h4>
+          <p>Dom = ℝ−{3} &nbsp;|&nbsp; Im = ℝ−{2} &nbsp;|&nbsp; AV: x = 3 &nbsp;|&nbsp; AH: y = 2 &nbsp;|&nbsp; C⁰ = {−1/2}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<!-- ============================== LÍMITES ============================== -->
+<section id="limites">
+<div class="container">
+
+  <div class="section-tag tag-li reveal">∞ Unidad 6</div>
+  <h2 class="section-title reveal">Límite y Continuidad</h2>
+  <p class="section-desc reveal">Un límite responde a: "¿a qué valor se acerca f(x) cuando x se acerca a cierto punto?" — aunque f(x) no esté definida exactamente ahí.</p>
+
+  <div class="theory-grid reveal">
+    <div class="theory-card li">
+      <h3 class="li-accent">Idea intuitiva</h3>
+      <p>lim(x→a) f(x) = L significa que a medida que x se acerca a "a" (sin llegar a ser "a"), f(x) se acerca a "L".</p>
+      <span class="formula">lim(x→a) f(x) = L</span>
+    </div>
+    <div class="theory-card li">
+      <h3 class="li-accent">Límites laterales</h3>
+      <p><strong>Por derecha:</strong> x → a⁺ (valores mayores que a)<br>
+      <strong>Por izquierda:</strong> x → a⁻ (valores menores que a)<br>
+      El límite existe ↔ ambos laterales son iguales.</p>
+    </div>
+    <div class="theory-card li">
+      <h3 class="li-accent">Indeterminaciones</h3>
+      <p><strong>0/0:</strong> factorizar o racionalizar.<br>
+      <strong>∞/∞:</strong> dividir por la mayor potencia de x.<br>
+      <strong>∞ − ∞:</strong> operar algebraicamente primero.</p>
+    </div>
+    <div class="theory-card li">
+      <h3 class="li-accent">Continuidad en un punto</h3>
+      <p>f es continua en x = a si se cumplen las 3 condiciones:<br>
+      1. f(a) existe<br>
+      2. lim(x→a) f(x) existe<br>
+      3. lim(x→a) f(x) = f(a)</p>
+    </div>
+    <div class="theory-card li">
+      <h3 class="li-accent">Discontinuidades</h3>
+      <p><strong>Evitable:</strong> el límite existe pero f(a) no está definida o no coincide.<br>
+      <strong>Esencial:</strong> los límites laterales son distintos, o el límite es ±∞.</p>
+    </div>
+    <div class="theory-card li">
+      <h3 class="li-accent">Límite notable</h3>
+      <p>Un resultado fundamental que debés memorizar:</p>
+      <span class="formula">lim(x→0) sen(x)/x = 1</span>
+    </div>
+  </div>
+
+  <!-- EJERCICIO LÍMITES -->
+  <h3 class="section-title reveal" style="font-size:1.4rem; margin-bottom:8px;">Ejercicio Completo — Cálculo de Límites</h3>
+  <p class="section-desc reveal">Resolvemos 5 límites de distintos tipos que abarca el parcial.</p>
+
+  <div class="exercise-box ex-li reveal">
+    <div class="exercise-header">
+      <div class="ex-icon">∞</div>
+      <div class="ex-meta">
+        <div class="ex-label">Ejercicio — Límites Variados</div>
+        <div class="ex-title">Calculá los siguientes límites y analizá continuidad</div>
+      </div>
+    </div>
+    <div class="problem-statement">
+      <p>Cinco límites de distintas técnicas: directa, indeterminación 0/0, irracional, ∞/∞ y análisis de continuidad.</p>
+    </div>
+
+    <button class="expand-btn" onclick="expandAll('li-a')">⊞ Expandir todos los pasos</button>
+
+    <div class="steps-container">
+      <div class="steps-intro">Límite 1 — Sustitución directa</div>
+
+      <div class="step" id="li-a-1" onclick="toggleStep(this)">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">lim(x→2) (x² + 3x − 1) <span class="toggle">+ ver</span></div>
+          <div class="step-detail">
+            <p>f(x) = x² + 3x − 1 es un polinomio → definida y continua en todos lados. Simplemente sustituimos x = 2:</p>
+            <span class="step-formula">lim(x→2) (x² + 3x − 1) = (2)² + 3(2) − 1 = 4 + 6 − 1 = 9</span>
+            <div class="note">Para polinomios y funciones racionales (con denominador ≠ 0), el límite es simplemente f(a). ¡Sustituí directo!</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="steps-intro" style="margin-top:24px;">Límite 2 — Indeterminación 0/0 (factorización)</div>
+
+      <div class="step" id="li-a-2" onclick="toggleStep(this)">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">lim(x→3) (x² − 9) / (x − 3) <span class="toggle">+ ver</span></div>
+          <div class="step-detail">
+            <p>Si sustituimos x = 3 directamente: (9−9)/(3−3) = 0/0. ¡Indeterminación! Necesitamos factorizar.</p>
+            <span class="step-formula">x² − 9 = (x − 3)(x + 3)   ← diferencia de cuadrados</span>
+            <span class="step-formula">lim(x→3) [(x−3)(x+3)] / (x−3)</span>
+            <p>Cancelamos el factor (x − 3) que aparece arriba y abajo (recordá que x ≠ 3, solo se <em>acerca</em> a 3):</p>
+            <span class="step-formula">= lim(x→3) (x + 3) = 3 + 3 = 6</span>
+            <div class="note">En una indeterminación 0/0 siempre hay un factor que se cancela. Factorizá numerador y denominador.</div>
+            <div class="graph-wrap" style="margin-top:14px;">
+              <div class="graph-title">📊 Tabla de valores cerca de x = 3</div>
+              <table class="data-table" style="padding: 12px;">
+                <tr><th>x</th><th>f(x) = (x²−9)/(x−3)</th><th>Tendencia</th></tr>
+                <tr><td class="td-x">2.9</td><td class="td-fx">5.9</td><td class="td-trend">→ 6</td></tr>
+                <tr><td class="td-x">2.99</td><td class="td-fx">5.99</td><td class="td-trend">→ 6</td></tr>
+                <tr><td class="td-x">3 (no definida)</td><td class="td-fx">0/0</td><td class="td-trend">❌</td></tr>
+                <tr><td class="td-x">3.01</td><td class="td-fx">6.01</td><td class="td-trend">→ 6</td></tr>
+                <tr><td class="td-x">3.1</td><td class="td-fx">6.1</td><td class="td-trend">→ 6</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="steps-intro" style="margin-top:24px;">Límite 3 — Función Irracional (conjugada)</div>
+
+      <div class="step" id="li-a-3" onclick="toggleStep(this)">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">lim(x→0) (√(x+1) − 1) / x <span class="toggle">+ ver</span></div>
+          <div class="step-detail">
+            <p>Sustituimos x = 0: (√1 − 1)/0 = 0/0. Indeterminación. Con raíces, la técnica es multiplicar por la <strong>expresión conjugada</strong>.</p>
+            <p>La conjugada de (√(x+1) − 1) es (√(x+1) + 1):</p>
+            <span class="step-formula">= lim(x→0) [(√(x+1)−1) / x] · [(√(x+1)+1) / (√(x+1)+1)]</span>
+            <p>El numerador se convierte en diferencia de cuadrados: (√(x+1))² − 1² = x+1 − 1 = x</p>
+            <span class="step-formula">= lim(x→0) x / [x · (√(x+1)+1)]</span>
+            <p>Cancelamos la x:</p>
+            <span class="step-formula">= lim(x→0) 1 / (√(x+1)+1) = 1 / (√1+1) = 1/2</span>
+            <div class="note">La conjugada de (√A − B) es (√A + B). Al multiplicar: (√A − B)(√A + B) = A − B². Esto elimina la raíz del numerador.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="steps-intro" style="margin-top:24px;">Límite 4 — En el infinito (∞/∞)</div>
+
+      <div class="step" id="li-a-4" onclick="toggleStep(this)">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">lim(x→∞) (3x² − 2x) / (x² + 5) <span class="toggle">+ ver</span></div>
+          <div class="step-detail">
+            <p>Si sustituimos x = ∞: ∞/∞ — indeterminación. La técnica: dividir numerador y denominador por la mayor potencia de x que aparece (aquí es x²):</p>
+            <span class="step-formula">= lim(x→∞) [(3x²/x² − 2x/x²)] / [(x²/x² + 5/x²)]</span>
+            <span class="step-formula">= lim(x→∞) [3 − 2/x] / [1 + 5/x²]</span>
+            <p>Cuando x → ∞, los términos con x en el denominador se van a 0: 2/x → 0, 5/x² → 0.</p>
+            <span class="step-formula">= (3 − 0) / (1 + 0) = 3/1 = 3</span>
+            <div class="note">
+              Regla rápida para lim(x→∞) P(x)/Q(x):<br>
+              • Si gr(P) = gr(Q): el límite es el cociente de coeficientes principales.<br>
+              • Si gr(P) &lt; gr(Q): el límite es 0.<br>
+              • Si gr(P) &gt; gr(Q): el límite es ±∞.
+            </div>
+            <p style="margin-top:10px;">En este caso ambos son grado 2: resultado = 3/1 = <strong>3</strong>. Confirma la asíntota horizontal y = 3.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="steps-intro" style="margin-top:24px;">Límite 5 — Análisis de Continuidad</div>
+
+      <div class="step" id="li-a-5" onclick="toggleStep(this)">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <div class="step-title">¿Es continua h(x) en x = 1? <span class="toggle">+ ver</span></div>
+          <div class="step-detail">
+            <p>Sea:</p>
+            <span class="step-formula">h(x) = { 4x + 3   si x &lt; 1
+          { x² + 6   si x ≥ 1</span>
+            <p>Verificamos las 3 condiciones:</p>
+            <p><strong>Condición 1:</strong> ¿Existe h(1)?<br>
+            h(1) = 1² + 6 = 7 ✅</p>
+            <p><strong>Condición 2:</strong> ¿Existe el límite?<br>
+            — Límite por izquierda (x → 1⁻): usamos la rama 4x + 3 → 4(1) + 3 = <strong>7</strong><br>
+            — Límite por derecha (x → 1⁺): usamos la rama x² + 6 → 1 + 6 = <strong>7</strong></p>
+            <span class="step-formula">lim(x→1⁻) h(x) = 7 = lim(x→1⁺) h(x)  →  lim(x→1) h(x) = 7 ✅</span>
+            <p><strong>Condición 3:</strong> ¿Coinciden?<br>
+            lim(x→1) h(x) = 7 = h(1) ✅</p>
+            <div class="tip">✅ Las 3 condiciones se cumplen → h(x) es CONTINUA en x = 1.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-box ex-li">
+        <div class="result-icon">✅</div>
+        <div class="result-text">
+          <h4>Resultados</h4>
+          <p>1) 9 &nbsp;|&nbsp; 2) 6 &nbsp;|&nbsp; 3) 1/2 &nbsp;|&nbsp; 4) 3 &nbsp;|&nbsp; 5) Continua en x = 1</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<!-- ============================== DERIVADAS ============================== -->
+<section id="derivadas">
+<div class="container">
+
+  <div class="section-tag tag-de reveal">f′ Unidad 7</div>
+  <h2 class="section-title reveal">Derivadas</h2>
+  <p class="section-desc reveal">La derivada mide cómo cambia una función. Geométricamente es la pendiente de la recta tangente a la curva en un punto.</p>
+
+  <div class="theory-grid reveal">
+    <div class="theory-card de">
+      <h3 class="de-accent">Definición</h3>
+      <p>La derivada de f en x₀ es el límite del cociente incremental:</p>
+      <span class="formula">f′(x) = lim(Δx→0) [f(x+Δx)−f(x)] / Δx</span>
+    </div>
+    <div class="theory-card de">
+      <h3 class="de-accent">Reglas básicas</h3>
+      <p><strong>Constante:</strong> D(k) = 0<br>
+      <strong>Potencia:</strong> D(xⁿ) = n·xⁿ⁻¹<br>
+      <strong>Constante × función:</strong> D(k·f) = k·f′<br>
+      <strong>Suma/Resta:</strong> D(f±g) = f′±g′</p>
+    </div>
+    <div class="theory-card de">
+      <h3 class="de-accent">Producto y Cociente</h3>
+      <p><strong>Producto:</strong> D(u·v) = u′v + uv′<br>
+      <strong>Cociente:</strong> D(u/v) = (u′v − uv′) / v²</p>
+      <span class="formula">(u/v)′ = (u′v − uv′) / v²</span>
+    </div>
+    <div class="theory-card de">
+      <h3 class="de-accent">Regla de la cadena</h3>
+      <p>Para funciones compuestas f(g(x)):</p>
+      <span class="formula">[f(g(x))]′ = f′(g(x)) · g′(x)</span>
+      <p>Primero derivás la función "de afuera" evaluada en la "de adentro", y multiplicás por la derivada de "adentro".</p>
+    </div>
+    <div class="theory-card de">
+      <h3 class="de-accent">Funciones especiales</h3>
+      <p><strong>D(eˣ) = eˣ</strong><br>
+      <strong>D(ln x) = 1/x</strong><br>
+      <strong>D(sen x) = cos x</strong><br>
+      <strong>D(cos x) = −sen x</strong><br>
+      <strong>D(tg x) = sec²x = 1/cos²x</strong></p>
+    </div>
+    <div class="theory-card de">
+      <h3 class="de-accent">Recta tangente y normal</h3>
+      <p>En el punto P(x₀, f(x₀)):<br>
+      <strong>Tangente:</strong> y = f′(x₀)·(x − x₀) + f(x₀)<br>
+      <strong>Normal:</strong> y = [−1/f′(x₀)]·(x − x₀) + f(x₀)</p>
+    </div>
+  </div>
+
+  <!-- TABLA DE DERIVADAS RÁPIDA -->
+  <div class="theory-card de reveal" style="margin-bottom: 40px;">
+    <h3 class="de-accent">📋 Tabla rápida de derivadas</h3>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap: 8px; margin-top:12px;">
+      <div><span class="formula" style="display:block; font-size:0.85rem; margin:3px 0; padding:6px 10px;">D(k) = 0</span></div>
+      <div><span class="formula" style="display:block; font-size:0.85rem; margin:3px 0; padding:6px 10px;">D(x) = 1</span></div>
+      <div><span class="formula" style="display:block; font-size:0.85rem; margin:3px 0; padding:6px 10px;">D(xⁿ) = n·xⁿ⁻¹</span></div>
+      <div><span class="formula" style="display:block; font-size:0.85rem; margin:3px 0; padding:6px 10px;">D(√x) = 1/(2√x)</span></div>
+      <div><span class="formula" style="display:block; font-size:0.85rem; margin:3px 0; padding:6px 10px;">D(eˣ) = eˣ</span></div>
+      <div><span class="formula" style="display:block; font-size:0.85rem; margin:3px 0; padding:6px 10px;">D(aˣ) = aˣ·ln(a)</span></div>
+      <div><span class="formula" style="display:block; font-size:0.85rem; margin:3px 0; padding:6px 10px;">D(ln x) = 1/x</span></div>
+      <div><span class="formula" style="display:block; font-size:0.85rem; margin:3px 0; padding:6px 10px;">D(logₐ x) = 1/(x·ln a)</span></div>
+      <div><span class="formula" style="display:block; font-size:0.85rem; margin:3px 0; padding:6px 10px;">D(sen x) = cos x</span></div>
+      <div><span class="formula" style="display:block; font-size:0.85rem; margin:3px 0; padding:6px 10px;">D(cos x) = −sen x</span></div>
+      <div><span class="formula" style="display:block; font-size:0.85rem; margin:3px 0; padding:6px 10px;">D(tg x) = sec²x</span></div>
+      <div><span class="formula" style="display:block; font-size:0.85rem; margin:3px 0; padding:6px 10px;">D(arcsen x) = 1/√(1−x²)</span></div>
+    </div>
+  </div>
+
+  <!-- EJERCICIO DERIVADAS -->
+  <h3 class="section-title reveal" style="font-size:1.4rem; margin-bottom:8px;">Ejercicio Completo — Derivación</h3>
+  <p class="section-desc reveal">Derivamos una función compleja usando múltiples reglas, hallamos recta tangente y normal, y analizamos los puntos críticos.</p>
+
+  <div class="exercise-box ex-de reveal">
+    <div class="exercise-header">
+      <div class="ex-icon">f′</div>
+      <div class="ex-meta">
+        <div class="ex-label">Ejercicio — Derivación completa</div>
+        <div class="ex-title">Sea f(x) = x³ − 6x² + 9x + 1. Analizá completamente.</div>
+      </div>
+    </div>
+    <div class="problem-statement">
+      <p>Calculá f′(x) y f″(x), encontrá los puntos críticos, determiná máximos/mínimos y hallá la ecuación de la recta tangente en x = 0.</p>
+      <span class="problem-func">f(x) = x³ − 6x² + 9x + 1</span>
+    </div>
+
+    <button class="expand-btn" onclick="expandAll('de-a')">⊞ Expandir todos los pasos</button>
+
+    <div class="steps-container">
+      <div class="steps-intro">Derivación y análisis completo</div>
+
+      <div class="step" id="de-a-1" onclick="toggleStep(this)">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Calculá f′(x) — Derivada primera <span class="toggle">+ ver</span></div>
+          <div class="step-detail">
+            <p>Aplicamos la regla de la potencia a cada término (derivada de la suma = suma de derivadas):</p>
+            <span class="step-formula">f(x) = x³ − 6x² + 9x + 1</span>
+            <span class="step-formula">D(x³) = 3x²</span>
+            <span class="step-formula">D(−6x²) = −6 · 2x = −12x</span>
+            <span class="step-formula">D(9x) = 9</span>
+            <span class="step-formula">D(1) = 0   ← derivada de constante</span>
+            <span class="step-formula">f′(x) = 3x² − 12x + 9</span>
+            <div class="note">La derivada de cada término es independiente. Regla de la potencia: D(xⁿ) = n·xⁿ⁻¹. Bajamos el exponente y lo ponemos como coeficiente, luego reducimos el exponente en 1.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step" id="de-a-2" onclick="toggleStep(this)">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Calculá f″(x) — Derivada segunda <span class="toggle">+ ver</span></div>
+          <div class="step-detail">
+            <p>Derivamos f′(x) para obtener f″(x):</p>
+            <span class="step-formula">f′(x) = 3x² − 12x + 9</span>
+            <span class="step-formula">D(3x²) = 6x</span>
+            <span class="step-formula">D(−12x) = −12</span>
+            <span class="step-formula">D(9) = 0</span>
+            <span class="step-formula">f″(x) = 6x − 12</span>
+            <div class="note">La derivada segunda nos dice cómo cambia la pendiente. Nos sirve para clasificar los puntos críticos: f″ > 0 → mínimo, f″ &lt; 0 → máximo.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step" id="de-a-3" onclick="toggleStep(this)">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Puntos críticos (donde f′ = 0) <span class="toggle">+ ver</span></div>
+          <div class="step-detail">
+            <p>Los puntos críticos son donde la derivada primera se anula (pendiente = 0, es decir la función "cambia de dirección"):</p>
+            <span class="step-formula">f′(x) = 0 → 3x² − 12x + 9 = 0</span>
+            <p>Dividimos todo por 3:</p>
+            <span class="step-formula">x² − 4x + 3 = 0</span>
+            <p>Factorizamos:</p>
+            <span class="step-formula">(x − 1)(x − 3) = 0</span>
+            <span class="step-formula">x₁ = 1   y   x₂ = 3</span>
+            <p>Calculamos f en esos puntos:</p>
+            <span class="step-formula">f(1) = 1 − 6 + 9 + 1 = 5   → punto crítico: (1, 5)</span>
+            <span class="step-formula">f(3) = 27 − 54 + 27 + 1 = 1  → punto crítico: (3, 1)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step" id="de-a-4" onclick="toggleStep(this)">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Clasificá los puntos críticos con f″ <span class="toggle">+ ver</span></div>
+          <div class="step-detail">
+            <p>Evaluamos la derivada segunda en cada punto crítico:</p>
+            <span class="step-formula">f″(1) = 6(1) − 12 = 6 − 12 = −6 &lt; 0  → MÁXIMO LOCAL en (1, 5)</span>
+            <span class="step-formula">f″(3) = 6(3) − 12 = 18 − 12 = 6 &gt; 0   → MÍNIMO LOCAL en (3, 1)</span>
+            <div class="note">
+              Regla del criterio de la segunda derivada:<br>
+              • f″(x₀) &lt; 0 → la función está "cóncava hacia abajo" → es un MÁXIMO LOCAL 🔝<br>
+              • f″(x₀) &gt; 0 → la función está "cóncava hacia arriba" → es un MÍNIMO LOCAL 🔻
+            </div>
+            <table class="data-table" style="margin-top:12px;">
+              <tr><th>Punto</th><th>f″</th><th>Tipo</th><th>Valor</th></tr>
+              <tr><td class="td-x">x = 1</td><td class="td-fx">−6</td><td class="td-trend">Máximo local</td><td class="td-fx">f(1) = 5</td></tr>
+              <tr><td class="td-x">x = 3</td><td class="td-fx">+6</td><td class="td-trend">Mínimo local</td><td class="td-fx">f(3) = 1</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="step" id="de-a-5" onclick="toggleStep(this)">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <div class="step-title">Recta tangente en x = 0 <span class="toggle">+ ver</span></div>
+          <div class="step-detail">
+            <p>La pendiente de la tangente en x = 0 es f′(0):</p>
+            <span class="step-formula">f′(x) = 3x² − 12x + 9</span>
+            <span class="step-formula">f′(0) = 3(0)² − 12(0) + 9 = 9    ← esta es la pendiente m</span>
+            <p>El punto de tangencia es (0, f(0)):</p>
+            <span class="step-formula">f(0) = 0 − 0 + 0 + 1 = 1   → P(0, 1)</span>
+            <p>Ecuación de la recta tangente y = m(x − x₀) + y₀:</p>
+            <span class="step-formula">y = 9(x − 0) + 1  →  y = 9x + 1</span>
+            <p>Ecuación de la recta normal (pendiente perpendicular = −1/m):</p>
+            <span class="step-formula">y = (−1/9)(x − 0) + 1  →  y = −x/9 + 1</span>
+            <div class="note">La recta tangente "roza" la curva en ese punto. La recta normal es perpendicular a la tangente (pendientes inversas y de signo contrario: m₁ · m₂ = −1).</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step" id="de-a-6" onclick="toggleStep(this)">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <div class="step-title">Ejercicios extra — Regla de la cadena y producto <span class="toggle">+ ver</span></div>
+          <div class="step-detail">
+            <p><strong>Ejemplo A:</strong> Derivá h(x) = sen(x²)</p>
+            <span class="step-formula">Función "de afuera": sen(u) → derivada: cos(u)</span>
+            <span class="step-formula">Función "de adentro": u = x² → derivada: 2x</span>
+            <span class="step-formula">h′(x) = cos(x²) · 2x = 2x·cos(x²)</span>
+
+            <p style="margin-top:16px;"><strong>Ejemplo B:</strong> Derivá k(x) = eˣ · ln(x) (producto)</p>
+            <span class="step-formula">u = eˣ → u′ = eˣ</span>
+            <span class="step-formula">v = ln(x) → v′ = 1/x</span>
+            <span class="step-formula">k′(x) = u′v + uv′ = eˣ·ln(x) + eˣ·(1/x) = eˣ[ln(x) + 1/x]</span>
+
+            <p style="margin-top:16px;"><strong>Ejemplo C:</strong> Derivá p(x) = (3x² + 1)⁵ (cadena con potencia)</p>
+            <span class="step-formula">u = 3x² + 1 → u′ = 6x</span>
+            <span class="step-formula">p′(x) = 5(3x²+1)⁴ · 6x = 30x(3x²+1)⁴</span>
+            <div class="note">En la regla de la cadena, siempre bajás el exponente exterior, dejás la función adentro sin cambiarla, y multiplicás por la derivada de adentro.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GRÁFICO DERIVADAS -->
+      <div class="step-detail" style="max-height:none; opacity:1; margin-top:10px;">
+        <div class="graph-wrap">
+          <div class="graph-title">📊 Gráfico de f(x), f′(x) y recta tangente en x=0</div>
+          <canvas id="graph-de-a" width="840" height="380"></canvas>
+        </div>
+      </div>
+
+      <div class="result-box ex-de">
+        <div class="result-icon">✅</div>
+        <div class="result-text">
+          <h4>Resumen</h4>
+          <p>Máximo local en (1, 5) &nbsp;|&nbsp; Mínimo local en (3, 1)</p>
+          <span class="res-formula">f′(x) = 3x² − 12x + 9 &nbsp;|&nbsp; Tangente en x=0: y = 9x + 1</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESUMEN REGLAS -->
+  <h3 class="section-title reveal" style="font-size:1.2rem; margin: 40px 0 16px;">Cheat-Sheet: ¿qué regla uso?</h3>
+  <div class="summary-grid reveal">
+    <div class="summ-card">
+      <h4 class="de-accent">Veo una suma o resta</h4>
+      <ul>
+        <li>Derivo término a término</li>
+        <li>D(f±g) = f′ ± g′</li>
+      </ul>
+    </div>
+    <div class="summ-card">
+      <h4 class="de-accent">Veo una multiplicación</h4>
+      <ul>
+        <li>Regla del producto</li>
+        <li>D(u·v) = u′v + uv′</li>
+      </ul>
+    </div>
+    <div class="summ-card">
+      <h4 class="de-accent">Veo una fracción</h4>
+      <ul>
+        <li>Regla del cociente</li>
+        <li>D(u/v) = (u′v − uv′)/v²</li>
+      </ul>
+    </div>
+    <div class="summ-card">
+      <h4 class="de-accent">Veo función dentro de función</h4>
+      <ul>
+        <li>Regla de la cadena</li>
+        <li>D[f(g(x))] = f′(g(x))·g′(x)</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<footer>
+  <p><strong>Matemática I — Segundo Parcial</strong></p>
+  <p style="margin-top:8px;">UNNOBA · Escuela de Tecnología · Elementos de Matemática · 1er año</p>
+  <p style="margin-top:12px; color: #475569;">Todos los ejemplos están resueltos en base a los apuntes teóricos de la cátedra.</p>
+</footer>
+
+<script>
+// ===== STEP TOGGLE =====
+function toggleStep(el) {
+  el.classList.toggle('open');
+  const toggle = el.querySelector('.toggle');
+  if (toggle) toggle.textContent = el.classList.contains('open') ? '− ocultar' : '+ ver';
+}
+
+function expandAll(prefix) {
+  const steps = document.querySelectorAll('[id^="' + prefix + '"]');
+  const allOpen = [...steps].every(s => s.classList.contains('open'));
+  steps.forEach(s => {
+    if (allOpen) {
+      s.classList.remove('open');
+      const t = s.querySelector('.toggle');
+      if (t) t.textContent = '+ ver';
+    } else {
+      s.classList.add('open');
+      const t = s.querySelector('.toggle');
+      if (t) t.textContent = '− ocultar';
+    }
+  });
+}
+
+// ===== NAV ACTIVE =====
+function setActive(el) {
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ===== SCROLL REVEAL =====
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ===== NAV scroll spy =====
+window.addEventListener('scroll', () => {
+  const sections = ['funciones','limites','derivadas'];
+  let current = '';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - 120) current = id;
+  });
+  document.querySelectorAll('.nav-link').forEach(l => {
+    l.classList.remove('active');
+    if (l.getAttribute('href') === '#' + current) l.classList.add('active');
+  });
+});
+
+// ===== CANVAS HELPERS =====
+function setupCanvas(id) {
+  const canvas = document.getElementById(id);
+  if (!canvas) return null;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const w = canvas.offsetWidth || canvas.width;
+  const h = canvas.offsetHeight || canvas.height;
+  canvas.width = w * dpr;
+  canvas.height = h * dpr;
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
+  ctx.scale(dpr, dpr);
+  return { ctx, w, h };
+}
+
+function drawAxes(ctx, w, h, ox, oy, scaleX, scaleY, color='rgba(255,255,255,0.12)') {
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 1;
+  ctx.setLineDash([]);
+  // x axis
+  ctx.beginPath(); ctx.moveTo(0, oy); ctx.lineTo(w, oy); ctx.stroke();
+  // y axis
+  ctx.beginPath(); ctx.moveTo(ox, 0); ctx.lineTo(ox, h); ctx.stroke();
+
+  // Tick marks
+  ctx.fillStyle = 'rgba(148,163,184,0.7)';
+  ctx.font = '10px Inter';
+  ctx.textAlign = 'center';
+  for (let x = -10; x <= 10; x++) {
+    if (x === 0) continue;
+    const px = ox + x * scaleX;
+    if (px > 4 && px < w - 4) {
+      ctx.beginPath();
+      ctx.moveTo(px, oy - 3); ctx.lineTo(px, oy + 3);
+      ctx.strokeStyle = 'rgba(255,255,255,0.15)'; ctx.stroke();
+      if (x % 2 === 0) ctx.fillText(x, px, oy + 14);
+    }
+  }
+  ctx.textAlign = 'right';
+  for (let y = -8; y <= 8; y++) {
+    if (y === 0) continue;
+    const py = oy - y * scaleY;
+    if (py > 4 && py < h - 4) {
+      ctx.beginPath();
+      ctx.moveTo(ox - 3, py); ctx.lineTo(ox + 3, py);
+      ctx.strokeStyle = 'rgba(255,255,255,0.15)'; ctx.stroke();
+      if (y % 2 === 0) ctx.fillText(y, ox - 6, py + 4);
+    }
+  }
+}
+
+function plotFunction(ctx, w, h, ox, oy, scaleX, scaleY, fn, color, lineW=2, dash=[]) {
+  ctx.strokeStyle = color; ctx.lineWidth = lineW; ctx.setLineDash(dash);
+  ctx.beginPath();
+  let first = true;
+  for (let px = 0; px <= w; px += 1) {
+    const x = (px - ox) / scaleX;
+    const y = fn(x);
+    const py = oy - y * scaleY;
+    if (!isFinite(y) || Math.abs(y) > 30) { first = true; continue; }
+    if (first) { ctx.moveTo(px, py); first = false; } else ctx.lineTo(px, py);
+  }
+  ctx.stroke(); ctx.setLineDash([]);
+}
+
+function drawPoint(ctx, ox, oy, scaleX, scaleY, x, y, color, label='') {
+  const px = ox + x * scaleX, py = oy - y * scaleY;
+  ctx.fillStyle = color;
+  ctx.beginPath(); ctx.arc(px, py, 5, 0, Math.PI*2); ctx.fill();
+  if (label) {
+    ctx.fillStyle = '#fff'; ctx.font = '11px Inter';
+    ctx.fillText(label, px + 8, py - 6);
+  }
+}
+
+function dashedLine(ctx, x1,y1,x2,y2, color='rgba(255,255,255,0.15)') {
+  ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.setLineDash([4,4]);
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+// ===== GRAPH: Funciones A (cuadrática) =====
+function drawFnA() {
+  const g = setupCanvas('graph-fn-a'); if (!g) return;
+  const {ctx, w, h} = g;
+  ctx.fillStyle = '#0D1526'; ctx.fillRect(0,0,w,h);
+
+  const ox = w/2 - 20, oy = h*0.35, sx = 48, sy = 20;
+  drawAxes(ctx, w, h, ox, oy, sx, sy);
+
+  // f(x) = x² - 4x - 5
+  plotFunction(ctx,w,h,ox,oy,sx,sy, x => x*x - 4*x - 5, '#3B82F6', 2.5);
+
+  // shading C-
+  ctx.fillStyle = 'rgba(239,68,68,0.1)';
+  ctx.beginPath();
+  ctx.moveTo(ox + (-1)*sx, oy);
+  for (let px = ox+(-1)*sx; px <= ox+5*sx; px++) {
+    const x = (px-ox)/sx;
+    const y = x*x - 4*x - 5;
+    ctx.lineTo(px, oy - y*sy);
+  }
+  ctx.lineTo(ox+5*sx, oy); ctx.closePath(); ctx.fill();
+
+  // vertex dashed
+  const vx = ox+2*sx, vy = oy-(-9)*sy;
+  dashedLine(ctx, vx, oy, vx, vy);
+  dashedLine(ctx, ox, vy, vx, vy);
+
+  // Points
+  drawPoint(ctx,ox,oy,sx,sy, -1, 0, '#F59E0B', '(−1, 0)');
+  drawPoint(ctx,ox,oy,sx,sy,  5, 0, '#F59E0B', '(5, 0)');
+  drawPoint(ctx,ox,oy,sx,sy,  2, -9, '#EF4444', 'V(2, −9)');
+  drawPoint(ctx,ox,oy,sx,sy,  0, -5, '#A78BFA', '(0,−5)');
+
+  // Labels
+  ctx.fillStyle = '#93C5FD'; ctx.font = 'bold 13px Inter';
+  ctx.fillText('f(x) = x² − 4x − 5', w - 190, 22);
+  ctx.fillStyle = 'rgba(239,68,68,0.7)'; ctx.font = '11px Inter';
+  ctx.fillText('C⁻ (negativa)', ox + 1*sx, vy + 30);
+}
+
+// ===== GRAPH: Funciones B (homográfica) =====
+function drawFnB() {
+  const g = setupCanvas('graph-fn-b'); if (!g) return;
+  const {ctx, w, h} = g;
+  ctx.fillStyle = '#0D1526'; ctx.fillRect(0,0,w,h);
+
+  const ox = w/2, oy = h/2, sx = 42, sy = 28;
+  drawAxes(ctx, w, h, ox, oy, sx, sy);
+
+  // Asymptotes
+  const avx = ox + 3*sx;
+  ctx.strokeStyle = 'rgba(245,158,11,0.5)'; ctx.lineWidth = 1.5; ctx.setLineDash([6,4]);
+  ctx.beginPath(); ctx.moveTo(avx,0); ctx.lineTo(avx,h); ctx.stroke();
+  const ahy = oy - 2*sy;
+  ctx.beginPath(); ctx.moveTo(0,ahy); ctx.lineTo(w,ahy); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Labels for asymptotes
+  ctx.fillStyle = 'rgba(245,158,11,0.8)'; ctx.font = '11px Inter';
+  ctx.fillText('AV: x=3', avx+6, 16);
+  ctx.fillText('AH: y=2', 8, ahy-6);
+
+  // g(x) = (2x+1)/(x-3) - two branches
+  plotFunction(ctx,w,h,ox,oy,sx,sy, x => (2*x+1)/(x-3), '#3B82F6', 2.5);
+
+  drawPoint(ctx,ox,oy,sx,sy, -0.5, 0, '#F59E0B', '(−½, 0)');
+  drawPoint(ctx,ox,oy,sx,sy,  0, -1/3, '#A78BFA', '(0, −⅓)');
+
+  ctx.fillStyle = '#93C5FD'; ctx.font = 'bold 13px Inter';
+  ctx.fillText('g(x) = (2x+1)/(x−3)', w-220, 22);
+}
+
+// ===== GRAPH: Derivadas =====
+function drawDeA() {
+  const g = setupCanvas('graph-de-a'); if (!g) return;
+  const {ctx, w, h} = g;
+  ctx.fillStyle = '#0D1526'; ctx.fillRect(0,0,w,h);
+
+  const ox = w*0.38, oy = h*0.45, sx = 60, sy = 18;
+  drawAxes(ctx, w, h, ox, oy, sx, sy);
+
+  const f = x => x*x*x - 6*x*x + 9*x + 1;
+  const fp = x => 3*x*x - 12*x + 9;
+
+  plotFunction(ctx,w,h,ox,oy,sx,sy, f, '#8B5CF6', 2.5);
+  plotFunction(ctx,w,h,ox,oy,sx,sy, fp, '#06B6D4', 2, [5,3]);
+  plotFunction(ctx,w,h,ox,oy,sx,sy, x => 9*x+1, 'rgba(245,158,11,0.7)', 1.5, [4,3]);
+
+  // critical points
+  drawPoint(ctx,ox,oy,sx,sy, 1, 5, '#EF4444', 'Máx (1,5)');
+  drawPoint(ctx,ox,oy,sx,sy, 3, 1, '#10B981', 'Mín (3,1)');
+  drawPoint(ctx,ox,oy,sx,sy, 0, 1, '#F59E0B', '(0,1)');
+
+  ctx.fillStyle = '#C4B5FD'; ctx.font = 'bold 12px Inter';
+  ctx.fillText('f(x) = x³−6x²+9x+1', w-240, 22);
+  ctx.fillStyle = '#67E8F9'; ctx.font = '11px Inter';
+  ctx.fillText('f′(x) = 3x²−12x+9', w-230, 40);
+  ctx.fillStyle = 'rgba(245,158,11,0.9)';
+  ctx.fillText('Tangente: y = 9x+1', w-230, 58);
+}
+
+// Draw all graphs on load
+window.addEventListener('load', () => {
+  drawFnA();
+  drawFnB();
+  drawDeA();
+});
+</script>
+</body>
+</html>
